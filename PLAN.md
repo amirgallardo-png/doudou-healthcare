@@ -210,7 +210,7 @@ Un seul chat au départ, mais la colonne `cat_id` évite de tout refaire si un d
 | checkins.selles | journal.selles | « Normales » → ok, « Molles / Diarrhée » → molles, autre → non |
 | checkins.boisson | journal.eau | « Normale » → normal, « Peu » → peu, « Beaucoup » → beaucoup |
 | checkins.vomissements | journal.vomi | « Non » → false, sinon true (+ texte dans la note) |
-| checkins (pas de moment) | journal.moment | heure d'enregistrement < 15 h → matin, sinon soir (même règle que le prototype) |
+| checkins (pas de moment) | journal.moment | heure d'enregistrement (Bruxelles) de 5 h à 15 h → matin, sinon soir (après minuit = saisie de la soirée) |
 | checkins.activite (1–5) | activities | gardé tel quel en note (pas d'équivalent dans le design) |
 | weights.value/date | weights.kg/date | moment = matin par défaut ; pesée datée dans le futur → **demander à Amir** |
 | profile.weight (texte) | — | ignoré (le poids vient des pesées) ; signalé |

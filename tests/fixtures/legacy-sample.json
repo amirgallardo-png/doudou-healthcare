@@ -1,0 +1,28 @@
+{
+  "exportedAt": "2026-06-11T19:45:32.920Z",
+  "source": "doudou-healthcare",
+  "data": {
+    "profile": [{ "name": "Minou Test", "breed": "Européen", "dob": "2019-01-02", "sex": "male", "color": "Gris", "weight": "5.1", "sterilized": true, "chipped": true, "chipId": "", "photo": "", "vetName": "Dr Exemple", "vetPhone": "000 00 00 00", "vetAddress": "Rue Fictive 1", "vetEmail": "", "vetDossier": "", "insurance": "", "insuranceId": "", "allergies": "", "notes": "", "savedAt": "2026-05-19T22:42:13.686Z", "id": "main", "createdAt": "2026-05-19T22:42:13.686Z" }],
+    "consultations": [{ "date": "2025-10-20", "motif": "Contrôle annuel", "vet": "Dr Exemple", "diagnostic": "RAS", "traitement": "", "cout": "90", "notes": "", "id": "c-1", "createdAt": "2026-05-16T13:10:51.556Z" }],
+    "vaccins": [],
+    "treatments": [{ "name": "Vermifuge", "type": "Antiparasitaire interne", "frequency": "1x/3mois", "lastDose": "2026-05-01", "nextDose": "2026-08-01", "active": true, "notes": "", "id": "t-1", "createdAt": "2026-05-16T13:09:36.747Z" }],
+    "analyses": [], "prescriptions": [], "allergies": [],
+    "checkins": [
+      { "id": "2026-05-16", "date": "2026-05-16", "appetit": 5, "activite": 3, "humeur": "Agressif", "selles": "Normales", "boisson": "Normale", "vomissements": "Non", "notes": "Note de test", "savedAt": "2026-05-16T13:26:17.146Z", "createdAt": "2026-05-16T13:26:17.146Z" },
+      { "id": "2026-05-19", "date": "2026-05-19", "appetit": 4, "activite": 4, "humeur": "Normal", "selles": "Normales", "boisson": "Normale", "vomissements": "1 fois", "notes": "", "savedAt": "2026-05-19T22:39:40.912Z", "createdAt": "2026-05-19T22:39:40.912Z" }
+    ],
+    "weights": [
+      { "date": "2024-10-20", "value": 6.9, "context": "", "id": "w-1", "createdAt": "2026-05-19T22:41:48.233Z" },
+      { "date": "2026-10-20", "value": 7.4, "context": "", "id": "w-2", "createdAt": "2026-05-19T22:41:06.962Z" }
+    ],
+    "food": [
+      { "date": "2026-05-16", "moment": "Soir", "type": "Croquettes", "brand": "Marque  ProPlan Test", "qty": "10", "eaten": "Tout", "id": "f-1", "createdAt": "2026-05-17T08:05:46.465Z" },
+      { "date": "2026-05-16", "moment": "Midi", "type": "Croquettes", "brand": "Marque Pro Plan Test", "qty": "15", "eaten": "Tout", "id": "f-2", "createdAt": "2026-05-16T13:28:52.744Z" },
+      { "date": "2026-05-17", "moment": "Matin", "type": "Pâtée", "brand": "Marque Pro Plan Test", "qty": "80", "eaten": "La moitié", "id": "f-3", "createdAt": "2026-05-17T08:05:46.465Z" }
+    ],
+    "events": [{ "date": "2026-05-19", "type": "Autre", "desc": "vomi la nuit", "suivi": "Observation", "id": "e-1", "createdAt": "2026-05-19T07:02:58.537Z" }],
+    "activity": [{ "id": "act-2026-05-16", "date": "2026-05-16", "minutes": 180, "distance": 0, "sleep": 3, "zones": "jardin", "notes": "joueur", "createdAt": "2026-05-16T13:25:21.029Z" }],
+    "finances": [],
+    "settings": [{ "key": "theme", "value": "light" }]
+  }
+}
