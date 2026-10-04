@@ -1,0 +1,12 @@
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+:root.calm *,:root.calm *::before,:root.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+
+@media print{
+  body *{visibility:hidden}
+  .visit,.visit *{visibility:visible}
+  .visit{position:absolute;inset:0;background:#fff;padding:0;overflow:visible}
+  .visit-doc{box-shadow:none;width:100%;color:#000;background:#fff}
+  .visit-bar,.no-print{display:none!important}
+}

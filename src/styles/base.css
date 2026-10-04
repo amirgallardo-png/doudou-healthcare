@@ -1,0 +1,20 @@
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;text-wrap:balance;color:var(--ink)}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+a{color:var(--soin)}
+svg{display:block}
+.ico{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ico.sm{width:20px;height:20px}
+.ico.lg{width:28px;height:28px}
+.num,.data{font-family:var(--font-data);font-variant-numeric:tabular-nums;font-weight:500}
+.muted{color:var(--ink-muted)}
+.small{font-size:16px;line-height:22px}
+.label{font-size:14px;line-height:18px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--soin);outline-offset:2px;border-radius:6px}
+

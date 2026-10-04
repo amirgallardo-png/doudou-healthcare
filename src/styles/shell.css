@@ -1,0 +1,32 @@
+/* ---------- Coquille ---------- */
+.app{display:flex;min-height:100%}
+.sidebar{display:none}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:var(--s3);padding:10px var(--s4);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.topbar.scrolled{border-bottom-color:var(--line)}
+.topbar .avatar-btn{width:var(--tap);height:var(--tap);border-radius:50%;background:var(--surface-tint);display:grid;place-items:center;overflow:hidden;flex:none}
+.topbar h1{font-size:19px;line-height:24px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sync{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:6px 12px 6px 10px;border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--line);font-size:14px;line-height:18px;color:var(--ink-muted);white-space:nowrap}
+.sync .dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none}
+.sync[data-state="pending"] .dot{background:var(--miel);animation:pulse 1.2s infinite}
+.sync[data-state="offline"] .dot{background:transparent;border:2px solid var(--ink-muted)}
+.sync .ico{width:16px;height:16px}
+@keyframes pulse{50%{opacity:.35}}
+.topbar .sync .txt-long{display:none}
+@media (min-width:430px){.topbar .sync .txt-long{display:inline}.topbar .sync .txt-short{display:none}}
+
+.offline-banner{margin:var(--s2) var(--s4) 0;padding:10px 14px;border-radius:var(--r-md);background:var(--miel-tint);color:var(--ink);display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:22px}
+.offline-banner .ico{color:var(--miel-ink)}
+
+#view{flex:1;padding:var(--s2) var(--s4) calc(var(--nav) + env(safe-area-inset-bottom,0px) + var(--s6));outline:none}
+.view{display:flex;flex-direction:column;gap:var(--s5);max-width:640px;margin:0 auto;width:100%}
+
+/* Barre basse */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;border-radius:var(--r-md);color:var(--ink-muted);font-size:13px;line-height:16px;font-weight:700;position:relative}
+.tab .pill{width:56px;height:32px;border-radius:var(--r-pill);display:grid;place-items:center;transition:background .2s var(--ease),transform .2s var(--ease)}
+.tab[aria-current="page"]{color:var(--soin)}
+.tab[aria-current="page"] .pill{background:var(--surface-tint)}
+.tab:active .pill{transform:scale(.92)}
+.tab .badge{position:absolute;top:6px;left:calc(50% + 10px);width:10px;height:10px;border-radius:50%;background:var(--miel);border:2px solid var(--surface)}
+

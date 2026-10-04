@@ -1,0 +1,54 @@
+/* Layout : mobile d'abord (colonne unique + barre basse) ; ≥1024px : menu latéral · contenu en grille · volet de détail à droite.
+   Direction « Clinique douce, pensée pour un chat » — vert soin + roux du pelage sur avoine chaude. */
+:root{
+  --bg:#F4F1EB; --surface:#FFFEFB; --surface-tint:#E3EEEA; --line:#D5DDD8;
+  --ink:#13302D; --ink-muted:#4D6461;
+  --soin:#1D6B62; --soin-strong:#0F4A44; --on-soin:#FFFFFF;
+  --roux:#E37B3E; --roux-ink:#A34A14; --roux-tint:#FBE6D8;
+  --miel:#E2AE45; --miel-ink:#7D5600; --miel-tint:#F8EDD2;
+  --on-accent:#13302D;
+  --ok:#28703F; --ok-tint:#DDEEDF;
+  --urgent:#B3222B; --urgent-tint:#FBE4E2;
+  --fur:#E58A4E; --fur-dark:#B9602A; --cream:#FBEBD9; --nose:#D9867A; --eye:#A9B83A;
+  --scrim:rgba(19,48,45,.38);
+  --shadow-card:0 1px 2px rgba(19,48,45,.06),0 4px 16px rgba(19,48,45,.06);
+  --shadow-sheet:0 -8px 32px rgba(19,48,45,.14);
+  --font-display:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:64px;
+  --r-sm:10px;--r-md:16px;--r-lg:24px;--r-pill:999px;
+  --tap:44px;--pad:72px;--nav:72px;--sidebar:256px;--pane:400px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1918; --surface:#152422; --surface-tint:#1D3532; --line:#2A3D3A;
+  --ink:#EAF2EF; --ink-muted:#A2B7B3;
+  --soin:#62C2B4; --soin-strong:#8ED6CB; --on-soin:#0D1918;
+  --roux:#F2955C; --roux-ink:#F4A26F; --roux-tint:#3A2619;
+  --miel:#EFC163; --miel-ink:#EFC163; --miel-tint:#352C16;
+  --on-accent:#0D1918;
+  --ok:#74D093; --ok-tint:#16322A;
+  --urgent:#FF7B7B; --urgent-tint:#3A1A1C;
+  --fur:#E08A52; --fur-dark:#A85A28; --cream:#F1DFC9; --nose:#D08276; --eye:#C3D24E;
+  --scrim:rgba(0,0,0,.6);
+  --shadow-card:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25);
+  --shadow-sheet:0 -8px 32px rgba(0,0,0,.55);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1918; --surface:#152422; --surface-tint:#1D3532; --line:#2A3D3A;
+  --ink:#EAF2EF; --ink-muted:#A2B7B3;
+  --soin:#62C2B4; --soin-strong:#8ED6CB; --on-soin:#0D1918;
+  --roux:#F2955C; --roux-ink:#F4A26F; --roux-tint:#3A2619;
+  --miel:#EFC163; --miel-ink:#EFC163; --miel-tint:#352C16;
+  --on-accent:#0D1918;
+  --ok:#74D093; --ok-tint:#16322A;
+  --urgent:#FF7B7B; --urgent-tint:#3A1A1C;
+  --fur:#E08A52; --fur-dark:#A85A28; --cream:#F1DFC9; --nose:#D08276; --eye:#C3D24E;
+  --scrim:rgba(0,0,0,.6);
+  --shadow-card:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25);
+  --shadow-sheet:0 -8px 32px rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+
