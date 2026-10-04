@@ -1,6 +1,7 @@
 # Doudou Healthcare — Plan de construction (Phase 0)
 
-> Rédigé le 2026-10-04. Statut : **en attente de validation par Amir** (arrêt de la Phase 0).
+> Rédigé le 2026-10-04. Statut : **validé par Amir le 2026-10-04** (D1 à D10 selon les recommandations ; D8 précisé en §7.1).
+> Reste ouvert : D4 (saisies dans la V1 après le 11 juin ?).
 > Ce document ne contient aucune donnée personnelle (le dépôt pourra devenir public pour GitHub Pages).
 
 ---
@@ -258,6 +259,19 @@ chaque table a `user_id = auth.uid()` en lecture et écriture.
 - Sans fiche pertinente : « je n'ai pas de source fiable là-dessus, voici quand consulter ».
 - Le modèle se change à un seul endroit (`MODEL` dans la config serveur).
 
+### 7.1 Choix de la clé et maîtrise du coût (décision d'Amir, 2026-10-04)
+
+- **Règle de choix** : au moment de la Phase 4, on prend le fournisseur (Claude, Gemini ou ChatGPT) **le moins
+  consommé par ODIN**, mesuré dans `Projets\odin\config\ia-conso.json` (compteurs uniquement, jamais les clés).
+  Photographie du 2026-10-04 (total depuis le 25.09) : ChatGPT ≈ 0,28 M jetons · Gemini ≈ 0,40 M · Claude ≈ 1,19 M.
+- La clé est **collée par Amir** dans les secrets Supabase ; Claude ne la lit ni ne la copie.
+- Plafond de dépense quotidien et mensuel côté serveur, coût affiché par réponse, estimation ×30 jours.
+- **Mode de secours « prompt à copier »** (comme la V1, coût zéro) : si le coût devient trop élevé ou si le
+  plafond est atteint, Dr. Doudou ne fait plus d'appel payant ; il prépare un prompt complet (question, dossier,
+  fiches sources de la liste blanche, consignes de sécurité) qu'Amir copie dans ses propres IA. Les **règles
+  d'urgence codées restent actives** dans ce mode (elles ne dépendent pas du modèle). Interrupteur dans Réglages
+  + bascule automatique au plafond, avec message clair.
+
 ---
 
 ## 8. Phases et points d'arrêt
@@ -303,6 +317,6 @@ chaque table a `user_id = auth.uid()` en lecture et écriture.
 | D5 | Serveur de synchro | **Supabase**, région Francfort, offre gratuite |
 | D6 | Connexion | **Code à 6 chiffres par e-mail** (fonctionne dans l'appli installée), une seule adresse autorisée |
 | D7 | Consultation avec coût à l'import | Créer aussi la dépense correspondante dans Finances |
-| D8 | Modèle IA | Décision en Phase 4 avec coût chiffré ×30 jours ; préférence pour un modèle payant **sans réutilisation des données** pour l'entraînement plutôt qu'une offre gratuite qui les réutilise |
+| D8 | Modèle IA | **Validé** : clé du fournisseur le moins consommé par ODIN au moment de la Phase 4, plafond de coût, et mode de secours « prompt à copier » si trop cher (voir §7.1) |
 | D9 | Rappels | Web Push programmé par le serveur (gratuit) ; à confirmer en Phase 5 après test sur ton téléphone |
 | D10 | Hébergement du code | GitHub Pages (dépôt public = code seulement, aucune donnée) ; sinon dépôt privé + Cloudflare Pages |
