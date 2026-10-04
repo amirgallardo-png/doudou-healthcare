@@ -1,0 +1,1929 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Doudou Healthcare</title>
+<meta name="theme-color" content="#F4F1EB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Atkinson+Hyperlegible+Next:wght@400;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout : mobile d'abord (colonne unique + barre basse) ; ≥1024px : menu latéral · contenu en grille · volet de détail à droite.
+   Direction « Clinique douce, pensée pour un chat » — vert soin + roux du pelage sur avoine chaude. */
+:root{
+  --bg:#F4F1EB; --surface:#FFFEFB; --surface-tint:#E3EEEA; --line:#D5DDD8;
+  --ink:#13302D; --ink-muted:#4D6461;
+  --soin:#1D6B62; --soin-strong:#0F4A44; --on-soin:#FFFFFF;
+  --roux:#E37B3E; --roux-ink:#A34A14; --roux-tint:#FBE6D8;
+  --miel:#E2AE45; --miel-ink:#7D5600; --miel-tint:#F8EDD2;
+  --on-accent:#13302D;
+  --ok:#28703F; --ok-tint:#DDEEDF;
+  --urgent:#B3222B; --urgent-tint:#FBE4E2;
+  --fur:#E58A4E; --fur-dark:#B9602A; --cream:#FBEBD9; --nose:#D9867A; --eye:#A9B83A;
+  --scrim:rgba(19,48,45,.38);
+  --shadow-card:0 1px 2px rgba(19,48,45,.06),0 4px 16px rgba(19,48,45,.06);
+  --shadow-sheet:0 -8px 32px rgba(19,48,45,.14);
+  --font-display:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:64px;
+  --r-sm:10px;--r-md:16px;--r-lg:24px;--r-pill:999px;
+  --tap:44px;--pad:72px;--nav:72px;--sidebar:256px;--pane:400px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1918; --surface:#152422; --surface-tint:#1D3532; --line:#2A3D3A;
+  --ink:#EAF2EF; --ink-muted:#A2B7B3;
+  --soin:#62C2B4; --soin-strong:#8ED6CB; --on-soin:#0D1918;
+  --roux:#F2955C; --roux-ink:#F4A26F; --roux-tint:#3A2619;
+  --miel:#EFC163; --miel-ink:#EFC163; --miel-tint:#352C16;
+  --on-accent:#0D1918;
+  --ok:#74D093; --ok-tint:#16322A;
+  --urgent:#FF7B7B; --urgent-tint:#3A1A1C;
+  --fur:#E08A52; --fur-dark:#A85A28; --cream:#F1DFC9; --nose:#D08276; --eye:#C3D24E;
+  --scrim:rgba(0,0,0,.6);
+  --shadow-card:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25);
+  --shadow-sheet:0 -8px 32px rgba(0,0,0,.55);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1918; --surface:#152422; --surface-tint:#1D3532; --line:#2A3D3A;
+  --ink:#EAF2EF; --ink-muted:#A2B7B3;
+  --soin:#62C2B4; --soin-strong:#8ED6CB; --on-soin:#0D1918;
+  --roux:#F2955C; --roux-ink:#F4A26F; --roux-tint:#3A2619;
+  --miel:#EFC163; --miel-ink:#EFC163; --miel-tint:#352C16;
+  --on-accent:#0D1918;
+  --ok:#74D093; --ok-tint:#16322A;
+  --urgent:#FF7B7B; --urgent-tint:#3A1A1C;
+  --fur:#E08A52; --fur-dark:#A85A28; --cream:#F1DFC9; --nose:#D08276; --eye:#C3D24E;
+  --scrim:rgba(0,0,0,.6);
+  --shadow-card:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25);
+  --shadow-sheet:0 -8px 32px rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;text-wrap:balance;color:var(--ink)}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+a{color:var(--soin)}
+svg{display:block}
+.ico{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ico.sm{width:20px;height:20px}
+.ico.lg{width:28px;height:28px}
+.num,.data{font-family:var(--font-data);font-variant-numeric:tabular-nums;font-weight:500}
+.muted{color:var(--ink-muted)}
+.small{font-size:16px;line-height:22px}
+.label{font-size:14px;line-height:18px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--soin);outline-offset:2px;border-radius:6px}
+
+/* ---------- Coquille ---------- */
+.app{display:flex;min-height:100%}
+.sidebar{display:none}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:var(--s3);padding:10px var(--s4);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.topbar.scrolled{border-bottom-color:var(--line)}
+.topbar .avatar-btn{width:var(--tap);height:var(--tap);border-radius:50%;background:var(--surface-tint);display:grid;place-items:center;overflow:hidden;flex:none}
+.topbar h1{font-size:19px;line-height:24px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sync{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:6px 12px 6px 10px;border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--line);font-size:14px;line-height:18px;color:var(--ink-muted);white-space:nowrap}
+.sync .dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none}
+.sync[data-state="pending"] .dot{background:var(--miel);animation:pulse 1.2s infinite}
+.sync[data-state="offline"] .dot{background:transparent;border:2px solid var(--ink-muted)}
+.sync .ico{width:16px;height:16px}
+@keyframes pulse{50%{opacity:.35}}
+.topbar .sync .txt-long{display:none}
+@media (min-width:430px){.topbar .sync .txt-long{display:inline}.topbar .sync .txt-short{display:none}}
+
+.offline-banner{margin:var(--s2) var(--s4) 0;padding:10px 14px;border-radius:var(--r-md);background:var(--miel-tint);color:var(--ink);display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:22px}
+.offline-banner .ico{color:var(--miel-ink)}
+
+#view{flex:1;padding:var(--s2) var(--s4) calc(var(--nav) + env(safe-area-inset-bottom,0px) + var(--s6));outline:none}
+.view{display:flex;flex-direction:column;gap:var(--s5);max-width:640px;margin:0 auto;width:100%}
+
+/* Barre basse */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;border-radius:var(--r-md);color:var(--ink-muted);font-size:13px;line-height:16px;font-weight:700;position:relative}
+.tab .pill{width:56px;height:32px;border-radius:var(--r-pill);display:grid;place-items:center;transition:background .2s var(--ease),transform .2s var(--ease)}
+.tab[aria-current="page"]{color:var(--soin)}
+.tab[aria-current="page"] .pill{background:var(--surface-tint)}
+.tab:active .pill{transform:scale(.92)}
+.tab .badge{position:absolute;top:6px;left:calc(50% + 10px);width:10px;height:10px;border-radius:50%;background:var(--miel);border:2px solid var(--surface)}
+
+/* ---------- Composants ---------- */
+.card{background:var(--surface);border-radius:var(--r-md);box-shadow:var(--shadow-card);padding:var(--s5)}
+.card.flat{box-shadow:none;border:1px solid var(--line)}
+.card.tint{background:var(--surface-tint);box-shadow:none}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
+.card-h h2,.card-h h3{font-size:19px;line-height:24px;font-weight:600}
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3)}
+.section-h h2{font-size:19px;line-height:24px;font-weight:600}
+.link-btn{color:var(--soin);font-weight:700;font-size:16px;min-height:var(--tap);display:inline-flex;align-items:center;gap:4px;padding:0 4px;border-radius:8px}
+.link-btn .ico{width:18px;height:18px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--r-md);font-weight:700;font-size:17px;transition:transform .12s var(--ease),background .2s,box-shadow .2s;user-select:none;text-align:center}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--soin);color:var(--on-soin)}
+.btn.primary:hover{background:var(--soin-strong)}
+.btn.secondary{background:var(--surface-tint);color:var(--ink)}
+.btn.ghost{border:1.5px solid var(--ink-muted);color:var(--ink)}
+.btn.danger{background:var(--urgent);color:var(--surface)}
+.btn.block{width:100%}
+.btn.sm{min-height:var(--tap);padding:0 14px;font-size:16px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.icon-btn{width:var(--tap);height:var(--tap);display:grid;place-items:center;border-radius:50%;color:var(--ink)}
+.icon-btn:hover{background:var(--surface-tint)}
+.icon-btn:active{transform:scale(.92)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:var(--tap);padding:0 16px;border-radius:var(--r-pill);border:1.5px solid var(--line);background:var(--surface);font-weight:700;font-size:16px;white-space:nowrap;transition:background .15s,border-color .15s}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .ico{width:18px;height:18px}
+.chips{display:flex;gap:var(--s2);overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--s4) * -1);padding:2px var(--s4)}
+.chips::-webkit-scrollbar{display:none}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface-tint);border-radius:var(--r-pill);padding:4px;gap:4px}
+.seg button{min-height:40px;padding:0 16px;border-radius:var(--r-pill);font-weight:700;font-size:16px;color:var(--ink-muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-card)}
+
+.status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 8px;border-radius:var(--r-sm);font-size:14px;line-height:18px;font-weight:700;white-space:nowrap}
+.status .ico{width:16px;height:16px;stroke-width:2.2}
+.status.ok{background:var(--ok-tint);color:var(--ok)}
+.status.watch{background:var(--miel-tint);color:var(--miel-ink);box-shadow:inset 0 0 0 1.5px var(--miel-ink)}
+.status.soon{background:var(--roux-tint);color:var(--roux-ink)}
+.status.urgent{background:var(--urgent);color:var(--surface)}
+.status.neutral{background:var(--surface-tint);color:var(--ink)}
+
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) 0;min-height:56px;text-align:left;width:100%;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .r-ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--surface-tint);color:var(--soin)}
+.row .r-ico.roux{background:var(--roux-tint);color:var(--roux-ink)}
+.row .r-ico.miel{background:var(--miel-tint);color:var(--miel-ink)}
+.row .r-ico.ok{background:var(--ok-tint);color:var(--ok)}
+.row .r-main{flex:1;min-width:0}
+.row .r-title{font-weight:700;line-height:22px}
+.row .r-sub{color:var(--ink-muted);font-size:16px;line-height:22px}
+.row .r-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:6px}
+.row .r-end{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.row .chev{color:var(--ink-muted)}
+button.row:hover .r-title{color:var(--soin)}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field .flabel{font-weight:700;font-size:16px}
+.input{min-height:48px;padding:10px 14px;border-radius:var(--r-sm);border:1.5px solid var(--ink-muted);background:var(--surface);width:100%}
+.input:focus{outline:3px solid var(--soin);outline-offset:1px;border-color:var(--soin)}
+textarea.input{min-height:96px;resize:vertical;line-height:24px}
+.field .err{color:var(--urgent);font-size:16px;display:flex;gap:6px;align-items:center}
+.input[aria-invalid="true"]{border-color:var(--urgent)}
+
+.choice-group{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.choice{min-height:64px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;font-size:15px;line-height:18px;padding:6px 4px;transition:all .15s var(--ease)}
+.choice[aria-pressed="true"]{border-color:var(--soin);background:var(--surface-tint);color:var(--soin);box-shadow:inset 0 0 0 1.5px var(--soin)}
+.choice:active{transform:scale(.96)}
+
+.toggle{position:relative;width:52px;height:32px;border-radius:var(--r-pill);background:var(--line);flex:none;transition:background .2s}
+.toggle::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s var(--ease)}
+.toggle[aria-checked="true"]{background:var(--soin)}
+.toggle[aria-checked="true"]::after{transform:translateX(20px)}
+
+.grid-2,.grid-3,.col{display:flex;flex-direction:column;gap:var(--s5);min-width:0}
+/* Toast */
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 12px);z-index:80;display:flex;flex-direction:column;gap:8px;width:min(420px,calc(100% - 32px));pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:var(--r-md);font-size:16px;line-height:22px;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:toastIn .3s var(--ease);pointer-events:auto}
+.toast .ico{width:20px;height:20px;flex:none}
+.toast.out{animation:toastOut .25s var(--ease) forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+
+/* Feuille (mobile) */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:60;opacity:0;transition:opacity .25s}
+.scrim.on{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:88%;display:flex;flex-direction:column;background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0;box-shadow:var(--shadow-sheet);transform:translateY(100%);transition:transform .3s var(--ease);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.on{transform:none}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0;flex:none}
+.sheet-h{display:flex;align-items:center;gap:var(--s3);padding:var(--s2) var(--s3) var(--s2) var(--s5);flex:none}
+.sheet-h h2{flex:1;font-size:21px;line-height:26px;font-weight:600;min-width:0}
+.sheet-b{overflow-y:auto;padding:var(--s2) var(--s5) var(--s6);display:flex;flex-direction:column;gap:var(--s5);overscroll-behavior:contain}
+
+/* Volet détail PC */
+.pane{display:none}
+
+/* Squelettes */
+.sk{background:linear-gradient(90deg,var(--surface-tint) 0%,var(--line) 50%,var(--surface-tint) 100%);background-size:200% 100%;animation:sk 1.2s linear infinite;border-radius:var(--r-md)}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* Animations d'entrée */
+.rise{animation:rise .42s var(--ease) both;animation-delay:calc(var(--i,0) * 45ms)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.view-enter{animation:viewIn .24s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateX(12px)}}
+
+/* ---------- Aujourd'hui ---------- */
+.hero{position:relative;background:var(--surface-tint);border-radius:var(--r-lg);padding:var(--s5) var(--s5) var(--s5);margin-top:18px;overflow:visible}
+.hero::before,.hero::after{content:"";position:absolute;top:-16px;width:44px;height:30px;background:var(--surface-tint);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:6px}
+.hero::before{left:28px;transform:rotate(-8deg)}
+.hero::after{right:28px;transform:rotate(8deg)}
+.hero-top{display:flex;gap:var(--s4);align-items:center}
+.hero-cat{width:112px;height:112px;flex:none;margin:-8px 0 -4px -6px}
+.hero-txt{min-width:0;flex:1}
+.hero-date{font-size:16px;color:var(--ink-muted);line-height:22px}
+.hero h2{font-size:30px;line-height:34px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.hero-sum{margin-top:var(--s3);font-size:17px}
+.whiskers{display:flex;flex-direction:column;gap:5px;margin:var(--s4) 0 0;opacity:.5}
+.whiskers i{display:block;height:1.5px;background:var(--soin);border-radius:2px}
+.whiskers i:nth-child(1){width:44%}.whiskers i:nth-child(2){width:36%}.whiskers i:nth-child(3){width:28%}
+
+.eye{display:inline-flex;align-items:center;gap:10px;margin-top:var(--s4);background:var(--surface);padding:6px 14px 6px 6px;border-radius:var(--r-pill);font-weight:700;font-size:16px}
+.eye svg{width:34px;height:34px}
+
+/* Coussinets */
+.paw-card{display:flex;flex-direction:column;gap:var(--s4)}
+.paw-head{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);flex-wrap:wrap}
+.paw-head h2{font-size:19px;line-height:24px;font-weight:600}
+.paw{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);align-items:end;padding:0 var(--s2)}
+.toe{display:flex;flex-direction:column;align-items:center;gap:6px;border-radius:var(--r-md);padding:4px 0}
+.toe .pad{width:var(--pad);height:calc(var(--pad) + 6px);border-radius:50% 50% 46% 46%;background:var(--roux-tint);display:grid;place-items:center;color:var(--roux-ink);transition:transform .25s var(--ease),background .25s,box-shadow .25s;position:relative}
+.toe:nth-child(2) .pad{transform:translateY(-14px)}
+.toe:nth-child(2){margin-top:-14px}
+.toe[aria-current="step"] .pad{box-shadow:0 0 0 3px var(--surface),0 0 0 6px var(--roux)}
+.toe.done .pad{background:var(--roux);color:var(--on-accent)}
+.toe .t-lab{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted)}
+.toe .t-val{font-size:16px;font-weight:700;line-height:20px;min-height:20px}
+.toe.lit .pad{animation:lit .5s var(--ease)}
+@keyframes lit{40%{transform:scale(1.14)}}
+.toe:nth-child(2).lit .pad{animation:lit2 .5s var(--ease)}
+@keyframes lit2{0%,100%{transform:translateY(-14px)}40%{transform:translateY(-14px) scale(1.14)}}
+.main-pad{margin:0 auto;width:min(240px,80%);min-height:64px;border-radius:44% 44% 50% 50% / 60% 60% 40% 40%;background:var(--roux-tint);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;color:var(--roux-ink);text-align:center;padding:8px 16px;position:relative;font-size:16px;line-height:20px}
+.main-pad.done{background:var(--ok-tint);color:var(--ok)}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.opt{min-height:var(--pad);border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;font-size:16px;line-height:20px;transition:transform .12s var(--ease),border-color .15s,background .15s}
+.opt:hover{border-color:var(--roux)}
+.opt:active{transform:scale(.95)}
+.opt .ico{width:28px;height:28px;color:var(--roux-ink)}
+.opt-q{font-weight:700;text-align:center}
+.print-paw{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.print-paw svg{width:120px;height:120px;color:var(--ok);opacity:0}
+.stamp .print-paw svg{animation:stamp .9s var(--ease) forwards}
+@keyframes stamp{0%{opacity:0;transform:scale(2.2) rotate(-18deg)}35%{opacity:.9;transform:scale(1) rotate(-8deg)}70%{opacity:.9}100%{opacity:0;transform:scale(1) rotate(-8deg)}}
+
+.cat .eyes-open{transform-origin:center 50%;transform-box:fill-box}
+.cat.blink .lid{animation:blink 1.6s var(--ease)}
+@keyframes blink{0%,100%{transform:scaleY(1)}25%,60%{transform:scaleY(.08)}}
+.cat .lid{transform-box:fill-box;transform-origin:center}
+.cat.purr{animation:purr .12s linear 10}
+@keyframes purr{50%{transform:translateX(.6px)}}
+.hearts{position:absolute;pointer-events:none;inset:0}
+.heart{position:absolute;width:18px;height:18px;color:var(--roux);animation:heart 1.4s var(--ease) forwards}
+@keyframes heart{from{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1}to{opacity:0;transform:translateY(-60px) scale(1)}}
+
+.alert-soft{display:flex;gap:var(--s4);align-items:flex-start;background:var(--miel-tint);border-radius:var(--r-md);padding:var(--s5)}
+.alert-soft .a-ico{width:44px;height:44px;border-radius:50%;background:var(--surface);color:var(--miel-ink);display:grid;place-items:center;flex:none}
+.alert-soft h3{font-size:18px;line-height:24px;font-weight:600}
+.alert-soft p{margin-top:4px}
+.alert-soft .acts{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.kpi{background:var(--surface);border-radius:var(--r-md);padding:var(--s4);box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:6px;text-align:left;min-width:0}
+.kpi .k-lab{display:flex;align-items:center;gap:6px;color:var(--ink-muted);font-size:16px;line-height:20px}
+.kpi .k-lab .ico{width:18px;height:18px}
+.kpi .k-val{font-family:var(--font-data);font-size:28px;line-height:32px;font-weight:500;letter-spacing:-.02em}
+.kpi .k-val small{font-size:16px;color:var(--ink-muted);margin-left:2px}
+.kpi .k-note{font-size:16px;line-height:22px}
+
+/* ---------- Santé ---------- */
+.verdict{display:flex;flex-direction:column;gap:var(--s3)}
+.verdict h2{font-size:30px;line-height:34px;font-weight:700;letter-spacing:-.02em}
+.ind{display:grid;grid-template-columns:1fr;gap:var(--s3)}
+.ind-card{display:grid;grid-template-columns:auto 1fr;gap:4px var(--s4);align-items:center;background:var(--surface);border-radius:var(--r-md);padding:var(--s4) var(--s5);box-shadow:var(--shadow-card);text-align:left;width:100%}
+.ind-card .i-ico{grid-row:span 3;width:48px;height:48px;border-radius:14px;display:grid;place-items:center}
+.ind-card .i-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ind-card .i-name{font-weight:700}
+.ind-card .i-val{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-data);font-size:24px;line-height:28px;font-weight:500}
+.ind-card .i-txt{color:var(--ink-muted);font-size:16px;line-height:22px}
+.chart{width:100%;position:relative;min-height:180px}
+.chart svg text{font-family:var(--font-data);font-size:13px;fill:var(--ink-muted)}
+.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:14px;line-height:18px;white-space:nowrap;transform:translate(-50%,-100%);opacity:0;transition:opacity .15s;font-family:var(--font-data)}
+.chart .tip.on{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);font-size:16px;line-height:20px;color:var(--ink-muted);margin-top:var(--s3)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.meaning{background:var(--surface-tint);border-radius:var(--r-md);padding:var(--s4);display:flex;gap:var(--s3);font-size:16px;line-height:22px;margin-top:var(--s4)}
+.meaning .ico{color:var(--soin);flex:none;margin-top:-1px}
+.trend-grid{display:grid;grid-template-columns:1fr;gap:var(--s4)}
+
+/* ---------- Dossier ---------- */
+.allergy{display:flex;gap:var(--s3);align-items:center;background:var(--roux-tint);color:var(--ink);border-radius:var(--r-md);padding:var(--s3) var(--s4);border:1.5px solid var(--roux-ink)}
+.allergy .ico{color:var(--roux-ink)}
+.allergy strong{color:var(--roux-ink)}
+.visit-cta{display:flex;gap:var(--s4);align-items:center;background:var(--soin);color:var(--on-soin);border-radius:var(--r-md);padding:var(--s4) var(--s5);text-align:left;width:100%;transition:transform .12s var(--ease)}
+.visit-cta:active{transform:scale(.98)}
+.visit-cta .v-ico{width:48px;height:48px;border-radius:50%;background:color-mix(in srgb,var(--on-soin) 18%,transparent);display:grid;place-items:center;flex:none}
+.visit-cta h3{color:var(--on-soin);font-size:18px;line-height:24px}
+.visit-cta p{font-size:16px;line-height:22px;opacity:.9}
+.tl{display:flex;flex-direction:column;gap:var(--s5)}
+.tl-month{display:flex;flex-direction:column;gap:var(--s2)}
+.tl-month > h3{font-size:14px;line-height:18px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);font-family:var(--font-body)}
+.rec{display:grid;grid-template-columns:44px 1fr auto;gap:var(--s3);align-items:center;background:var(--surface);border-radius:var(--r-md);padding:var(--s3) var(--s4);box-shadow:var(--shadow-card);text-align:left;width:100%;transition:transform .12s var(--ease)}
+.rec:active{transform:scale(.985)}
+.rec[aria-current="true"]{box-shadow:inset 0 0 0 2px var(--soin),var(--shadow-card)}
+.rec .r-ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
+.rec .r-title{font-weight:700;line-height:22px}
+.rec .r-sub{color:var(--ink-muted);font-size:16px;line-height:22px}
+.t-consult{background:var(--surface-tint);color:var(--soin)}
+.t-vaccin{background:var(--ok-tint);color:var(--ok)}
+.t-traitement{background:var(--roux-tint);color:var(--roux-ink)}
+.t-analyse{background:var(--miel-tint);color:var(--miel-ink)}
+.t-ordonnance{background:var(--surface-tint);color:var(--ink)}
+.vax-cal{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px 4px;margin-top:var(--s2)}
+@media (min-width:600px){.vax-cal{grid-template-columns:repeat(12,minmax(0,1fr))}}
+.vax-cal .m{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;line-height:16px;color:var(--ink-muted);font-family:var(--font-data)}
+.vax-cal .m b{width:100%;height:36px;border-radius:8px;background:var(--surface-tint);display:grid;place-items:center}
+.vax-cal .m.now b{box-shadow:inset 0 0 0 2px var(--ink-muted)}
+.vax-cal .m.has b{background:var(--ok);color:var(--surface)}
+.vax-cal .m.has.next b{background:var(--miel);color:var(--on-accent)}
+.vax-cal .m b .ico{width:18px;height:18px}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:10px var(--s4);font-size:16px;line-height:22px}
+.dl dt{color:var(--ink-muted)}
+.dl dd{margin:0;font-weight:700;min-width:0}
+.explain{background:var(--surface-tint);border-radius:var(--r-md);padding:var(--s4)}
+.explain h4{font-size:16px;line-height:22px;margin-bottom:4px;display:flex;gap:8px;align-items:center}
+
+/* Résumé de visite */
+.visit{position:fixed;inset:0;z-index:90;background:var(--scrim);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:max(16px,env(safe-area-inset-top,0px)) 16px 32px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.visit-doc{background:var(--surface);color:var(--ink);width:min(720px,100%);border-radius:var(--r-lg);padding:var(--s6) var(--s5);box-shadow:var(--shadow-sheet);display:flex;flex-direction:column;gap:var(--s5);animation:rise .35s var(--ease)}
+.visit-bar{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center;justify-content:space-between}
+.visit-doc h2{font-size:26px;line-height:32px}
+.visit-doc h3{font-size:17px;line-height:22px;margin-bottom:6px}
+.visit-grid{display:grid;grid-template-columns:1fr;gap:var(--s4)}
+.visit-doc .box{border:1.5px solid var(--line);border-radius:var(--r-md);padding:var(--s4)}
+.visit-doc ul{margin:0;padding-left:20px}
+.visit-doc li{margin:2px 0}
+.q-item{display:flex;gap:8px;align-items:center}
+.q-item input{flex:1;min-width:0}
+
+/* ---------- Journal ---------- */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dow{font-size:13px;font-weight:700;text-align:center;color:var(--ink-muted);letter-spacing:.04em;padding-bottom:2px}
+.day{aspect-ratio:1;min-height:var(--tap);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--font-data);font-size:15px;line-height:16px;background:var(--surface);position:relative;max-width:100%}
+.day .g{width:12px;height:12px;display:block}
+.day.empty{background:transparent}
+.day.future{color:var(--ink-muted);opacity:.55}
+.day.none{background:var(--surface);color:var(--ink-muted)}
+.day.bonne{background:var(--ok-tint)}
+.day.moyenne{background:var(--miel-tint)}
+.day.difficile{background:var(--roux-tint)}
+.day.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.day[aria-current="true"]{box-shadow:inset 0 0 0 3px var(--soin)}
+.day .cam{position:absolute;top:3px;right:4px;width:12px;height:12px;color:var(--ink-muted)}
+.cal-legend{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:16px;color:var(--ink-muted)}
+.cal-legend span{display:inline-flex;gap:6px;align-items:center}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.photo{aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;background:var(--surface-tint);max-width:100%}
+.photo img,.photo svg{width:100%;height:100%;object-fit:cover}
+.photo-add{aspect-ratio:1;border-radius:var(--r-sm);border:2px dashed var(--ink-muted);display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;color:var(--ink-muted);font-size:14px;font-weight:700;cursor:pointer}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+.entry-slot{display:flex;flex-direction:column;gap:var(--s2)}
+.entry-line{display:flex;align-items:center;gap:10px;font-size:16px}
+.entry-line .ico{color:var(--roux-ink);width:20px;height:20px}
+
+/* ---------- Alimentation ---------- */
+.meal{display:grid;grid-template-columns:auto 1fr auto;gap:var(--s3);align-items:center}
+.meal-time{font-family:var(--font-data);font-size:16px;color:var(--ink-muted);width:52px}
+.bowl-meter{height:10px;border-radius:5px;background:var(--surface-tint);overflow:hidden;margin-top:6px}
+.bowl-meter i{display:block;height:100%;background:var(--roux);border-radius:5px}
+.transition{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:var(--s3)}
+.transition div{display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:18px;color:var(--ink-muted)}
+.transition .bar{height:28px;border-radius:8px;overflow:hidden;display:flex;background:var(--surface-tint)}
+.transition .bar i{background:var(--soin);display:block}
+.transition .bar s{background:var(--roux-tint);display:block;text-decoration:none}
+.brand-card{display:flex;gap:var(--s4);align-items:center}
+.pack{width:52px;height:64px;flex:none;border-radius:10px 10px 6px 6px;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--on-soin);background:var(--soin);position:relative}
+.pack.roux{background:var(--roux);color:var(--on-accent)}
+
+/* ---------- Activité ---------- */
+.ring-wrap{display:flex;gap:var(--s5);align-items:center}
+.ring{width:132px;height:132px;flex:none;position:relative}
+.ring .r-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .r-in b{font-family:var(--font-data);font-size:30px;line-height:32px;font-weight:500}
+.map{position:relative;border-radius:var(--r-md);overflow:hidden;background:var(--surface-tint)}
+.map svg{width:100%;height:auto}
+.map-card{position:absolute;left:12px;right:12px;bottom:12px;background:var(--surface);border-radius:var(--r-md);padding:10px 14px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow-card)}
+.map-card .r-main{flex:1;min-width:0}
+.ping{transform-box:fill-box;transform-origin:center;animation:ping 2s var(--ease) infinite}
+@keyframes ping{from{transform:scale(.6);opacity:.7}to{transform:scale(2.4);opacity:0}}
+.well{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.well div{background:var(--surface-tint);border-radius:var(--r-md);padding:var(--s3);display:flex;flex-direction:column;gap:2px;min-width:0}
+.well b{font-family:var(--font-data);font-size:20px;font-weight:500}
+
+/* ---------- Finances ---------- */
+.total{display:flex;flex-direction:column;gap:4px}
+.total .big{font-family:var(--font-data);font-size:44px;line-height:48px;font-weight:500;letter-spacing:-.03em}
+.stackbar{display:flex;height:20px;border-radius:10px;overflow:hidden;gap:2px;margin:var(--s3) 0}
+.stackbar i{display:block;height:100%}
+.cat-list .row .sw{width:14px;height:14px;border-radius:4px;flex:none}
+
+/* ---------- Dr. Doudou ---------- */
+.chat{display:flex;flex-direction:column;gap:var(--s4);min-height:0}
+.chat-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--s3);padding:var(--s4) 0}
+.chat-intro .doc{width:96px;height:96px}
+.chat-intro h2{font-size:26px;line-height:30px}
+.disclaimer{display:flex;gap:8px;align-items:flex-start;font-size:16px;line-height:22px;color:var(--ink-muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 14px}
+.disclaimer .ico{width:20px;height:20px;flex:none;margin-top:1px}
+.suggest{display:flex;flex-direction:column;gap:var(--s2);width:100%}
+.suggest button{text-align:left;padding:12px 16px;min-height:var(--tap);border-radius:var(--r-md);background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:16px;line-height:22px;display:flex;gap:10px;align-items:center}
+.suggest button:hover{border-color:var(--soin)}
+.suggest button .ico{color:var(--soin);width:20px;height:20px}
+.msgs{display:flex;flex-direction:column;gap:var(--s4)}
+.msg{display:flex;flex-direction:column;gap:var(--s2);max-width:92%}
+.msg.user{align-self:flex-end;background:var(--soin);color:var(--on-soin);padding:10px 16px;border-radius:var(--r-md) var(--r-md) 6px var(--r-md);font-weight:700}
+.msg.bot{align-self:flex-start;width:100%;max-width:100%}
+.bubble{background:var(--surface);border-radius:6px var(--r-md) var(--r-md) var(--r-md);padding:var(--s4);box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:var(--s3)}
+.bubble p+p{margin-top:0}
+.bubble ul{margin:0;padding-left:20px}
+.bubble .ctx{display:flex;gap:8px;align-items:flex-start;background:var(--surface-tint);border-radius:var(--r-sm);padding:8px 12px;font-size:16px;line-height:22px}
+.bubble .ctx .ico{width:18px;height:18px;color:var(--soin);flex:none;margin-top:2px}
+.bot-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.bot-h svg.av{width:32px;height:32px}
+.sources{display:flex;flex-wrap:wrap;gap:6px}
+.src{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px;border-radius:var(--r-pill);background:var(--surface-tint);font-size:14px;line-height:18px;font-weight:700;color:var(--ink);text-decoration:none;border:1px solid var(--line)}
+.src:hover{border-color:var(--soin);color:var(--soin)}
+.src .ico{width:14px;height:14px}
+.src-lab{font-size:14px;line-height:18px;color:var(--ink-muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.fine{font-size:14px;line-height:18px;color:var(--ink-muted);display:flex;gap:6px;align-items:center}
+.typing{display:inline-flex;gap:5px;padding:6px 2px}
+.typing i{width:8px;height:8px;border-radius:50%;background:var(--ink-muted);animation:typ 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes typ{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.caret{display:inline-block;width:2px;height:18px;background:var(--soin);vertical-align:-3px;margin-left:2px;animation:pulse .8s infinite}
+.urgent-band{display:flex;flex-direction:column;gap:var(--s3);background:var(--urgent-tint);border:2px solid var(--urgent);border-radius:var(--r-md);padding:var(--s4)}
+.urgent-band h4{color:var(--urgent);font-size:18px;line-height:24px;display:flex;gap:8px;align-items:center}
+.callbox{display:flex;flex-direction:column;gap:6px;background:var(--surface);border-radius:var(--r-sm);padding:10px 12px}
+.callbox .numb{font-family:var(--font-data);font-size:20px;user-select:all}
+.err-bubble{display:flex;flex-direction:column;gap:var(--s3);background:var(--surface);border:1.5px dashed var(--ink-muted);border-radius:var(--r-md);padding:var(--s4)}
+.composer{position:sticky;bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 8px);display:flex;gap:var(--s2);align-items:flex-end;background:var(--surface);border-radius:var(--r-lg);padding:6px 6px 6px 16px;box-shadow:var(--shadow-sheet);border:1px solid var(--line);margin-top:var(--s2)}
+.composer textarea{flex:1;border:0;background:transparent;resize:none;min-height:44px;max-height:120px;padding:10px 0;line-height:24px;outline:none;min-width:0}
+.composer .send{width:44px;height:44px;border-radius:50%;background:var(--soin);color:var(--on-soin);display:grid;place-items:center;flex:none}
+.composer .send[disabled]{opacity:.4}
+.composer:focus-within{box-shadow:0 0 0 3px var(--soin),var(--shadow-sheet)}
+
+/* ---------- Profil ---------- */
+.idcard{position:relative;background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:var(--s5);margin-top:18px;display:flex;flex-direction:column;gap:var(--s4)}
+.idcard::before,.idcard::after{content:"";position:absolute;top:-16px;width:44px;height:30px;background:var(--surface);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.idcard::before{left:28px;transform:rotate(-8deg)}.idcard::after{right:28px;transform:rotate(8deg)}
+.id-top{display:flex;gap:var(--s4);align-items:center}
+.id-photo{width:96px;height:96px;border-radius:24px;background:var(--surface-tint);flex:none;overflow:hidden}
+.id-top h2{font-size:30px;line-height:34px}
+.qr-wrap{display:flex;gap:var(--s5);align-items:center;flex-wrap:wrap}
+.qr{width:168px;height:168px;padding:10px;background:#FFFFFF;border-radius:var(--r-md);flex:none;box-shadow:inset 0 0 0 1px var(--line)}
+.qr svg{width:100%;height:100%}
+
+/* ---------- Réglages ---------- */
+.set-row{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) 0;min-height:60px;border-top:1px solid var(--line);width:100%;text-align:left}
+.set-row:first-child{border-top:0}
+.set-row .r-main{flex:1;min-width:0}
+.radio-list{display:flex;flex-direction:column;gap:var(--s2)}
+.radio{display:flex;gap:var(--s3);align-items:center;padding:var(--s3) var(--s4);border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;width:100%;min-height:56px}
+.radio .rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--ink-muted);flex:none;display:grid;place-items:center}
+.radio[aria-checked="true"]{border-color:var(--soin)}
+.radio[aria-checked="true"] .rd{border-color:var(--soin)}
+.radio[aria-checked="true"] .rd::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--soin)}
+.batt{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-data);font-size:14px}
+pre.json{background:var(--surface-tint);border-radius:var(--r-md);padding:var(--s4);font-family:var(--font-data);font-size:13px;line-height:18px;overflow:auto;max-height:300px;margin:0;white-space:pre}
+
+/* États vides */
+.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--s3);padding:var(--s6) var(--s4);background:var(--surface);border-radius:var(--r-lg);border:1.5px dashed var(--line)}
+.empty-state svg.ill{width:132px;height:110px}
+.empty-state h3{font-size:20px;line-height:26px}
+.empty-state p{color:var(--ink-muted);max-width:34ch}
+
+/* Menu Plus */
+.more-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3)}
+.more-item{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s2);padding:var(--s4);border-radius:var(--r-md);background:var(--bg);text-align:left;min-height:96px;transition:transform .12s}
+.more-item:active{transform:scale(.97)}
+.more-item .m-ico{width:44px;height:44px;border-radius:12px;background:var(--surface-tint);color:var(--soin);display:grid;place-items:center}
+.more-item b{line-height:22px}
+.more-item span{font-size:15px;line-height:20px;color:var(--ink-muted)}
+
+/* ================= PC ≥ 1024px ================= */
+@media (min-width:1024px){
+  .tabbar{display:none}
+  .toasts{bottom:24px}
+  .sidebar{display:flex;flex-direction:column;gap:var(--s4);width:var(--sidebar);flex:none;position:sticky;top:0;height:100vh;padding:var(--s5) var(--s4);border-right:1px solid var(--line);background:var(--surface);overflow-y:auto}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 var(--s2)}
+  .brand svg{width:40px;height:40px}
+  .brand b{font-family:var(--font-display);font-size:20px;line-height:22px;display:block}
+  .brand span{font-size:14px;color:var(--ink-muted);line-height:18px}
+  .side-cat{display:flex;gap:var(--s3);align-items:center;background:var(--surface-tint);border-radius:var(--r-md);padding:var(--s3);text-align:left;width:100%}
+  .side-cat .av{width:48px;height:48px;border-radius:14px;background:var(--surface);overflow:hidden;flex:none}
+  .side-cat b{display:block;line-height:22px}
+  .side-cat span{font-size:15px;color:var(--ink-muted);line-height:20px}
+  .nav-group{display:flex;flex-direction:column;gap:2px}
+  .nav-group h3{font-family:var(--font-body);font-size:13px;line-height:18px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:var(--s2) var(--s3) 4px}
+  .nav-item{display:flex;align-items:center;gap:var(--s3);min-height:var(--tap);padding:0 var(--s3);border-radius:12px;font-weight:700;font-size:16px;color:var(--ink-muted);text-align:left;width:100%;transition:background .15s,color .15s}
+  .nav-item:hover{background:var(--bg);color:var(--ink)}
+  .nav-item[aria-current="page"]{background:var(--surface-tint);color:var(--soin)}
+  .nav-item .dotw{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--miel)}
+  .side-foot{margin-top:auto;display:flex;flex-direction:column;gap:var(--s2)}
+  .side-foot .sync{justify-content:flex-start}
+  .topbar{padding:var(--s5) var(--s6) var(--s3);background:var(--bg)}
+  .topbar .avatar-btn{display:none}
+  .topbar h1{font-size:15px;font-weight:700;color:var(--ink-muted);letter-spacing:.04em;text-transform:uppercase;font-family:var(--font-body)}
+  .topbar .sync{display:none}
+  .offline-banner{margin:var(--s2) var(--s7) 0}
+  #view{padding:var(--s2) var(--s6) var(--s7)}
+  .view{max-width:1100px;margin:0}
+  .composer{bottom:var(--s4)}
+  :root{--pane:360px}
+  .pane{display:flex;flex-direction:column;width:var(--pane);flex:none;position:sticky;top:0;height:100vh;border-left:1px solid var(--line);background:var(--surface);overflow:hidden}
+  .pane-h{display:flex;align-items:center;gap:var(--s3);padding:var(--s5) var(--s4) var(--s3) var(--s5);border-bottom:1px solid var(--line)}
+  .pane-h h2{flex:1;font-size:19px;line-height:24px;font-weight:600;min-width:0}
+  .pane-b{flex:1;overflow-y:auto;padding:var(--s5);display:flex;flex-direction:column;gap:var(--s5)}
+  .pane-b .composer{position:sticky;bottom:0}
+  .pane .chat .msg.bot .bubble{box-shadow:none;background:var(--bg)}
+  .grid-2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:var(--s5);align-items:start}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s5);align-items:start}
+  .col{display:flex;flex-direction:column;gap:var(--s5);min-width:0}
+  .ind{grid-template-columns:repeat(3,1fr)}
+  .ind-card{grid-template-columns:1fr;align-content:start}
+  .ind-card .i-ico{grid-row:auto}
+  .trend-grid{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .visit-grid{grid-template-columns:1fr 1fr}
+  .more-btn-mobile{display:none}
+  .hide-desk{display:none!important}
+}
+@media (max-width:1023.98px){.hide-mob{display:none!important}}
+@media (min-width:1024px) and (max-width:1279px){
+  :root{--pane:340px;--sidebar:232px}
+  #view{padding-left:var(--s5);padding-right:var(--s5)}
+  .topbar{padding-left:var(--s5);padding-right:var(--s5)}
+  .grid-2{grid-template-columns:minmax(0,1fr)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+:root.calm *,:root.calm *::before,:root.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+
+@media print{
+  body *{visibility:hidden}
+  .visit,.visit *{visibility:visible}
+  .visit{position:absolute;inset:0;background:#fff;padding:0;overflow:visible}
+  .visit-doc{box-shadow:none;width:100%;color:#000;background:#fff}
+  .visit-bar,.no-print{display:none!important}
+}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M20.4 12.6A5 5 0 0 0 12 6.2a5 5 0 0 0-8.4 6.4L12 21l3.2-3.2"/><path d="M3 12h4l1.5-3 3 6 1.5-3h3"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1M12 10v5M9.5 12.5h5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.4A7.5 7.5 0 1 1 20 11.5z"/><path d="M12.5 8.5v6M9.5 11.5h6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></symbol>
+    <symbol id="i-journal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4M8 13.5h3M8 16.5h6"/></symbol>
+    <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM7 20.5h10"/><path d="M8 9c0-1.5 1-2 1-3.5M12 9c0-1.5 1-2 1-3.5M16 9c0-1.5 1-2 1-3.5"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><path d="M12 13c-3 0-5.5 2.8-5.5 5 0 1.6 1.3 2.5 2.8 2.5 1.1 0 1.8-.6 2.7-.6s1.6.6 2.7.6c1.5 0 2.8-.9 2.8-2.5 0-2.2-2.5-5-5.5-5z"/><ellipse cx="5.5" cy="10.5" rx="1.8" ry="2.3"/><ellipse cx="9.3" cy="6" rx="1.8" ry="2.4"/><ellipse cx="14.7" cy="6" rx="1.8" ry="2.4"/><ellipse cx="18.5" cy="10.5" rx="1.8" ry="2.3"/></symbol>
+    <symbol id="i-pawfill" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 13c-3 0-5.5 2.8-5.5 5 0 1.6 1.3 2.5 2.8 2.5 1.1 0 1.8-.6 2.7-.6s1.6.6 2.7.6c1.5 0 2.8-.9 2.8-2.5 0-2.2-2.5-5-5.5-5z"/><ellipse fill="currentColor" stroke="none" cx="5.5" cy="10.5" rx="1.9" ry="2.4"/><ellipse fill="currentColor" stroke="none" cx="9.3" cy="6" rx="1.9" ry="2.5"/><ellipse fill="currentColor" stroke="none" cx="14.7" cy="6" rx="1.9" ry="2.5"/><ellipse fill="currentColor" stroke="none" cx="18.5" cy="10.5" rx="1.9" ry="2.4"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H17v2.5"/><rect x="4" y="7.5" width="16.5" height="12" rx="2.5"/><path d="M16 13.5h1.5"/></symbol>
+    <symbol id="i-cat" viewBox="0 0 24 24"><path d="M5 4l3.2 3.6a9 9 0 0 1 7.6 0L19 4l.5 7.5A7.5 7.5 0 0 1 12 20a7.5 7.5 0 0 1-7.5-8.5z"/><path d="M9.5 12.5v.5M14.5 12.5v.5M11 15.5l1 .8 1-.8"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+    <symbol id="i-syringe" viewBox="0 0 24 24"><path d="M18 3l3 3M19.5 4.5L15 9M14 5l5 5M16.5 7.5l-9 9-3-3 9-9M7.5 16.5L3 21M9.5 11.5l1.5 1.5M11.5 9.5l1.5 1.5"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><rect x="2.8" y="8.5" width="18.4" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="M8.8 8.8l6.4 6.4"/></symbol>
+    <symbol id="i-pipette" viewBox="0 0 24 24"><path d="M14.5 4.5l5 5M17 7l-8.5 8.5-3 1 1-3L15 5M7 17l-3 3"/><path d="M5 20.5c0 .8-.6 1.5-1.5 1.5"/></symbol>
+    <symbol id="i-stetho" viewBox="0 0 24 24"><path d="M6 3H5v6a4.5 4.5 0 0 0 9 0V3h-1"/><path d="M9.5 13.5v1a5 5 0 0 0 10 0v-2"/><circle cx="19.5" cy="10.5" r="2"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.3 9.2A1.8 1.8 0 0 0 6.3 21h11.4a1.8 1.8 0 0 0 1.6-2.8L14 9V3"/><path d="M7.5 15h9"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 4.2L2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-checkc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.3l2.8 2.7L16 9.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M14 15h3"/></symbol>
+    <symbol id="i-calgo" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15h6M13 13l2 2-2 2"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="M9 3.5h6v5.5h5.5v6H15v5.5H9V15H3.5V9H9z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M21 16.5v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.5 5.2 2 2 0 0 1 4.5 3h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8L8 10.9a16 16 0 0 0 5.1 5.1l1.4-1.4a2 2 0 0 1 1.8-.6l3 .5a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 9a5.5 5.5 0 0 1 8 0l-2.5 2.5h-3z"/><path d="M12 9.5l1-1.5"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6.5 7 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10 12 3 12 3z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></symbol>
+    <symbol id="i-sunset" viewBox="0 0 24 24"><path d="M17 18a5 5 0 0 0-10 0M12 3v6M8.5 6.5L12 3l3.5 3.5M4.2 10.2l1.4 1.4M2 18h2M20 18h2M18.4 11.6l1.4-1.4M2 22h20"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H7a5 5 0 1 1 1-9.9A6 6 0 0 1 19.5 11a4 4 0 0 1-2 8z"/><path d="M9.5 14l2 2 3.5-3.5"/></symbol>
+    <symbol id="i-cloud-off" viewBox="0 0 24 24"><path d="M3 3l18 18M8 9.1A5 5 0 0 0 7 19h10.5M19.5 11A6 6 0 0 0 10.6 6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.6-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.6 4.5L20 16M20 20v-4h-4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4.5 19.5h15"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V6A2.5 2.5 0 0 0 13 3.5H6A2.5 2.5 0 0 0 3.5 6v7A2.5 2.5 0 0 0 6 15.5h2.5"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.5"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1.5"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1.5"/><path d="M14 14h2.5v2.5H14zM18 18h2.5v2.5H18zM14 19.5h1M19.5 14v1"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3.5 8.5A2 2 0 0 1 5.5 6.5h2l1.5-2.5h6l1.5 2.5h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5h.01"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h13M12.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 21H20"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9.5a6 6 0 0 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15.5 18 9.5zM10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol>
+    <symbol id="i-meh" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 15h7M9 9.5h.01M15 9.5h.01"/></symbol>
+    <symbol id="i-frown" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 16a4.5 4.5 0 0 1 7 0M8 9l2 1M16 9l-2 1"/></symbol>
+    <symbol id="i-bfull" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M5 12c1-3 3.5-4 7-4s6 1 7 4"/><path d="M8.5 9.5l.01.01M12 8.6l.01.01M15.5 9.5l.01.01"/></symbol>
+    <symbol id="i-bhalf" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 12c.8-1.5 2.2-2 4-2s3.2.5 4 2"/></symbol>
+    <symbol id="i-bempty" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M12 6v2.5"/></symbol>
+    <symbol id="i-litter" viewBox="0 0 24 24"><path d="M3.5 10h17l-1.5 9.5a1.5 1.5 0 0 1-1.5 1.3h-11A1.5 1.5 0 0 1 5 19.5z"/><path d="M8 14.5h.01M12 15.5h.01M16 14.5h.01M10 17.5h.01M14 17.5h.01"/></symbol>
+    <symbol id="i-soft" viewBox="0 0 24 24"><path d="M3.5 10h17l-1.5 9.5a1.5 1.5 0 0 1-1.5 1.3h-11A1.5 1.5 0 0 1 5 19.5z"/><path d="M12 3.5s2.5 2.6 2.5 4.2a2.5 2.5 0 0 1-5 0c0-1.6 2.5-4.2 2.5-4.2z"/></symbol>
+    <symbol id="i-question" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2.2-2.4 3.7M12 17h.01"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 21s8-3.5 8-10V5.5L12 3 4 5.5V11c0 6.5 8 10 8 10z"/><path d="M8.5 12l2.5 2.5 4.5-4.5"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><circle cx="12" cy="14" r="6"/><path d="M12 8V4M9.5 4h5M12 12v2l1.5 1.5"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M6.5 9V3.5h11V9M6.5 17.5h-2a2 2 0 0 1-2-2v-4.5a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2h-2"/><rect x="6.5" y="14" width="11" height="7" rx="1"/></symbol>
+    <symbol id="i-zzz" viewBox="0 0 24 24"><path d="M4 9h6l-6 7h6M14 4h6l-6 6h6"/></symbol>
+    <symbol id="i-yarn" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="M5 8c4 0 9 3 11 8.5M8 4.5c3 2 5.5 6 6 10.5M3.6 12c3 0 6 2.5 7 6.3M18 17c1 1.5 2 2.5 3.5 3"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M4 7l6 6 3.5-3.5L20 16M20 11v5h-5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M4 17l6-6 3.5 3.5L20 8M20 13V8h-5"/></symbol>
+    <symbol id="i-flat" viewBox="0 0 24 24"><path d="M4 12h16M15 7l5 5-5 5"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 20.5s-8-4.6-8-10.4A4.4 4.4 0 0 1 12 7.6a4.4 4.4 0 0 1 8 2.5c0 5.8-8 10.4-8 10.4z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/><path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+    <symbol id="i-water" viewBox="0 0 24 24"><path d="M4 14h16v1a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M12 3s3 3.2 3 5.2a3 3 0 0 1-6 0C9 6.2 12 3 12 3z"/></symbol>
+    <symbol id="i-motion" viewBox="0 0 24 24"><path d="M3 12h3l2-5 4 10 2-5h7"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+  <aside class="sidebar" aria-label="Navigation principale">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="12" fill="var(--soin)"/><path d="M10 11l5 5a10 10 0 0 1 10 0l5-5 .5 10A10.5 10.5 0 0 1 20 31.5 10.5 10.5 0 0 1 9.5 21z" fill="var(--on-soin)"/><path d="M17.5 23h5M20 23v3" stroke="var(--soin)" stroke-width="2" stroke-linecap="round"/></svg>
+      <div><b>Doudou</b><span>Healthcare</span></div>
+    </div>
+    <button class="side-cat" data-go="profil" aria-label="Profil de Doudou">
+      <span class="av" data-cat-mini></span>
+      <span><b>Doudou</b><span>6 ans · 4,6 kg · européen</span></span>
+    </button>
+    <nav id="sideNav" class="nav-wrap" style="display:flex;flex-direction:column;gap:var(--s3)"></nav>
+    <div class="side-foot">
+      <button class="btn secondary sm" id="dockChat"><svg class="ico sm"><use href="#i-doc"/></svg>Ouvrir Dr. Doudou</button>
+      <button class="sync" id="syncSide" data-go="reglages"></button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar" id="topbar">
+      <button class="avatar-btn" data-go="profil" aria-label="Profil de Doudou"><span data-cat-mini style="width:44px;height:44px;display:block"></span></button>
+      <h1 id="screenTitle">Aujourd'hui</h1>
+      <button class="sync" id="syncTop" data-go="reglages"></button>
+    </header>
+    <div id="offlineSlot"></div>
+    <main id="view" tabindex="-1"></main>
+  </div>
+
+  <aside class="pane" id="pane" aria-label="Détail">
+    <div class="pane-h"><h2 id="paneTitle">Détail</h2><button class="icon-btn" id="paneClose" aria-label="Fermer le volet" hidden><svg class="ico"><use href="#i-x"/></svg></button></div>
+    <div class="pane-b" id="paneBody"></div>
+  </aside>
+</div>
+
+<nav class="tabbar" id="tabbar" aria-label="Navigation">
+  <button class="tab" data-go="aujourdhui"><span class="pill"><svg class="ico"><use href="#i-today"/></svg></span>Aujourd'hui</button>
+  <button class="tab" data-go="sante"><span class="pill"><svg class="ico"><use href="#i-pulse"/></svg></span>Santé</button>
+  <button class="tab" data-go="dossier"><span class="pill"><svg class="ico"><use href="#i-folder"/></svg></span>Dossier</button>
+  <button class="tab" data-go="drdoudou"><span class="pill"><svg class="ico"><use href="#i-doc"/></svg></span>Dr. Doudou</button>
+  <button class="tab" id="moreTab"><span class="pill"><svg class="ico"><use href="#i-grid"/></svg></span>Plus</button>
+</nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="grab"></div>
+  <div class="sheet-h"><h2 id="sheetTitle">Détail</h2><button class="icon-btn" id="sheetClose" aria-label="Fermer"><svg class="ico"><use href="#i-x"/></svg></button></div>
+  <div class="sheet-b" id="sheetBody"></div>
+</section>
+<div id="visitSlot"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<input type="file" id="photoInput" accept="image/*" hidden>
+<script>
+"use strict";
+/* =====================================================================
+   DOUDOU HEALTHCARE — prototype V2
+   Architecture (un seul fichier, sans framework) :
+   1. DONNÉES fictives (date du jour figée au 4 octobre 2026 pour une histoire cohérente)
+   2. OUTILS (dates, format, stockage sûr)
+   3. ILLUSTRATIONS (Doudou, Dr. Doudou, états vides)
+   4. GRAPHIQUES SVG mesurés au conteneur
+   5. COQUILLE (routeur #hash, feuille mobile, volet PC, toasts, synchro)
+   6. ÉCRANS (une fonction par écran → {main, aside})
+   7. INTERACTIONS (délégation d'événements sur data-act)
+   ===================================================================== */
+
+/* ---------- 2. OUTILS ---------- */
+const TODAY = new Date(2026, 9, 4);
+const DAY = 86400000;
+const pad2 = n => String(n).padStart(2, "0");
+const key = d => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+const parse = k => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const diffDays = (a, b) => Math.round((parse(key(a)) - parse(key(b))) / DAY);
+const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const MOIS_C = ["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const JOURS = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+const fmtDate = (d, y) => d.getDate() + (d.getDate() === 1 ? "er" : "") + " " + MOIS[d.getMonth()] + (y ? " " + d.getFullYear() : "");
+const fmtShort = d => d.getDate() + " " + MOIS_C[d.getMonth()];
+const fmtKg = v => v.toFixed(2).replace(".", ",").replace(/0$/, "") + " kg";
+const fmtEur = v => v.toLocaleString("fr-BE", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + " €";
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ico = (id, cls = "") => `<svg class="ico ${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+function relDay(d) {
+  const n = diffDays(d, TODAY);
+  if (n === 0) return "aujourd'hui";
+  if (n === 1) return "demain";
+  if (n === -1) return "hier";
+  if (n > 1 && n < 14) return "dans " + n + " jours";
+  if (n >= 14 && n < 60) return "dans " + Math.round(n / 7) + " semaines";
+  if (n < -1 && n > -14) return "il y a " + (-n) + " jours";
+  if (n <= -14 && n > -60) return "il y a " + Math.round(-n / 7) + " semaines";
+  if (n <= -60 && n > -365) return "il y a " + Math.round(-n / 30) + " mois";
+  return n > 0 ? "dans " + Math.round(n / 30) + " mois" : "il y a " + Math.round(-n / 365) + " an" + (Math.round(-n / 365) > 1 ? "s" : "");
+}
+const store = {
+  get(k, def) { try { const v = localStorage.getItem("doudou." + k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
+  set(k, v) { try { localStorage.setItem("doudou." + k, JSON.stringify(v)); } catch (e) { /* stockage indisponible : on continue en mémoire */ } }
+};
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ---------- 1. DONNÉES FICTIVES ---------- */
+const CAT = {
+  name: "Doudou", breed: "Européen à poil court", sex: "Mâle stérilisé", birth: "12 mai 2020", age: "6 ans",
+  color: "Tigré roux et crème", weight: 4.6, chip: "250 26 0000 0048 21", chipNote: "numéro fictif",
+  vet: { name: "Dr Martin", clinic: "Clinique des Quatre Pattes", phone: "+32 2 000 12 34", addr: "Rue des Tilleuls 12, Bruxelles" },
+  emergency: { name: "Garde vétérinaire 24 h/24", phone: "+32 2 000 99 00" },
+  contacts: [{ name: "Amir (propriétaire)", role: "Propriétaire", phone: "+32 470 00 00 01" }, { name: "Léa", role: "Voisine, pet-sitter", phone: "+32 470 00 00 02" }],
+  allergies: [{ name: "Poulet", detail: "Démangeaisons et grattage autour du cou", since: "Repérée en novembre 2024 (régime d'éviction)" }],
+  noDrugAllergy: "Aucune allergie aux médicaments connue",
+  target: [4.4, 4.8]
+};
+
+const WEIGHTS = [["2026-04-05",4.42],["2026-04-19",4.45],["2026-05-03",4.50],["2026-05-17",4.55],["2026-05-31",4.61],["2026-06-14",4.68],["2026-06-28",4.74],["2026-07-12",4.78],["2026-07-26",4.80],["2026-08-04",4.76],["2026-08-23",4.70],["2026-09-06",4.66],["2026-09-20",4.64],["2026-10-03",4.60]].map(([d, v]) => ({ d: parse(d), v }));
+
+const HUMEUR = { 3: { w: "Joueur", i: "smile" }, 2: { w: "Calme", i: "meh" }, 1: { w: "Grognon", i: "frown" } };
+const APPETIT = { 3: { w: "Bien", i: "bfull" }, 2: { w: "Moyen", i: "bhalf" }, 1: { w: "Peu", i: "bempty" } };
+const SELLES = { ok: { w: "Normales", i: "litter" }, molles: { w: "Molles", i: "soft" }, non: { w: "Pas vues", i: "question" } };
+
+/* Journal : 90 jours générés de façon déterministe + épisodes de l'histoire */
+const LOGS = {};
+(function buildLogs() {
+  const r = rng(46);
+  for (let d = new Date(2026, 6, 6); d < TODAY; d = addDays(d, 1)) {
+    const k = key(d);
+    const mk = () => ({ h: r() < .55 ? 3 : (r() < .9 ? 2 : 1), a: r() < .78 ? 3 : 2, s: r() < .9 ? "ok" : (r() < .5 ? "molles" : "non") });
+    LOGS[k] = { m: mk(), e: r() < .9 ? mk() : null, note: "", photos: [] };
+  }
+  const set = (k, slot, v) => { LOGS[k][slot] = Object.assign(LOGS[k][slot] || { h: 2, a: 3, s: "ok" }, v); };
+  set("2026-09-16", "m", { s: "molles", a: 2 }); set("2026-09-17", "e", { s: "molles" });
+  ["2026-09-28","2026-09-29"].forEach(k => { set(k, "m", { h: 3, a: 3, s: "ok" }); set(k, "e", { h: 3, a: 3, s: "ok" }); });
+  set("2026-09-30", "m", { h: 3, a: 3, s: "ok" }); set("2026-09-30", "e", { h: 2, a: 3, s: "ok" });
+  set("2026-10-01", "m", { h: 2, a: 2, s: "ok" }); set("2026-10-01", "e", { h: 2, a: 2, s: "ok" });
+  set("2026-10-02", "m", { h: 2, a: 2, s: "ok" }); set("2026-10-02", "e", { h: 1, a: 1, s: "non" });
+  set("2026-10-03", "m", { h: 2, a: 1, s: "ok" }); set("2026-10-03", "e", { h: 2, a: 1, s: "ok" });
+  LOGS["2026-08-04"].note = "Bilan annuel chez le Dr Martin : tout va bien, un peu de tartre.";
+  LOGS["2026-09-14"].note = "Début de la transition vers les croquettes « Stérilisé ».";
+  LOGS["2026-09-24"].note = "Transition terminée, il mange les nouvelles croquettes sans problème.";
+  LOGS["2026-10-02"].note = "A boudé sa pâtée du soir, il a juste léché la sauce.";
+  LOGS["2026-10-03"].note = "Moins de croquettes mangées. Il dort beaucoup au soleil.";
+  LOGS["2026-09-20"].photos = ["window"]; LOGS["2026-09-27"].photos = ["sleep"]; LOGS["2026-10-03"].photos = ["sleep", "bowl"];
+  WEIGHTS.forEach(w => { const k = key(w.d); if (LOGS[k]) LOGS[k].w = w.v; });
+})();
+
+const RECORDS = [
+  { id: "r1", type: "consult", date: "2026-08-04", title: "Bilan annuel", sub: "Dr Martin · Clinique des Quatre Pattes", cost: 58,
+    fields: [["Motif", "Contrôle annuel"], ["Examen", "Bon état général, cœur et poumons normaux"], ["Dents", "Léger tartre (stade 1)"], ["Poids", "4,76 kg"], ["Conseils", "Surveiller le poids, contrôle dentaire dans 3 mois"]],
+    explain: "Tout va bien. Le « tartre stade 1 » est un petit dépôt sur les dents, sans gravité. On en reparle au contrôle de novembre." },
+  { id: "r2", type: "analyse", date: "2026-08-04", title: "Bilan sanguin", sub: "Prise de sang · résultats normaux", cost: 72,
+    fields: [["Reins (créatinine)", "1,4 mg/dL · norme 0,8–2,0"], ["Foie (ALAT)", "52 U/L · norme 12–130"], ["Sucre (glycémie)", "96 mg/dL · norme 70–150"], ["Globules rouges", "Normaux"]],
+    explain: "Les reins, le foie et le sucre dans le sang sont dans les normes pour un chat de son âge." },
+  { id: "r3", type: "ordonnance", date: "2026-08-04", title: "Ordonnance antiparasitaire", sub: "3 pipettes · valable 1 an", cost: 39,
+    fields: [["Prescrit par", "Dr Martin"], ["Produit", "Pipette antiparasitaire (sélamectine)"], ["Posologie", "1 pipette par mois entre les omoplates"], ["Quantité", "3 pipettes"]],
+    explain: "C'est l'ordonnance des pipettes en cours. À montrer en pharmacie pour le renouvellement en novembre." },
+  { id: "r4", type: "traitement", date: "2026-08-06", title: "Antiparasitaire en pipette", sub: "En cours · dose 3 sur 3 le 6 oct.", status: "en cours", cost: 0,
+    fields: [["Contre", "Puces, tiques, certains vers intestinaux"], ["Rythme", "1 fois par mois"], ["Faites", "6 août · 6 septembre"], ["Prochaine", "6 octobre (dernière dose)"]],
+    explain: "La pipette protège contre les puces, les tiques et certains vers. Il reste une dose, le 6 octobre." },
+  { id: "r5", type: "consult", date: "2026-05-12", title: "Œil qui coule", sub: "Dr Martin · conjonctivite légère", cost: 45,
+    fields: [["Motif", "Œil droit qui coule depuis 2 jours"], ["Diagnostic", "Conjonctivite légère"], ["Suivi", "Guéri en une semaine"]],
+    explain: "La conjonctivite est une inflammation de la fine membrane de l'œil. Elle était légère et a guéri en une semaine." },
+  { id: "r6", type: "traitement", date: "2026-05-12", title: "Pommade pour les yeux", sub: "Terminé · 7 jours", status: "terminé", cost: 12,
+    fields: [["Durée", "7 jours, 2 fois par jour"], ["Résultat", "Œil guéri"]],
+    explain: "Traitement court terminé, sans effet indésirable." },
+  { id: "r7", type: "vaccin", date: "2025-10-25", title: "Vaccin typhus + coryza", sub: "Rappel prévu le 25 oct. 2026", next: "2026-10-25", cost: 55,
+    fields: [["Protège contre", "Typhus et coryza (virus fréquents)"], ["Fait le", "25 octobre 2025"], ["Rappel", "25 octobre 2026"], ["Lot", "Noté sur le carnet papier"]],
+    explain: "Le typhus et le coryza sont des maladies virales fréquentes chez le chat. Le rappel se fait chaque année." },
+  { id: "r8", type: "vaccin", date: "2025-03-14", title: "Vaccin leucose", sub: "Valable jusqu'en mars 2027", next: "2027-03-14", cost: 48,
+    fields: [["Protège contre", "Leucose féline (virus transmis entre chats)"], ["Fait le", "14 mars 2025"], ["Rappel", "14 mars 2027"]],
+    explain: "La leucose se transmet entre chats. Le vaccin est utile car Doudou sort au jardin." },
+  { id: "r9", type: "analyse", date: "2024-11-20", title: "Régime d'éviction", sub: "Sensibilité au poulet repérée", cost: 0,
+    fields: [["Méthode", "8 semaines sans poulet puis réintroduction"], ["Résultat", "Démangeaisons au retour du poulet"]],
+    explain: "Un régime d'éviction consiste à retirer un aliment puis à le réintroduire pour voir s'il pose problème." }
+];
+const TYPES = {
+  consult: { w: "Consultation", pl: "Consultations", i: "stetho", c: "t-consult" },
+  vaccin: { w: "Vaccin", pl: "Vaccins", i: "syringe", c: "t-vaccin" },
+  traitement: { w: "Traitement", pl: "Traitements", i: "pipette", c: "t-traitement" },
+  analyse: { w: "Analyse", pl: "Analyses", i: "flask", c: "t-analyse" },
+  ordonnance: { w: "Ordonnance", pl: "Ordonnances", i: "file", c: "t-ordonnance" }
+};
+
+const REMINDERS = [
+  { id: "m1", date: "2026-10-04", title: "Pesée du dimanche", sub: "Sur la balance de la salle de bain", i: "scale", c: "ok" },
+  { id: "m2", date: "2026-10-06", title: "Pipette antiparasitaire", sub: "Dernière dose du traitement", i: "pipette", c: "roux", rec: "r4" },
+  { id: "m3", date: "2026-10-25", title: "Rappel vaccin typhus + coryza", sub: "À réserver chez le Dr Martin", i: "syringe", c: "miel", rec: "r7" },
+  { id: "m4", date: "2026-11-18", title: "Contrôle dentaire", sub: "Dr Martin · 10 h 30", i: "stetho", c: "", rec: "r1" }
+];
+
+const EXPENSES = [
+  { d: "2026-02-10", label: "Consultation démangeaisons", cat: "Consultations", amt: 38 },
+  { d: "2026-04-08", label: "Vermifuge en comprimé", cat: "Médicaments", amt: 18 },
+  { d: "2026-05-12", label: "Consultation œil", cat: "Consultations", amt: 45 },
+  { d: "2026-05-12", label: "Pommade pour les yeux", cat: "Médicaments", amt: 12 },
+  { d: "2026-08-04", label: "Bilan annuel", cat: "Consultations", amt: 58 },
+  { d: "2026-08-04", label: "Bilan sanguin", cat: "Analyses", amt: 72 },
+  { d: "2026-08-04", label: "Pipettes antiparasitaires ×3", cat: "Médicaments", amt: 39 }
+];
+const PLANNED = [
+  { d: "2026-10-25", label: "Rappel vaccin typhus + coryza", cat: "Vaccins", amt: 55 },
+  { d: "2026-11-06", label: "Renouvellement pipettes ×3", cat: "Médicaments", amt: 39 },
+  { d: "2026-11-18", label: "Contrôle dentaire", cat: "Consultations", amt: 45 }
+];
+const CATS = { Consultations: "var(--soin)", Analyses: "var(--miel)", "Médicaments": "var(--roux)", Vaccins: "var(--ok)", Urgences: "var(--urgent)" };
+
+const FOOD = {
+  dry: { name: "Félis Vital Stérilisé", kind: "Croquettes · au saumon, sans poulet", g: 50, note: "50 g par jour en 2 repas" },
+  wet: { name: "Maison Minou Saumon", kind: "Pâtée · 1 sachet de 85 g le soir", g: 85 },
+  water: "Fontaine à eau · environ 220 ml par jour",
+  meals: [
+    { t: "07:30", what: "Croquettes", qty: "25 g", eaten: .5, done: true },
+    { t: "12:00", what: "Quelques croquettes (libre-service)", qty: "10 g", eaten: .4, done: true },
+    { t: "19:00", what: "Pâtée Maison Minou", qty: "85 g", eaten: 0, done: false },
+    { t: "21:30", what: "Croquettes", qty: "15 g", eaten: 0, done: false }
+  ],
+  transition: { from: "Félis Vital Adulte", to: "Félis Vital Stérilisé", start: "2026-09-14", end: "2026-09-24", steps: [["14–16 sept.", 25], ["17–19 sept.", 50], ["20–22 sept.", 75], ["23–24 sept.", 100]] },
+  week: [50, 48, 52, 47, 41, 30, 26] /* g de croquettes mangées, 28 sept. → 4 oct. (aujourd'hui partiel) */
+};
+
+const ACTIVITY = { active: 38, goal: 45, play: 14, sessions: 2, sleep: "14 h 20", dist: "1,2 km",
+  week: [{ d: "lun.", v: 52 }, { d: "mar.", v: 47 }, { d: "mer.", v: 55 }, { d: "jeu.", v: 41 }, { d: "ven.", v: 34 }, { d: "sam.", v: 30 }, { d: "dim.", v: 38 }],
+  where: "Dans le jardin", seen: "il y a 4 min", batt: 62 };
+
+const DEVICES = [
+  { id: "tag", name: "Collier traceur", detail: "Activité et position", i: "tag", batt: 62, state: "ok" },
+  { id: "scale", name: "Balance connectée", detail: "Pesée du dimanche", i: "scale", batt: 88, state: "ok" },
+  { id: "fountain", name: "Fontaine à eau", detail: "Quantité bue", i: "water", batt: null, state: "off" }
+];
+
+const SOURCES = {
+  icc: { name: "International Cat Care", url: "https://icatcare.org/" },
+  cornell: { name: "Cornell Feline Health Center", url: "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center" },
+  aafp: { name: "AAFP", url: "https://catvets.com/" },
+  merck: { name: "Merck Veterinary Manual", url: "https://www.merckvetmanual.com/" },
+  wsava: { name: "WSAVA", url: "https://wsava.org/global-guidelines/" }
+};
+const LEVELS = {
+  ok: { w: "Rien d'inquiétant", i: "checkc", c: "ok" },
+  watch: { w: "À surveiller", i: "eye", c: "watch" },
+  soon: { w: "Consulter bientôt", i: "calgo", c: "soon" },
+  urgent: { w: "URGENCE vétérinaire", i: "cross", c: "urgent" }
+};
+const ANSWERS = [
+  { id: "urine", re: /urin|pipi|bouch|n'arrive pas.*(litière|faire)|force.*litière/i, level: "urgent",
+    ctx: ["Doudou est un mâle stérilisé : ce profil est plus exposé au blocage urinaire."],
+    p: ["Un chat mâle qui va souvent à la litière sans réussir à uriner peut avoir l'urètre bouché (le petit canal qui évacue l'urine). C'est une urgence : sans soin, la situation peut devenir grave en quelques heures.", "Appelle un vétérinaire maintenant. Ne lui donne ni médicament ni nourriture en attendant."],
+    src: ["cornell", "merck"] },
+  { id: "respi", re: /respir|halète|convuls|empoison|saign|tomb[ée]|accident|lys|paracétamol/i, level: "urgent",
+    ctx: ["Je n'ai pas besoin de son dossier pour celle-ci : ce signe demande un avis immédiat."],
+    p: ["Une difficulté à respirer, une convulsion, un saignement important ou une possible intoxication sont des urgences vétérinaires.", "Appelle le vétérinaire tout de suite. Garde Doudou au calme et au chaud pendant le trajet."],
+    src: ["merck", "icc"] },
+  { id: "vomi", re: /vomi/i, level: "soon",
+    ctx: ["D'après son journal : appétit en baisse depuis le 1er octobre."],
+    p: ["Un vomissement isolé, souvent de poils, arrive à beaucoup de chats. Deux vomissements dans la même matinée, alors que son appétit baisse déjà, justifient d'appeler le Dr Martin aujourd'hui ou demain."],
+    li: ["Retire la nourriture 2 à 3 heures et laisse l'eau à disposition.", "Note l'aspect (poils, nourriture, liquide) : c'est utile pour le vétérinaire.", "C'est une urgence s'il y a du sang, s'il vomit toute la journée ou s'il semble très abattu."],
+    src: ["cornell", "merck"] },
+  { id: "appetit", re: /mang|app[ée]tit|croquette|boude|faim|nourri/i, level: "watch",
+    ctx: ["D'après son journal : appétit « moyen » le 1er octobre, puis « peu » les 2 et 3 octobre.", "D'après le poids des 3 derniers mois : de 4,80 à 4,60 kg (−4 %), toujours dans sa zone idéale."],
+    p: ["Une baisse d'appétit sur 3 jours mérite un suivi attentif, sans s'alarmer. Chez Doudou, trois pistes simples :"],
+    li: ["Ses dents : le Dr Martin a noté un léger tartre en août. Une gêne dans la bouche peut lui faire bouder les croquettes.", "Son eau et sa litière : boit-il comme d'habitude ? Ses selles étaient normales hier soir, c'est rassurant.", "La transition alimentaire s'est terminée le 24 septembre. Elle explique mal une baisse qui commence une semaine plus tard."],
+    p2: ["Appelle le Dr Martin s'il ne mange presque plus rien pendant 24 heures, s'il vomit ou s'il se cache. Un chat qui jeûne peut développer un problème de foie (la lipidose hépatique)."],
+    src: ["icc", "cornell"] },
+  { id: "poids", re: /poids|kilo|\bkg\b|gros|maigr|pes/i, level: "ok",
+    ctx: ["D'après ses 14 pesées depuis avril : de 4,42 à 4,80 kg, et 4,60 kg hier."],
+    p: ["Son poids est bon : 4,60 kg, dans la zone idéale de 4,4 à 4,8 kg fixée avec le Dr Martin.", "Il a pris un peu de poids au printemps puis l'a reperdu depuis août, comme le conseillait le bilan annuel. Avec la baisse d'appétit actuelle, garde la pesée du dimanche pour vérifier que la courbe se stabilise."],
+    src: ["wsava", "cornell"] },
+  { id: "vaccin", re: /vaccin|rappel|typhus|coryza|leucose/i, level: "ok",
+    ctx: ["D'après son dossier : dernier vaccin typhus + coryza le 25 octobre 2025."],
+    p: ["Son rappel typhus + coryza est à faire vers le 25 octobre, dans 3 semaines. Tu peux appeler la clinique dès cette semaine pour réserver.", "Le vaccin leucose, lui, reste valable jusqu'en mars 2027."],
+    src: ["aafp", "wsava"] }
+];
+const FALLBACK = { id: "fallback", level: "watch",
+  ctx: ["Je connais son dossier : poids, vaccins, traitement en cours et 90 jours de journal."],
+  p: ["Je n'ai pas assez d'éléments pour te répondre précisément. Peux-tu me dire depuis quand tu as remarqué ce changement, et s'il mange, boit et va à la litière normalement ?", "En cas de doute, un appel à la clinique reste la bonne réponse."],
+  src: ["icc"] };
+const SUGGESTIONS = ["Pourquoi mange-t-il moins depuis 3 jours ?", "Son poids est-il normal ?", "Quand refaire son vaccin ?", "Il a vomi deux fois ce matin", "Il va à la litière mais n'arrive pas à faire pipi"];
+
+const QR_BITS = "1111111001011100110001010101010001101110111011101110110100111111110000010100000010101010111111101010011000110010011000000101000001101110101110000101100010101111100101110100100001101110101010111011011101011001111100011110100011100000010101011100101101100101110110111010011111001011010010011011111110000011000111001000101011101100000100011101000000011110110100010111001100010011011100010000011111111010101010101010101010101010101010101010101010101010111111100000000101010010001101111101110001000000010110101000001100000000100000101100111000011010100110111110100110110111101100010110011100011110010000000010110100111101000010011000100110011001011000001111001011011101000011100110001101101011011100100001111101010101000110011000111001111010101101010000000100000100010100000000010000001010101011001001110010110101001011111001100111101111111010110111001011001011010111010110111010001000111011011101100010010101100101101101100110001111100100101011000010000101000110110110111110000110100100100010010001101010100011010111001000000000010100000100011011110111010111011100000111010010011111100100001111010100111000010111010000000011000101001101100110010110110111001010101100011001011101101001001010011101100100000100110001011101110111110100110111010010000111100110011001111100001100110101000001000000000000010111010111101000110001101111100011110111111111010010111101001110010111110010100001011110110111000001100001111000110001010100010110111011101111110010110000010100000000111000011110110000010001110010101011111010100101100011000011000000001101100111001101110100000101010111101010001100101101010010011110011001100110110001000100011000101010000100001001100101110101011110100101110010000100000101111111111111100000111011011001000111000110001000100110110001111100100101111010001000100000000100100101100110011001010001011100000111010100100011010100110011001010100101001011011110000101011010101010010010101010000111000001001110000111000101100001010111011101100100010100111110010100101101101110111111111111111110111010101111111001101011000101011100010110001100110001011100100011011100100100010011111010101111001011000000010000101011001010011111001010011010101100000100011100000100110001010101000100100010001000100010110001010111011111110000100000100010001011111100001011110100001011111111000011100001010000101101100010011001010100000010101101011110001011101100101001101000100110111111111111011111001101101011111001100011111100000110001000110101001000010110110110011011111111010010010001100000110011011001101011101011111110111100100100111101111010001100001110010100101011110111100010010001000111110101110001011111001011111111100110000111111100011011101010100100010110000001110001110100011000010000101001010111000100011100110101001001010011110100010001111110100001110110011000001010010011100110111001100011010101111101000100110101111110100101100100000101011000001001010101100111101101111011011001100111111111110110111111001100011100110101100100001000010011011010000100010100010010011011100110001001101101101010010011111001010100110100101001011011111010110011010011010110100010010011011111001011000100001100110100100011010000010110100111110011001100000001111000011010101110101001000110011001000100111111001111101111010101101111001100100010110111111110100011011000010100111110111001111010000110010011110110010110100010101110000111001001111000110111100001100011000011011001001100110111000001010001111011010110010011111111001101101111011111110100001111110100110000110101000001010001100010110011011001111101111110001110100000000100100011011101010011111011110111001001111011011011110001110111100111110010001101011100111000001101110101110110001000100011010011010100011010111000111011101110010010111110111111000000011101111111111100000000010101010000010101110011000100011111100111001101110001011111111110001010011110011010111110101110111100110000111011101011010100000100001010011110111001001100011101010111001000100101000110011011101001100001101011110101111111111011101000111010110011111000110111010000110000011010111011000100000110000100100000001110010100101110100101100101100111011110100010010000100101100000010110110101000001000000011101010101111010100011011101110111011101100111100011111110100111101110011011010110100011010110000011010110010011010";
+</script>
+<script>
+"use strict";
+/* ---------- ÉTAT ---------- */
+const S = {
+  route: "aujourdhui",
+  theme: store.get("theme", "system"),
+  calm: store.get("calm", false),
+  sync: "ok", lastSync: Date.now() - 2 * 60000, pending: 0,
+  empty: false, demoError: false,
+  slot: new Date().getHours() >= 15 ? "e" : "m",
+  quick: { step: 0, h: null, a: null, s: null },
+  period: 30, weightRange: 6,
+  filter: "tout", selRec: "r1",
+  calMonth: [2026, 9], selDay: key(addDays(TODAY, -1)),
+  chat: [], chatBusy: false, chatPinned: false, pendingQ: null,
+  loaded: {}, visitQs: ["Faut-il examiner ses dents plus tôt que le contrôle de novembre ?", "Que surveiller à la maison si l'appétit ne revient pas ?"],
+  draftPhotos: []
+};
+
+/* ---------- 3. ILLUSTRATIONS ---------- */
+function catSVG(mood = "content", opts = {}) {
+  const eyeL = 44, eyeR = 76, ey = 64;
+  let eyes = "";
+  if (mood === "endormi") {
+    eyes = `<path d="M${eyeL - 8} ${ey} q8 6 16 0M${eyeR - 8} ${ey} q8 6 16 0" stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  } else if (mood === "malade") {
+    eyes = `<path d="M${eyeL - 8} ${ey + 2} q8 -5 16 0M${eyeR - 8} ${ey + 2} q8 -5 16 0" stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  } else {
+    const ry = mood === "boudeur" ? 4.5 : 8.5, pr = mood === "curieux" ? 3.6 : (mood === "content" ? 2.6 : 2);
+    const one = cx => `<g class="lid"><ellipse cx="${cx}" cy="${ey}" rx="7.5" ry="${ry}" fill="var(--eye)"/><ellipse cx="${cx}" cy="${ey}" rx="${pr}" ry="${Math.max(ry - 2, 2.5)}" fill="var(--ink)"/><circle cx="${cx + 2.5}" cy="${ey - 3}" r="1.6" fill="#FFFFFF"/></g>`;
+    eyes = one(eyeL) + one(eyeR);
+    if (mood === "boudeur") eyes += `<path d="M${eyeL - 9} ${ey - 6} l17 3M${eyeR + 9} ${ey - 6} l-17 3" stroke="var(--fur-dark)" stroke-width="3" stroke-linecap="round"/>`;
+  }
+  const mouth = mood === "malade" || mood === "boudeur"
+    ? `<path d="M54 87 q6 -3 12 0" stroke="var(--ink)" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
+    : `<path d="M60 80.5v3.5M60 84q-4 4.5-8.5 1.5M60 84q4 4.5 8.5 1.5" stroke="var(--ink)" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  return `<svg class="cat" viewBox="0 0 120 120" role="img" aria-label="${opts.label || "Illustration de Doudou, chat tigré roux"}" ${opts.id ? `id="${opts.id}"` : ""}>
+    ${opts.bg ? `<circle cx="60" cy="60" r="60" fill="${opts.bg}"/>` : ""}
+    <ellipse cx="60" cy="116" rx="34" ry="18" fill="var(--cream)"/>
+    <path d="M20 52 L28 12 L56 34 Z" fill="var(--fur)"/><path d="M29 42 L32 22 L47 34 Z" fill="var(--nose)" opacity=".55"/>
+    <path d="M100 52 L92 12 L64 34 Z" fill="var(--fur)"/><path d="M91 42 L88 22 L73 34 Z" fill="var(--nose)" opacity=".55"/>
+    <ellipse cx="60" cy="68" rx="44" ry="38" fill="var(--fur)"/>
+    <path d="M60 31v12M49 33l3 10M71 33l-3 10M17 64h10M18 73h8M103 64H93M102 73h-8" stroke="var(--fur-dark)" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="60" cy="86" rx="19" ry="13.5" fill="var(--cream)"/>
+    ${eyes}
+    <path d="M55.5 76.5h9l-4.5 4.5z" fill="var(--nose)" stroke="var(--nose)" stroke-width="1.5" stroke-linejoin="round"/>
+    ${mouth}
+    <path d="M42 84L14 80M42 88L15 91M78 84l28-4M78 88l27 3" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round" opacity=".45"/>
+    ${mood === "malade" ? `<ellipse cx="38" cy="80" rx="6" ry="3.5" fill="var(--nose)" opacity=".4"/><ellipse cx="82" cy="80" rx="6" ry="3.5" fill="var(--nose)" opacity=".4"/>` : ""}
+  </svg>`;
+}
+function drSVG(cls = "av") {
+  return `<svg class="${cls}" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="60" fill="var(--surface-tint)"/>
+    <g transform="translate(14 16) scale(.77)">${catSVG("content").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>
+    <path d="M38 98c0 10 10 16 22 16s22-6 22-16" stroke="var(--soin)" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="92" cy="92" r="16" fill="var(--soin)"/><path d="M92 84v16M84 92h16" stroke="var(--on-soin)" stroke-width="4" stroke-linecap="round"/></svg>`;
+}
+function eyeStatus(level) {
+  /* l'œil de chat : pupille ronde = tout va bien ; fendue = à surveiller ; très fine = consulter */
+  const col = { ok: "var(--ok)", watch: "var(--miel)", soon: "var(--roux)", urgent: "var(--urgent)" }[level];
+  const rx = { ok: 7, watch: 3.2, soon: 1.8, urgent: 1.4 }[level];
+  return `<svg viewBox="0 0 34 34" aria-hidden="true"><path d="M2 17C6 8 11 5 17 5s11 3 15 12c-4 9-9 12-15 12S6 26 2 17z" fill="${col}"/><ellipse cx="17" cy="17" rx="${rx}" ry="9" fill="var(--ink)"/><circle cx="20" cy="13" r="1.8" fill="#FFFFFF"/></svg>`;
+}
+function emptyIll(kind) {
+  const base = `<svg class="ill" viewBox="0 0 132 110" aria-hidden="true"><ellipse cx="66" cy="100" rx="52" ry="8" fill="var(--surface-tint)"/>`;
+  const items = {
+    journal: `<rect x="34" y="22" width="64" height="72" rx="10" fill="var(--surface-tint)"/><path d="M46 44h40M46 56h28M46 68h34" stroke="var(--line)" stroke-width="5" stroke-linecap="round"/><g transform="translate(78 54) scale(.4)">${catSVG("curieux").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>`,
+    dossier: `<rect x="30" y="18" width="58" height="76" rx="10" fill="var(--surface-tint)"/><path d="M59 40v20M49 50h20" stroke="var(--soin)" stroke-width="6" stroke-linecap="round"/><g transform="translate(74 52) scale(.42)">${catSVG("endormi").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>`,
+    finances: `<circle cx="52" cy="58" r="26" fill="var(--surface-tint)"/><text x="52" y="67" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="26" fill="var(--soin)">€</text><g transform="translate(70 46) scale(.46)">${catSVG("content").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>`,
+    today: `<g transform="translate(30 6) scale(.62)">${catSVG("curieux").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>`
+  };
+  return base + (items[kind] || items.today) + `</svg>`;
+}
+function photoSVG(kind) {
+  const scenes = {
+    sleep: `<rect width="100" height="100" fill="var(--miel-tint)"/><rect y="62" width="100" height="38" fill="var(--surface-tint)"/><ellipse cx="50" cy="66" rx="30" ry="14" fill="var(--fur)"/><circle cx="72" cy="58" r="12" fill="var(--fur)"/><path d="M64 50l3-8 5 6M76 48l4-6 2 8" fill="var(--fur)"/><path d="M68 58q3 2 6 0M76 58q3 2 6 0" stroke="var(--ink)" stroke-width="1.6" fill="none"/><path d="M22 66q-8 6 2 10" stroke="var(--fur-dark)" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="84" cy="22" r="9" fill="var(--miel)"/>`,
+    window: `<rect width="100" height="100" fill="var(--surface-tint)"/><rect x="18" y="12" width="64" height="56" rx="4" fill="var(--bg)" stroke="var(--soin)" stroke-width="3"/><path d="M50 12v56M18 40h64" stroke="var(--soin)" stroke-width="3"/><rect y="68" width="100" height="32" fill="var(--line)"/><ellipse cx="50" cy="72" rx="16" ry="12" fill="var(--fur)"/><circle cx="50" cy="56" r="11" fill="var(--fur)"/><path d="M41 49l1-9 6 5M59 49l-1-9-6 5" fill="var(--fur)"/>`,
+    bowl: `<rect width="100" height="100" fill="var(--roux-tint)"/><path d="M20 58h60a30 22 0 0 1-60 0z" fill="var(--soin)"/><ellipse cx="50" cy="58" rx="30" ry="6" fill="var(--soin-strong)"/><circle cx="42" cy="56" r="3" fill="var(--miel)"/><circle cx="52" cy="55" r="3" fill="var(--miel)"/><circle cx="58" cy="57" r="3" fill="var(--miel)"/>`
+  };
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Photo illustrée">${scenes[kind] || scenes.sleep}</svg>`;
+}
+function qrSVG() {
+  const n = Math.round(Math.sqrt(QR_BITS.length));
+  let d = "";
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (QR_BITS[y * n + x] === "1") d += `M${x} ${y}h1v1h-1z`;
+  return `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" role="img" aria-label="QR code de la carte de secours de Doudou"><path d="${d}" fill="#13302D"/></svg>`;
+}
+
+/* ---------- 4. GRAPHIQUES (dessinés à la taille réelle du conteneur) ---------- */
+const CHARTS = {};
+function chartBox(id, h = 200) { return `<div class="chart" data-chart="${id}" style="height:${h}px" role="img"></div>`; }
+function drawCharts(root = document) {
+  root.querySelectorAll("[data-chart]").forEach(el => {
+    const fn = CHARTS[el.dataset.chart]; if (!fn) return;
+    const w = Math.max(240, el.clientWidth), h = el.clientHeight || 200;
+    el.innerHTML = fn(w, h, el) + `<div class="tip"></div>`;
+  });
+}
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+
+CHARTS.weight = (w, h, el) => {
+  const since = addDays(TODAY, -(S.weightRange === 6 ? 183 : 92));
+  const pts = WEIGHTS.filter(p => p.d >= since);
+  el.setAttribute("aria-label", `Courbe de poids : ${fmtKg(pts[0].v)} le ${fmtDate(pts[0].d)}, ${fmtKg(pts[pts.length - 1].v)} le ${fmtDate(pts[pts.length - 1].d)}. Zone idéale 4,4 à 4,8 kg.`);
+  const L = 40, R = 16, T = 14, B = 28;
+  const x = scale(+since, +TODAY, L, w - R), y = scale(4.3, 4.9, h - B, T);
+  let g = "";
+  [4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9].forEach(v => { if (v === 4.3 || v === 4.9) return; g += `<line x1="${L}" x2="${w - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="${v === 4.4 || v === 4.8 ? "0" : "2 4"}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v.toFixed(1).replace(".", ",")}</text>`; });
+  const band = `<rect x="${L}" y="${y(4.8)}" width="${w - R - L}" height="${y(4.4) - y(4.8)}" fill="var(--ok-tint)"/><text x="${L + 8}" y="${y(4.4) - 8}" style="fill:var(--ok);font-weight:600">zone idéale</text>`;
+  const months = []; for (let m = new Date(since.getFullYear(), since.getMonth() + 1, 1); m <= TODAY; m = new Date(m.getFullYear(), m.getMonth() + 1, 1)) months.push(m);
+  const xl = months.map(m => `<text x="${x(+m)}" y="${h - 8}" text-anchor="middle">${MOIS_C[m.getMonth()]}</text>`).join("");
+  const path = pts.map((p, i) => (i ? "L" : "M") + x(+p.d).toFixed(1) + " " + y(p.v).toFixed(1)).join(" ");
+  const area = path + ` L${x(+pts[pts.length - 1].d)} ${h - B} L${x(+pts[0].d)} ${h - B} Z`;
+  const dots = pts.map((p, i) => `<circle cx="${x(+p.d)}" cy="${y(p.v)}" r="${i === pts.length - 1 ? 6 : 3.5}" fill="${i === pts.length - 1 ? "var(--soin)" : "var(--surface)"}" stroke="var(--soin)" stroke-width="2.5" data-tip="${fmtShort(p.d)} · ${fmtKg(p.v)}"/>`).join("");
+  const last = pts[pts.length - 1];
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${band}${g}${xl}<path d="${area}" fill="var(--soin)" opacity=".08"/><path d="${path}" fill="none" stroke="var(--soin)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${dots}<text x="${Math.min(x(+last.d), w - R - 30)}" y="${y(last.v) - 12}" text-anchor="middle" style="fill:var(--ink);font-weight:600">${fmtKg(last.v)}</text></svg>`;
+};
+function trendData(field, days) {
+  const out = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = addDays(TODAY, -i - 1), l = LOGS[key(d)];
+    if (!l) { out.push({ d, v: null }); continue; }
+    const vals = [l.m, l.e].filter(Boolean).map(e => e[field]);
+    out.push({ d, v: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null });
+  }
+  return out;
+}
+function trendChart(field, color, label, words) {
+  return (w, h, el) => {
+    const days = S.period, data = trendData(field, days);
+    const L = 8, R = 8, T = 10, B = 26, bw = (w - L - R) / days;
+    const y = scale(0, 3, h - B, T);
+    const valid = data.filter(d => d.v != null), avg = valid.reduce((a, b) => a + b.v, 0) / valid.length;
+    el.setAttribute("aria-label", `${label} sur ${days} jours : moyenne ${avg.toFixed(1).replace(".", ",")} sur 3, ${words}.`);
+    let bars = "";
+    data.forEach((p, i) => {
+      if (p.v == null) return;
+      const recent = i >= days - 3;
+      const bh = (h - B) - y(p.v);
+      bars += `<rect x="${(L + i * bw + bw * .15).toFixed(1)}" y="${y(p.v).toFixed(1)}" width="${Math.max(1.5, bw * .7).toFixed(1)}" height="${bh.toFixed(1)}" rx="${Math.min(3, bw * .3).toFixed(1)}" fill="${color}" opacity="${recent ? 1 : .45}" data-tip="${fmtShort(p.d)} · ${(field === "a" ? APPETIT : HUMEUR)[Math.round(p.v)].w}"/>`;
+    });
+    const ticks = [1, 2, 3].map(v => `<line x1="${L}" x2="${w - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="2 4"/>`).join("");
+    const avgL = `<line x1="${L}" x2="${w - R}" y1="${y(avg)}" y2="${y(avg)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${w - R}" y="${y(avg) - 6}" text-anchor="end" style="fill:var(--ink)">moyenne</text>`;
+    const lab = `<text x="${L}" y="${h - 6}">${fmtShort(data[0].d)}</text><text x="${w - R}" y="${h - 6}" text-anchor="end">hier</text>`;
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${ticks}${bars}${avgL}${lab}</svg>`;
+  };
+}
+CHARTS.appetit = trendChart("a", "var(--roux)", "Appétit", "en baisse depuis 3 jours");
+CHARTS.humeur = trendChart("h", "var(--soin)", "Humeur", "plutôt stable");
+CHARTS.food = (w, h, el) => {
+  const L = 8, R = 8, T = 22, B = 26, n = FOOD.week.length, bw = (w - L - R) / n;
+  const y = scale(0, 60, h - B, T);
+  el.setAttribute("aria-label", "Croquettes mangées sur 7 jours : de 50 g à 26 g aujourd'hui (journée en cours).");
+  const days = ["lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."];
+  let s = `<line x1="${L}" x2="${w - R}" y1="${y(50)}" y2="${y(50)}" stroke="var(--soin)" stroke-dasharray="5 4"/><text x="${w - R}" y="${y(50) - 6}" text-anchor="end" style="fill:var(--soin)">ration 50 g</text>`;
+  FOOD.week.forEach((v, i) => {
+    const today = i === n - 1;
+    s += `<rect x="${L + i * bw + bw * .2}" y="${y(v)}" width="${bw * .6}" height="${(h - B) - y(v)}" rx="6" fill="${today ? "var(--surface)" : "var(--roux)"}" stroke="var(--roux)" stroke-width="2" ${today ? 'stroke-dasharray="4 3"' : ""} data-tip="${days[i]} · ${v} g${today ? " (en cours)" : ""}"/><text x="${L + i * bw + bw / 2}" y="${h - 6}" text-anchor="middle">${days[i]}</text>`;
+  });
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${s}</svg>`;
+};
+CHARTS.activity = (w, h, el) => {
+  const L = 8, R = 8, T = 22, B = 26, n = ACTIVITY.week.length, bw = (w - L - R) / n;
+  const y = scale(0, 60, h - B, T);
+  el.setAttribute("aria-label", "Minutes d'activité sur 7 jours, objectif 45 minutes.");
+  let s = `<line x1="${L}" x2="${w - R}" y1="${y(45)}" y2="${y(45)}" stroke="var(--soin)" stroke-dasharray="5 4"/><text x="${w - R}" y="${y(45) - 6}" text-anchor="end" style="fill:var(--soin)">objectif 45 min</text>`;
+  ACTIVITY.week.forEach((p, i) => {
+    s += `<rect x="${L + i * bw + bw * .2}" y="${y(p.v)}" width="${bw * .6}" height="${(h - B) - y(p.v)}" rx="6" fill="var(--soin)" opacity="${i === n - 1 ? 1 : .55}" data-tip="${p.d} · ${p.v} min"/><text x="${L + i * bw + bw / 2}" y="${h - 6}" text-anchor="middle">${p.d}</text>`;
+  });
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${s}</svg>`;
+};
+CHARTS.money = (w, h, el) => {
+  const L = 34, R = 8, T = 14, B = 26, bw = (w - L - R) / 12;
+  const byM = Array(12).fill(0), plan = Array(12).fill(0);
+  EXPENSES.forEach(e => byM[parse(e.d).getMonth()] += e.amt);
+  PLANNED.forEach(e => plan[parse(e.d).getMonth()] += e.amt);
+  const y = scale(0, 180, h - B, T);
+  el.setAttribute("aria-label", "Dépenses vétérinaires par mois en 2026 : pic en août (169 €). Dépenses prévues en octobre et novembre.");
+  let s = [0, 60, 120, 180].map(v => `<line x1="${L}" x2="${w - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="2 4"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join("");
+  for (let m = 0; m < 12; m++) {
+    const x0 = L + m * bw + bw * .18, bwi = bw * .64;
+    if (byM[m]) s += `<rect x="${x0}" y="${y(byM[m])}" width="${bwi}" height="${(h - B) - y(byM[m])}" rx="4" fill="var(--soin)" data-tip="${MOIS[m]} · ${fmtEur(byM[m])}"/>`;
+    if (plan[m]) s += `<rect x="${x0}" y="${y(plan[m])}" width="${bwi}" height="${(h - B) - y(plan[m])}" rx="4" fill="none" stroke="var(--soin)" stroke-width="2" stroke-dasharray="4 3" data-tip="${MOIS[m]} · ${fmtEur(plan[m])} prévus"/>`;
+    s += `<text x="${L + m * bw + bw / 2}" y="${h - 6}" text-anchor="middle" style="${m === 9 ? "fill:var(--ink);font-weight:600" : ""}">${MOIS[m][0].toUpperCase()}</text>`;
+  }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${s}</svg>`;
+};
+/* info-bulles des graphiques */
+document.addEventListener("pointerover", e => {
+  const t = e.target.closest("[data-tip]"); if (!t) return;
+  const box = t.closest(".chart"); if (!box) return;
+  const tip = box.querySelector(".tip"), r = t.getBoundingClientRect(), b = box.getBoundingClientRect();
+  tip.textContent = t.dataset.tip;
+  tip.style.left = Math.min(Math.max(r.left - b.left + r.width / 2, 60), b.width - 60) + "px";
+  tip.style.top = (r.top - b.top - 8) + "px";
+  tip.classList.add("on");
+});
+document.addEventListener("pointerout", e => { const t = e.target.closest("[data-tip]"); if (t) t.closest(".chart")?.querySelector(".tip")?.classList.remove("on"); });
+let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => { drawCharts(); }, 120); });
+
+/* ---------- 5. COQUILLE ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const ROUTES = {
+  aujourdhui: { t: "Aujourd'hui", i: "today", g: "Quotidien" },
+  journal: { t: "Journal", i: "journal", g: "Quotidien" },
+  alimentation: { t: "Alimentation et poids", i: "bowl", g: "Quotidien" },
+  activite: { t: "Activité et GPS", i: "paw", g: "Quotidien" },
+  sante: { t: "Santé", i: "pulse", g: "Santé" },
+  dossier: { t: "Dossier médical", i: "folder", g: "Santé" },
+  drdoudou: { t: "Dr. Doudou", i: "doc", g: "Santé" },
+  finances: { t: "Finances", i: "wallet", g: "Pratique" },
+  profil: { t: "Profil de Doudou", i: "cat", g: "Pratique" },
+  reglages: { t: "Réglages et données", i: "gear", g: "Pratique" }
+};
+const isDesk = () => window.matchMedia("(min-width:1024px)").matches;
+
+function applyTheme() {
+  const r = document.documentElement;
+  if (S.theme === "system") r.removeAttribute("data-theme"); else r.setAttribute("data-theme", S.theme);
+  r.classList.toggle("calm", !!S.calm);
+  const dark = S.theme === "dark" || (S.theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0D1918" : "#F4F1EB");
+}
+function buildSideNav() {
+  const groups = {};
+  Object.entries(ROUTES).forEach(([k, r]) => (groups[r.g] = groups[r.g] || []).push([k, r]));
+  $("#sideNav").innerHTML = Object.entries(groups).map(([g, items]) => `<div class="nav-group"><h3>${g}</h3>${items.map(([k, r]) =>
+    `<button class="nav-item" data-go="${k}">${ico(r.i)}${r.t}${k === "sante" && !S.empty ? '<span class="dotw" aria-label="un point à surveiller"></span>' : ""}</button>`).join("")}</div>`).join("");
+}
+function syncLabel() {
+  if (S.sync === "offline") return { l: "Hors ligne · tes saisies sont gardées", s: "Hors ligne", i: "cloud-off" };
+  if (S.sync === "pending") return { l: S.pending + " saisie" + (S.pending > 1 ? "s" : "") + " en attente d'envoi", s: "En attente", i: "refresh" };
+  const m = Math.max(0, Math.round((Date.now() - S.lastSync) / 60000));
+  return { l: "À jour " + (m < 1 ? "à l'instant" : "il y a " + m + " min"), s: "À jour", i: "cloud" };
+}
+function renderSync() {
+  const s = syncLabel();
+  const html = `<span class="dot" aria-hidden="true"></span><span class="txt-long">${s.l}</span><span class="txt-short">${s.s}</span>`;
+  ["#syncTop", "#syncSide"].forEach(id => { const el = $(id); el.dataset.state = S.sync; el.innerHTML = html; el.setAttribute("aria-label", "Synchronisation : " + s.l + ". Ouvrir les réglages."); });
+  $("#syncSide .txt-short").hidden = true;
+  $("#offlineSlot").innerHTML = S.sync === "offline" ? `<div class="offline-banner" role="status">${ico("cloud-off")}<span><b>Hors ligne.</b> Tu peux continuer à noter : tout sera envoyé au retour du réseau.</span></div>` : "";
+}
+setInterval(renderSync, 30000);
+function markPending() {
+  if (S.sync === "offline") { S.pending++; renderSync(); return; }
+  S.sync = "pending"; S.pending = 1; renderSync();
+  setTimeout(() => { if (S.sync !== "pending") return; S.sync = "ok"; S.pending = 0; S.lastSync = Date.now(); renderSync(); }, 1600);
+}
+
+function toast(msg, icon = "check") {
+  const t = document.createElement("div");
+  t.className = "toast"; t.innerHTML = ico(icon) + `<span>${msg}</span>`;
+  $("#toasts").appendChild(t);
+  setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 260); }, 2600);
+}
+
+/* Feuille mobile / volet PC */
+let lastFocus = null;
+function openDetail(title, html, opts = {}) {
+  if (isDesk() && !opts.sheet) {
+    S.chatPinned = false;
+    $("#paneTitle").textContent = title; $("#paneBody").innerHTML = html; $("#paneClose").hidden = false;
+    $("#paneBody").scrollTop = 0; drawCharts($("#pane")); $("#paneBody").classList.remove("view-enter"); void $("#paneBody").offsetWidth; $("#paneBody").classList.add("view-enter");
+    return;
+  }
+  lastFocus = document.activeElement;
+  $("#sheetTitle").textContent = title; $("#sheetBody").innerHTML = html;
+  const sc = $("#scrim"), sh = $("#sheet");
+  sc.hidden = false; sh.hidden = false;
+  requestAnimationFrame(() => { sc.classList.add("on"); sh.classList.add("on"); drawCharts(sh); });
+  setTimeout(() => $("#sheetClose").focus(), 60);
+}
+function closeSheet() {
+  const sc = $("#scrim"), sh = $("#sheet");
+  if (sh.hidden) return;
+  sc.classList.remove("on"); sh.classList.remove("on");
+  setTimeout(() => { sc.hidden = true; sh.hidden = true; $("#sheetBody").innerHTML = ""; }, 280);
+  lastFocus?.focus?.();
+}
+function closePane() { S.chatPinned = false; renderAside(); }
+
+/* Routeur */
+function go(route, opts = {}) {
+  if (!ROUTES[route]) route = "aujourdhui";
+  closeSheet();
+  if (S.route !== route || opts.force) { S.route = route; try { history.replaceState(null, "", "#" + route); } catch (e) {} }
+  render(true);
+  if (!opts.keepScroll) window.scrollTo({ top: 0 });
+  if (opts.focus !== false) $("#view").focus({ preventScroll: true });
+}
+const SKELETON_ROUTES = ["sante", "dossier", "finances", "activite"];
+function render(anim) {
+  const r = ROUTES[S.route];
+  $("#screenTitle").textContent = r.t;
+  document.title = r.t + " · Doudou Healthcare";
+  document.querySelectorAll(".tab,.nav-item").forEach(b => b.dataset.go === S.route ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+  const moreRoutes = ["journal", "alimentation", "activite", "finances", "profil", "reglages"];
+  $("#moreTab").toggleAttribute("aria-current", moreRoutes.includes(S.route));
+  if (moreRoutes.includes(S.route)) $("#moreTab").setAttribute("aria-current", "page");
+  const v = $("#view");
+  if (SKELETON_ROUTES.includes(S.route) && !S.loaded[S.route]) {
+    S.loaded[S.route] = true;
+    v.innerHTML = skeleton();
+    const rt = S.route;
+    setTimeout(() => { if (S.route === rt) render(true); }, 650);
+    renderAside(); return;
+  }
+  const out = SCREENS[S.route]();
+  v.innerHTML = `<div class="view ${anim ? "view-enter" : ""}">${out.main}</div>`;
+  v.querySelectorAll(".view > *").forEach((el, i) => { if (anim) { el.classList.add("rise"); el.style.setProperty("--i", i); } });
+  drawCharts(v);
+  renderAside(out);
+  afterRender();
+}
+function renderAside(out) {
+  if (S.chatPinned) { $("#paneTitle").textContent = "Dr. Doudou"; $("#paneClose").hidden = false; $("#paneBody").innerHTML = chatHTML("pane"); scrollChat(); return; }
+  out = out || (SCREENS[S.route] ? SCREENS[S.route]() : {});
+  $("#paneClose").hidden = true;
+  $("#paneTitle").textContent = out.asideTitle || "En un coup d'œil";
+  $("#paneBody").innerHTML = out.aside || "";
+  drawCharts($("#pane"));
+}
+function skeleton() {
+  return `<div class="view" aria-busy="true" aria-label="Chargement"><div class="sk" style="height:38px;width:60%"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:220px"></div><div class="sk" style="height:140px"></div></div>`;
+}
+function afterRender() {
+  document.querySelectorAll("[data-cat-mini]").forEach(el => { if (!el.innerHTML) el.innerHTML = catSVG("content", { label: "Doudou" }); });
+  const c = $("#composer-main"); if (c) autoGrow(c);
+}
+window.addEventListener("scroll", () => $("#topbar").classList.toggle("scrolled", window.scrollY > 4), { passive: true });
+</script>
+<script>
+"use strict";
+/* ---------- 6. ÉCRANS ---------- */
+const lvl = (l, txt) => `<span class="status ${LEVELS[l].c}">${ico(LEVELS[l].i)}${txt || LEVELS[l].w}</span>`;
+function dayOverall(l) {
+  if (!l) return null;
+  const e = [l.m, l.e].filter(Boolean); if (!e.length) return null;
+  const v = e.reduce((s, x) => s + (x.a + x.h) / 2, 0) / e.length;
+  return v >= 2.5 ? "bonne" : v >= 1.75 ? "moyenne" : "difficile";
+}
+const GLYPH = {
+  bonne: `<svg class="g" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="var(--ok)"/></svg>`,
+  moyenne: `<svg class="g" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="none" stroke="var(--miel-ink)" stroke-width="1.6"/><path d="M6 1.6a4.4 4.4 0 0 1 0 8.8z" fill="var(--miel-ink)"/></svg>`,
+  difficile: `<svg class="g" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="none" stroke="var(--roux-ink)" stroke-width="1.8"/><path d="M3 9l6-6" stroke="var(--roux-ink)" stroke-width="1.8"/></svg>`
+};
+const DAYWORD = { bonne: "Bonne journée", moyenne: "Journée moyenne", difficile: "Journée difficile" };
+const todayLog = () => LOGS[key(TODAY)];
+function catMood() {
+  const t = todayLog(), last = t && (t.e || t.m);
+  if (last) return last.h === 3 ? "content" : last.h === 1 ? "boudeur" : "content";
+  return "curieux";
+}
+const emptyState = (kind, title, text, act, label) => `<div class="empty-state">${emptyIll(kind)}<h3>${title}</h3><p>${text}</p>${act ? `<button class="btn primary" data-act="${act}">${ico("plus")}${label}</button>` : ""}</div>`;
+
+/* --- Saisie rapide : les coussinets --- */
+const QCATS = [
+  { k: "h", lab: "Humeur", q: "Comment est son humeur ?", icon: "smile", opts: [[3, HUMEUR[3]], [2, HUMEUR[2]], [1, HUMEUR[1]]] },
+  { k: "a", lab: "Appétit", q: "Comment a-t-il mangé ?", icon: "bowl", opts: [[3, APPETIT[3]], [2, APPETIT[2]], [1, APPETIT[1]]] },
+  { k: "s", lab: "Selles", q: "Et dans la litière ?", icon: "litter", opts: [["ok", SELLES.ok], ["molles", SELLES.molles], ["non", SELLES.non]] }
+];
+function quickHTML() {
+  const t = todayLog(), saved = t && t[S.slot];
+  const q = S.quick, slotW = S.slot === "m" ? "ce matin" : "ce soir";
+  const done = !!saved && q.h == null && q.a == null && q.s == null;
+  const vals = done ? saved : q;
+  const toes = QCATS.map((c, i) => {
+    const v = vals[c.k], o = v != null ? c.opts.find(x => x[0] == v)[1] : null;
+    const cur = !done && q.step === i;
+    return `<button class="toe ${o ? "done" : ""}" data-act="qstep" data-step="${i}" ${cur ? 'aria-current="step"' : ""} aria-label="${c.lab} : ${o ? o.w : "à renseigner"}">
+      <span class="pad">${ico(o ? o.i : c.icon, "lg")}</span><span class="t-lab">${c.lab}</span><span class="t-val">${o ? o.w : "·"}</span></button>`;
+  }).join("");
+  const c = QCATS[Math.min(q.step, 2)];
+  const opts = done ? "" : `<p class="opt-q" id="optq">${c.q}</p><div class="options" role="group" aria-labelledby="optq">${c.opts.map(([v, o]) => `<button class="opt" data-act="qpick" data-k="${c.k}" data-v="${v}">${ico(o.i)}${o.w}</button>`).join("")}</div>`;
+  const nDone = QCATS.filter(c => vals[c.k] != null).length;
+  return `<section class="card paw-card" id="quick" aria-label="Saisie rapide">
+    <div class="paw-head"><h2>Comment va Doudou ${slotW} ?</h2>
+      <div class="seg" role="group" aria-label="Moment de la journée"><button data-act="slot" data-v="m" aria-pressed="${S.slot === "m"}">Matin</button><button data-act="slot" data-v="e" aria-pressed="${S.slot === "e"}">Soir</button></div></div>
+    <div class="paw">${toes}</div>
+    ${opts}
+    <div class="main-pad ${done ? "done" : ""}" id="mainPad" role="status">${done ? ico("check") + "Noté pour " + slotW + ". Merci !" : nDone + " sur 3"}<span class="print-paw">${`<svg viewBox="0 0 24 24"><use href="#i-pawfill"/></svg>`}</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      ${done ? `<button class="link-btn" data-act="qedit">${ico("refresh")}Modifier</button>` : `<span class="small muted">Enregistré automatiquement à la 3ᵉ touche</span>`}
+      <button class="link-btn" data-act="form" data-day="${key(TODAY)}">Saisie détaillée${ico("chev-r")}</button></div>
+  </section>`;
+}
+function remindersHTML(limit) {
+  const list = REMINDERS.slice(0, limit || 9);
+  return `<section class="card"><div class="card-h"><h2>Prochains rappels</h2><button class="link-btn" data-go="dossier">Dossier${ico("chev-r")}</button></div>
+    <div class="list">${list.map(m => { const d = parse(m.date), n = diffDays(d, TODAY);
+      return `<button class="row" data-act="reminder" data-id="${m.id}" style="align-items:flex-start"><span class="r-ico ${m.c}">${ico(m.i)}</span><span class="r-main"><span class="r-title">${m.title}</span><br><span class="r-sub">${m.sub}</span><span class="r-meta"><span class="status ${n <= 2 ? "soon" : n <= 21 ? "watch" : "neutral"}">${n <= 2 ? ico("clock") : ""}${cap(relDay(d))}</span><span class="small muted data">${fmtShort(d)}</span></span></span>${ico("chev-r", "sm chev")}</button>`; }).join("")}</div></section>`;
+}
+const SCREENS = {};
+SCREENS.aujourdhui = () => {
+  const d = TODAY;
+  if (S.empty) return { main: `<section class="hero"><div class="hero-top"><div class="hero-cat">${catSVG("curieux")}</div><div class="hero-txt"><p class="hero-date">${cap(JOURS[d.getDay()])} ${fmtDate(d)}</p><h2>Bienvenue, Doudou !</h2></div></div><p class="hero-sum">Commence par la saisie du jour : trois touches, et l'appli apprend à connaître ses habitudes.</p></section>${quickHTML()}${emptyState("today", "Aucun rappel pour l'instant", "Ajoute son dernier vaccin ou son traitement en cours : on te préviendra avant chaque échéance.", "goDossier", "Ajouter un soin")}`, aside: asideToday() };
+  const hero = `<section class="hero" aria-label="Doudou aujourd'hui"><div class="hero-top"><div class="hero-cat" id="heroCat" style="position:relative">${catSVG(catMood())}<div class="hearts" id="hearts"></div></div>
+    <div class="hero-txt"><p class="hero-date">${cap(JOURS[d.getDay()])} ${fmtDate(d)}</p><h2>Doudou se repose</h2></div></div>
+    <p class="hero-sum">Il a dormi au soleil une bonne partie de la matinée. Son appétit est un peu bas depuis 3 jours, le reste va bien.</p>
+    <button class="eye" data-go="sante">${eyeStatus("watch")}<span>À surveiller : l'appétit</span>${ico("chev-r", "sm")}</button>
+    <div class="whiskers" aria-hidden="true"><i></i><i></i><i></i></div></section>`;
+  const alert = `<section class="alert-soft" role="note"><span class="a-ico">${ico("eye")}</span><div><h3>Son appétit baisse depuis 3 jours</h3>
+    <p>Il mange environ la moitié de sa ration depuis le 1er octobre. Rien d'alarmant pour l'instant : note bien ses repas, et appelle le Dr Martin s'il ne mange presque plus rien pendant 24 heures.</p>
+    <div class="acts"><button class="btn sm secondary" data-act="ask" data-q="Pourquoi mange-t-il moins depuis 3 jours ?">${ico("doc", "sm")}Demander à Dr. Doudou</button><button class="btn sm ghost" data-go="alimentation">Voir ses repas</button></div></div></section>`;
+  const kpis = `<section class="kpis" aria-label="Chiffres du jour">
+    <button class="kpi" data-go="sante"><span class="k-lab">${ico("scale")}Poids</span><span class="k-val">4,60<small>kg</small></span><span class="k-note">${lvl("ok", "Zone idéale")}</span></button>
+    <button class="kpi" data-go="activite"><span class="k-lab">${ico("paw")}Activité</span><span class="k-val">38<small>/45 min</small></span><span class="k-note muted">Un peu moins joueur</span></button>
+    <button class="kpi" data-go="alimentation"><span class="k-lab">${ico("bowl")}Mangé</span><span class="k-val">26<small>/50 g</small></span><span class="k-note muted">2 repas restants</span></button>
+    <button class="kpi" data-go="alimentation"><span class="k-lab">${ico("drop")}Eau</span><span class="k-val">140<small>ml</small></span><span class="k-note muted">Normal à cette heure</span></button></section>`;
+  return { main: `<div class="grid-2"><div class="col">${hero}${quickHTML()}</div><div class="col">${alert}${remindersHTML()}</div></div>${kpis}`, aside: asideToday(), asideTitle: "Dr. Doudou" };
+};
+function asideToday() {
+  return `<div style="display:flex;gap:12px;align-items:center">${drSVG("av")}<p><b>Une question sur Doudou ?</b><br><span class="muted small">Je réponds avec son dossier et des sources vétérinaires.</span></p></div>
+  <div class="suggest">${SUGGESTIONS.slice(0, 3).map(q => `<button data-act="ask" data-q="${esc(q)}">${ico("doc")}${q}</button>`).join("")}</div>
+  <div class="explain"><h4>${ico("journal", "sm")}Sa semaine</h4><p class="small">5 bonnes journées sur 7. Selles normales tous les jours. Appétit en baisse depuis jeudi, humeur stable, activité un peu plus basse (−20 %).</p></div>
+  <p class="fine">${ico("info", "sm")}Ne remplace pas un vétérinaire.</p>`;
+}
+
+SCREENS.sante = () => {
+  if (S.empty) return { main: `<div class="verdict"><h2>Pas encore assez de données</h2><p class="muted">Les tendances apparaissent après 7 jours de saisies.</p></div>${emptyState("journal", "On attend ses premières saisies", "Note son humeur, son appétit et ses selles matin et soir : les courbes se dessineront d'elles-mêmes.", "goToday", "Faire la saisie du jour")}`, aside: "" };
+  const main = `<div class="verdict"><h2>Doudou va bien, avec un point à surveiller</h2><p class="muted">Basé sur 90 jours de journal, 14 pesées et son bilan d'août.</p></div>
+  <div class="ind">
+    <button class="ind-card" data-act="explainInd" data-k="poids"><span class="i-ico t-vaccin">${ico("scale")}</span><span class="i-top"><span class="i-name">Poids</span>${lvl("ok", "Dans la norme")}</span><span class="i-val">4,60 kg</span><span class="i-txt">Zone idéale 4,4–4,8 kg · −0,2 kg en 2 mois, comme conseillé</span></button>
+    <button class="ind-card" data-act="explainInd" data-k="appetit"><span class="i-ico t-analyse">${ico("bowl")}</span><span class="i-top"><span class="i-name">Appétit</span>${lvl("watch")}</span><span class="i-val">${ico("down", "sm")} 3 jours</span><span class="i-txt">Environ la moitié de sa ration depuis le 1er octobre</span></button>
+    <button class="ind-card" data-act="explainInd" data-k="humeur"><span class="i-ico t-consult">${ico("smile")}</span><span class="i-top"><span class="i-name">Humeur</span>${lvl("ok", "Stable")}</span><span class="i-val">Calme</span><span class="i-txt">Un peu moins joueur que d'habitude, sans signe de douleur noté</span></button>
+  </div>
+  <section class="card"><div class="card-h"><h2>Courbe de poids</h2><div class="seg" role="group" aria-label="Période du poids"><button data-act="wrange" data-v="3" aria-pressed="${S.weightRange === 3}">3 mois</button><button data-act="wrange" data-v="6" aria-pressed="${S.weightRange === 6}">6 mois</button></div></div>
+    ${chartBox("weight", 220)}
+    <div class="legend"><span><i style="background:var(--ok-tint);box-shadow:inset 0 0 0 1px var(--ok)"></i>Zone idéale (fixée avec le Dr Martin)</span><span><i style="background:var(--soin)"></i>Pesées</span></div>
+    <div class="meaning">${ico("info")}<p>Il est passé de 4,80 à 4,60 kg depuis fin juillet. C'est ce que conseillait le bilan annuel, et il reste dans sa zone idéale.</p></div></section>
+  <section class="card"><div class="card-h"><h2>Tendances</h2><div class="seg" role="group" aria-label="Période des tendances">${[7, 30, 90].map(p => `<button data-act="period" data-v="${p}" aria-pressed="${S.period === p}">${p} j</button>`).join("")}</div></div>
+    <div class="trend-grid">
+      <div><div class="section-h" style="margin-bottom:8px"><h3 style="font-size:17px">Appétit</h3>${lvl("watch")}</div>${chartBox("appetit", 150)}<p class="small muted" style="margin-top:8px">Les 3 dernières barres (en plein) sont plus basses que sa moyenne.</p></div>
+      <div><div class="section-h" style="margin-bottom:8px"><h3 style="font-size:17px">Humeur</h3>${lvl("ok", "Stable")}</div>${chartBox("humeur", 150)}<p class="small muted" style="margin-top:8px">Barre haute = joueur, moyenne = calme, basse = grognon.</p></div>
+    </div></section>`;
+  const aside = `<div class="explain"><h4>${ico("info", "sm")}Comment lire cet écran</h4><p class="small">Chaque indicateur compare Doudou à lui-même : sa moyenne des 30 derniers jours et la zone fixée avec son vétérinaire.</p></div>
+    <div class="list">${Object.entries(LEVELS).map(([k, l]) => `<div class="row"><span class="r-main"><span class="r-title">${lvl(k)}</span><br><span class="r-sub">${{ ok: "Dans ses habitudes, rien à faire de particulier.", watch: "Un changement à suivre quelques jours à la maison.", soon: "Prendre rendez-vous dans les jours qui viennent.", urgent: "Appeler un vétérinaire immédiatement." }[k]}</span></span></div>`).join("")}</div>
+    <button class="btn primary block" data-act="ask" data-q="Pourquoi mange-t-il moins depuis 3 jours ?">${ico("doc")}Parler de l'appétit</button>`;
+  return { main, aside, asideTitle: "Les niveaux" };
+};
+
+/* --- Dossier médical --- */
+function recRow(r) {
+  const t = TYPES[r.type], d = parse(r.date);
+  return `<button class="rec" data-act="rec" data-id="${r.id}" ${S.selRec === r.id && isDesk() ? 'aria-current="true"' : ""}><span class="r-ico ${t.c}">${ico(t.i)}</span><span style="min-width:0"><span class="r-title">${r.title}</span><br><span class="r-sub">${t.w} · ${r.sub}</span></span>
+    <span class="r-end" style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${r.status === "en cours" ? '<span class="status soon">En cours</span>' : ""}<span class="small muted data">${fmtShort(d)}</span></span></button>`;
+}
+function recordHTML(r) {
+  const t = TYPES[r.type], d = parse(r.date);
+  return `<div style="display:flex;gap:14px;align-items:center"><span class="rec" style="box-shadow:none;padding:0;width:auto;display:block;background:none"><span class="r-ico ${t.c}" style="width:56px;height:56px;border-radius:16px;display:grid;place-items:center">${ico(t.i, "lg")}</span></span>
+    <div style="min-width:0"><span class="label muted">${t.w}</span><h3 style="font-size:22px;line-height:28px">${r.title}</h3><p class="muted small">${cap(JOURS[d.getDay()])} ${fmtDate(d, true)} · ${relDay(d)}</p></div></div>
+    ${r.status ? `<div>${r.status === "en cours" ? lvl("soon", "Traitement en cours") : lvl("ok", "Terminé")}</div>` : ""}
+    ${r.next ? `<div>${diffDays(parse(r.next), TODAY) < 30 ? lvl("watch", "Rappel " + relDay(parse(r.next))) : lvl("ok", "Valable jusqu'au " + fmtDate(parse(r.next), true))}</div>` : ""}
+    <dl class="dl">${r.fields.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join("")}${r.cost ? `<dt>Coût</dt><dd class="data">${fmtEur(r.cost)}</dd>` : ""}</dl>
+    <div class="explain"><h4>${ico("info", "sm")}En clair</h4><p class="small">${r.explain}</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${r.next ? `<button class="btn sm primary" data-act="toastCal">${ico("bell", "sm")}Me le rappeler</button>` : ""}
+    <button class="btn sm secondary" data-act="ask" data-q="${r.type === "vaccin" ? "Quand refaire son vaccin ?" : "Son poids est-il normal ?"}">${ico("doc", "sm")}Demander à Dr. Doudou</button></div>`;
+}
+SCREENS.dossier = () => {
+  const allergy = `<div class="allergy" role="note">${ico("alert")}<span><strong>Allergie : poulet</strong> (démangeaisons). Aucune allergie aux médicaments connue.</span></div>`;
+  if (S.empty) return { main: `${allergy}${emptyState("dossier", "Son dossier est vide", "Ajoute une consultation, un vaccin ou un traitement. Une photo du carnet papier suffit pour commencer.", "toastAdd", "Ajouter un soin")}`, aside: "" };
+  const list = RECORDS.filter(r => S.filter === "tout" || r.type === S.filter).sort((a, b) => b.date.localeCompare(a.date));
+  const months = {};
+  list.forEach(r => { const d = parse(r.date), k = cap(MOIS[d.getMonth()]) + " " + d.getFullYear(); (months[k] = months[k] || []).push(r); });
+  const cal = []; for (let i = 0; i < 12; i++) { const m = new Date(2026, 9 + i, 1); cal.push(m); }
+  const vax = { "2026-9": { n: "Typhus + coryza", next: true }, "2027-2": { n: "Leucose" } };
+  const main = `${allergy}
+  <button class="visit-cta" data-act="visit"><span class="v-ico">${ico("stetho")}</span><span style="flex:1;min-width:0"><h3>Préparer ma visite chez le vétérinaire</h3><p>Un résumé clair des 30 derniers jours, à montrer ou à partager.</p></span>${ico("chev-r")}</button>
+  <section class="card"><div class="card-h"><h2>Calendrier des vaccins</h2><span class="small muted">12 prochains mois</span></div>
+    <div class="vax-cal" role="list">${cal.map(m => { const k = m.getFullYear() + "-" + m.getMonth(), v = vax[k];
+      return `<div class="m ${v ? "has" : ""} ${v && v.next ? "next" : ""} ${m.getMonth() === 9 && m.getFullYear() === 2026 ? "now" : ""}" role="listitem" aria-label="${MOIS[m.getMonth()]} ${m.getFullYear()}${v ? " : rappel " + v.n : ""}"><b>${v ? ico("syringe") : ""}</b>${MOIS_C[m.getMonth()].replace(".", "")}</div>`; }).join("")}</div>
+    <p class="small" style="margin-top:12px"><b>25 oct. 2026</b> typhus + coryza (dans 3 semaines) · <b>14 mars 2027</b> leucose</p></section>
+  <div class="chips" role="group" aria-label="Filtrer par type">${[["tout", "Tout"], ...Object.entries(TYPES).map(([k, t]) => [k, t.pl])].map(([k, w]) => `<button class="chip" data-act="filter" data-v="${k}" aria-pressed="${S.filter === k}">${w}</button>`).join("")}</div>
+  <div class="tl">${Object.entries(months).map(([m, rs]) => `<div class="tl-month"><h3>${m}</h3>${rs.map(recRow).join("")}</div>`).join("") || `<p class="muted">Aucun élément de ce type.</p>`}</div>`;
+  const r = RECORDS.find(x => x.id === S.selRec) || RECORDS[0];
+  return { main, aside: recordHTML(r), asideTitle: "Fiche" };
+};
+function visitText() {
+  return `RÉSUMÉ POUR LA VISITE — ${fmtDate(TODAY, true)}
+Doudou · européen à poil court · mâle stérilisé · 6 ans · 4,60 kg
+Vétérinaire référent : Dr Martin, Clinique des Quatre Pattes
+
+MOTIF PROPOSÉ
+Baisse d'appétit depuis le 1er octobre (environ la moitié de sa ration).
+
+30 DERNIERS JOURS
+- Appétit : « peu » les 2 et 3 octobre, « moyen » le 1er octobre, « bien » avant
+- Poids : 4,64 kg (20 sept.) → 4,60 kg (3 oct.), zone idéale 4,4–4,8 kg
+- Humeur : calme, un peu moins joueur ; activité −20 % sur 3 jours
+- Selles : normales ; pas de vomissement noté
+- Transition alimentaire terminée le 24 septembre
+
+TRAITEMENT EN COURS
+- Pipette antiparasitaire (sélamectine), dernière dose le 6 octobre
+
+VACCINS
+- Typhus + coryza : rappel le 25 octobre 2026
+- Leucose : valable jusqu'au 14 mars 2027
+
+ALLERGIE
+- Poulet (démangeaisons). Aucune allergie aux médicaments connue.
+
+DERNIÈRE VISITE
+- 4 août 2026, bilan annuel : léger tartre (stade 1), bilan sanguin normal
+
+QUESTIONS
+${S.visitQs.filter(Boolean).map(q => "- " + q).join("\n")}`;
+}
+function openVisit() {
+  const framed = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+  $("#visitSlot").innerHTML = `<div class="visit" role="dialog" aria-modal="true" aria-labelledby="visitTitle" data-act="visitBg"><article class="visit-doc">
+    <div class="visit-bar"><span class="label muted">Résumé de visite</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm secondary" data-act="copyVisit">${ico("copy", "sm")}Copier le texte</button>${framed ? "" : `<button class="btn sm secondary" data-act="printVisit">${ico("print", "sm")}Imprimer ou PDF</button>`}<button class="icon-btn" data-act="closeVisit" aria-label="Fermer">${ico("x")}</button></div></div>
+    <header style="display:flex;gap:16px;align-items:center"><div style="width:72px;height:72px;flex:none">${catSVG("content")}</div><div><h2 id="visitTitle">Doudou · visite du ${fmtDate(TODAY)}</h2><p class="muted">Européen à poil court · mâle stérilisé · 6 ans · 4,60 kg · puce ${CAT.chip} (fictive)</p></div></header>
+    <div class="box" style="border-color:var(--miel-ink);background:var(--miel-tint)"><h3>Motif proposé</h3><p>Baisse d'appétit depuis le 1er octobre : environ la moitié de sa ration.</p></div>
+    <div class="visit-grid">
+      <div class="box"><h3>Ces 30 derniers jours</h3><ul><li>Appétit « peu » les 2 et 3 oct.</li><li>Poids 4,64 → 4,60 kg (zone idéale)</li><li>Humeur calme, activité −20 %</li><li>Selles normales, pas de vomissement</li><li>Transition alimentaire finie le 24 sept.</li></ul></div>
+      <div class="box"><h3>Traitement en cours</h3><ul><li>Pipette antiparasitaire, dernière dose le 6 oct.</li></ul><h3 style="margin-top:12px">Vaccins</h3><ul><li>Typhus + coryza : rappel le 25 oct. 2026</li><li>Leucose : jusqu'au 14 mars 2027</li></ul></div>
+      <div class="box" style="border-color:var(--roux-ink)"><h3>Allergie</h3><p>Poulet (démangeaisons). Aucune allergie aux médicaments connue.</p></div>
+      <div class="box"><h3>Dernière visite</h3><p>4 août 2026, bilan annuel : léger tartre, bilan sanguin normal.</p></div>
+    </div>
+    <div class="box"><h3>Courbe de poids (6 mois)</h3>${chartBox("weight", 180)}</div>
+    <div class="box"><h3>Mes questions</h3><div style="display:flex;flex-direction:column;gap:8px" id="visitQs">${S.visitQs.map((q, i) => `<div class="q-item"><label class="sr" for="vq${i}">Question ${i + 1}</label><input class="input" id="vq${i}" data-vq="${i}" value="${esc(q)}"><button class="icon-btn no-print" data-act="delQ" data-i="${i}" aria-label="Supprimer la question">${ico("x")}</button></div>`).join("")}</div>
+      <button class="link-btn no-print" data-act="addQ" style="margin-top:6px">${ico("plus")}Ajouter une question</button></div>
+    <p class="fine">${ico("info", "sm")}Résumé généré à partir du journal de Doudou. ${framed ? "Pour imprimer ou créer un PDF, ouvre le fichier HTML hors de cette fenêtre d'aperçu." : ""}</p>
+  </article></div>`;
+  drawCharts($("#visitSlot"));
+  setTimeout(() => $("#visitSlot [data-act=closeVisit]")?.focus(), 50);
+}
+
+/* --- Journal --- */
+function calHTML() {
+  const [y, m] = S.calMonth, first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+  const off = (first.getDay() + 6) % 7;
+  let cells = ["L", "M", "M", "J", "V", "S", "D"].map((d, i) => `<div class="dow" aria-hidden="true">${d}</div>`).join("");
+  for (let i = 0; i < off; i++) cells += `<div class="day empty" aria-hidden="true"></div>`;
+  for (let d = 1; d <= days; d++) {
+    const dt = new Date(y, m, d), k = key(dt), l = S.empty ? null : LOGS[k], o = dayOverall(l), fut = dt > TODAY;
+    const lab = `${d} ${MOIS[m]}${o ? ", " + DAYWORD[o] : fut ? "" : ", pas de saisie"}${l && l.photos && l.photos.length ? ", avec photo" : ""}`;
+    cells += fut ? `<div class="day future" aria-hidden="true">${d}</div>` :
+      `<button class="day ${o || "none"} ${k === key(TODAY) ? "today" : ""}" data-act="day" data-k="${k}" ${S.selDay === k && isDesk() ? 'aria-current="true"' : ""} aria-label="${lab}">${d}${o ? GLYPH[o] : '<span class="g"></span>'}${l && l.photos && l.photos.length ? `<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-camera"/></svg>` : ""}</button>`;
+  }
+  const canNext = !(y === 2026 && m === 9), canPrev = !(y === 2026 && m === 6);
+  return `<section class="card"><div class="card-h"><button class="icon-btn" data-act="calPrev" aria-label="Mois précédent" ${canPrev ? "" : "disabled style='opacity:.3'"}>${ico("chev-l")}</button><h2 aria-live="polite">${cap(MOIS[m])} ${y}</h2><button class="icon-btn" data-act="calNext" aria-label="Mois suivant" ${canNext ? "" : "disabled style='opacity:.3'"}>${ico("chev-r")}</button></div>
+    <div class="cal">${cells}</div>
+    <div class="cal-legend" style="margin-top:14px"><span>${GLYPH.bonne.replace('class="g"', 'width="14" height="14"')}Bonne</span><span>${GLYPH.moyenne.replace('class="g"', 'width="14" height="14"')}Moyenne</span><span>${GLYPH.difficile.replace('class="g"', 'width="14" height="14"')}Difficile</span></div></section>`;
+}
+function entryLines(e) {
+  if (!e) return `<p class="muted small">Pas de saisie</p>`;
+  return `<div class="entry-line">${ico(HUMEUR[e.h].i)}<span>Humeur : <b>${HUMEUR[e.h].w}</b></span></div><div class="entry-line">${ico(APPETIT[e.a].i)}<span>Appétit : <b>${APPETIT[e.a].w}</b></span></div><div class="entry-line">${ico(SELLES[e.s].i)}<span>Selles : <b>${SELLES[e.s].w}</b></span></div>${e.vomi ? `<div class="entry-line">${ico("alert")}Vomissement noté</div>` : ""}`;
+}
+function photosHTML(list) { return list.map(p => `<div class="photo">${p.startsWith("data:") ? `<img src="${p}" alt="Photo ajoutée">` : photoSVG(p)}</div>`).join(""); }
+function dayHTML(k) {
+  const d = parse(k), l = LOGS[k], o = dayOverall(l);
+  if (!l) return `<p class="muted">Aucune saisie ce jour-là.</p><button class="btn primary" data-act="form" data-day="${k}">${ico("plus")}Ajouter une saisie</button>`;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><p class="muted">${cap(JOURS[d.getDay()])} ${fmtDate(d, true)}</p>${o ? `<span class="status ${o === "bonne" ? "ok" : o === "moyenne" ? "watch" : "soon"}">${GLYPH[o]}${DAYWORD[o]}</span>` : ""}</div>
+    <div class="slots"><div class="entry-slot"><h3 style="font-size:17px;display:flex;gap:8px;align-items:center">${ico("sun", "sm")}Matin</h3>${entryLines(l.m)}</div><div class="entry-slot"><h3 style="font-size:17px;display:flex;gap:8px;align-items:center">${ico("moon", "sm")}Soir</h3>${entryLines(l.e)}</div></div>
+    ${l.w ? `<div class="entry-line">${ico("scale")}<span>Pesée : <b class="data">${fmtKg(l.w)}</b></span></div>` : ""}
+    ${l.note ? `<div class="explain"><h4>${ico("journal", "sm")}Note</h4><p class="small">${esc(l.note)}</p></div>` : ""}
+    ${l.photos.length ? `<div class="photos">${photosHTML(l.photos)}</div>` : ""}
+    <button class="btn secondary" data-act="form" data-day="${k}">${ico("journal", "sm")}Modifier cette journée</button>`;
+}
+SCREENS.journal = () => {
+  if (S.empty) return { main: emptyState("journal", "Son journal t'attend", "Chaque jour, quelques touches suffisent. Au bout d'une semaine, tu verras ses habitudes se dessiner dans le calendrier.", "formToday", "Écrire la première page"), aside: "" };
+  const notes = Object.entries(LOGS).filter(([k, l]) => l.note || l.photos.length).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 4);
+  const main = `<div class="grid-2"><div class="col">
+    <button class="visit-cta" data-act="form" data-day="${key(TODAY)}" style="background:var(--roux);color:var(--on-accent)"><span class="v-ico" style="background:color-mix(in srgb,var(--on-accent) 14%,transparent)">${ico("journal")}</span><span style="flex:1;min-width:0"><h3 style="color:var(--on-accent)">Saisie détaillée du jour</h3><p>Humeur, repas, eau, litière, poids, notes et photos.</p></span>${ico("plus")}</button>
+    ${calHTML()}</div>
+    <div class="col"><section class="card"><div class="card-h"><h2>Notes et photos récentes</h2></div><div class="list">${notes.map(([k, l]) => `<button class="row" data-act="day" data-k="${k}" style="align-items:flex-start"><span class="r-ico roux">${ico(l.photos.length ? "camera" : "journal")}</span><span class="r-main"><span class="r-title">${cap(fmtDate(parse(k)))}</span><br><span class="r-sub">${esc(l.note || "Photo ajoutée")}</span>${l.photos.length ? `<span class="photos" style="margin-top:8px;max-width:220px">${photosHTML(l.photos)}</span>` : ""}</span></button>`).join("")}</div></section></div></div>`;
+  return { main, aside: dayHTML(S.selDay), asideTitle: "Journée" };
+};
+function formHTML(k) {
+  const l = LOGS[k] || {}, slot = k === key(TODAY) ? S.slot : "e", e = l[slot] || {}, d = parse(k);
+  const grp = (name, lab, opts, cur) => `<div class="field"><span class="flabel" id="fl-${name}">${lab}</span><div class="choice-group" role="group" aria-labelledby="fl-${name}">${opts.map(([v, o]) => `<button type="button" class="choice" data-act="fpick" data-f="${name}" data-v="${v}" aria-pressed="${cur == v}">${o.i ? ico(o.i) : ""}${o.w}</button>`).join("")}</div></div>`;
+  S.draft = { k, slot, h: e.h || null, a: e.a || null, s: e.s || null, vomi: e.vomi ? "oui" : "non", eau: "normal" };
+  S.draftPhotos = (l.photos || []).slice();
+  return `<form id="dayForm" novalidate style="display:flex;flex-direction:column;gap:20px">
+    <p class="muted">${cap(JOURS[d.getDay()])} ${fmtDate(d, true)}</p>
+    <div class="seg" role="group" aria-label="Moment"><button type="button" data-act="fslot" data-v="m" aria-pressed="${slot === "m"}">${"Matin"}</button><button type="button" data-act="fslot" data-v="e" aria-pressed="${slot === "e"}">Soir</button></div>
+    ${grp("h", "Humeur", [[3, HUMEUR[3]], [2, HUMEUR[2]], [1, HUMEUR[1]]], e.h)}
+    ${grp("a", "Appétit", [[3, APPETIT[3]], [2, APPETIT[2]], [1, APPETIT[1]]], e.a)}
+    ${grp("s", "Selles", [["ok", SELLES.ok], ["molles", SELLES.molles], ["non", SELLES.non]], e.s)}
+    ${grp("vomi", "Vomissement", [["non", { w: "Non", i: "check" }], ["oui", { w: "Oui", i: "alert" }]], e.vomi ? "oui" : "non")}
+    ${grp("eau", "Eau bue", [["peu", { w: "Peu", i: "drop" }], ["normal", { w: "Normal", i: "drop" }], ["beaucoup", { w: "Beaucoup", i: "drop" }]], "normal")}
+    <div class="field"><label for="fWeight">Poids (facultatif)</label><input class="input data" id="fWeight" inputmode="decimal" placeholder="ex. 4,6" value="${l.w ? String(l.w).replace(".", ",") : ""}" aria-describedby="fWeightHelp"><span class="small muted" id="fWeightHelp">En kilos. Zone idéale de Doudou : 4,4 à 4,8 kg.</span><span class="err" id="fWeightErr" hidden></span></div>
+    <div class="field"><label for="fNote">Note libre</label><textarea class="input" id="fNote" placeholder="Ce que tu as remarqué aujourd'hui…">${esc(l.note || "")}</textarea></div>
+    <div class="field"><span class="flabel">Photos</span><div class="photos" id="fPhotos">${photosHTML(S.draftPhotos)}<label class="photo-add" for="photoInput" tabindex="0" data-act="addPhoto">${ico("camera")}Ajouter</label></div></div>
+    <p class="err" id="fErr" hidden></p>
+    <button class="btn primary block" type="submit">${ico("check")}Enregistrer la journée</button>
+  </form>`;
+}
+
+/* --- Alimentation --- */
+SCREENS.alimentation = () => {
+  const meals = FOOD.meals.map((m, i) => `<button class="row meal" data-act="meal" data-i="${i}"><span class="meal-time">${m.t}</span><span class="r-main"><span class="r-title">${m.what}</span><br><span class="r-sub">${m.qty} · ${m.done ? (m.eaten >= .9 ? "tout mangé" : m.eaten >= .5 ? "la moitié" : "presque rien") : "à venir, touche pour noter"}</span>${m.done ? `<span class="bowl-meter" aria-hidden="true"><i style="width:${m.eaten * 100}%"></i></span>` : ""}</span>${m.done ? `<span class="status ${m.eaten >= .9 ? "ok" : m.eaten >= .5 ? "watch" : "soon"}">${Math.round(m.eaten * 100)} %</span>` : ico("plus", "sm")}</button>`).join("");
+  const main = `<div class="grid-2"><div class="col">
+  <section class="card"><div class="card-h"><h2>Repas du jour</h2><span class="small muted data">26 g / 50 g</span></div><div class="list">${meals}</div></section>
+  <section class="card"><div class="card-h"><h2>Croquettes mangées</h2><span class="small muted">7 derniers jours</span></div>${chartBox("food", 180)}<div class="meaning">${ico("info")}<p>Il mangeait toute sa ration jusqu'à jeudi. Depuis, il en laisse environ la moitié.</p></div></section>
+  </div><div class="col">
+  <section class="card"><div class="card-h"><h2>Ce qu'il mange</h2></div>
+    <div class="list"><div class="row brand-card"><span class="pack">FV</span><span class="r-main"><span class="r-title">${FOOD.dry.name}</span><br><span class="r-sub">${FOOD.dry.kind} · ${FOOD.dry.note}</span></span></div>
+    <div class="row brand-card"><span class="pack roux">MM</span><span class="r-main"><span class="r-title">${FOOD.wet.name}</span><br><span class="r-sub">${FOOD.wet.kind}</span></span></div>
+    <div class="row"><span class="r-ico">${ico("water")}</span><span class="r-main"><span class="r-title">Eau</span><br><span class="r-sub">${FOOD.water}</span></span></div></div>
+    <div class="allergy" style="margin-top:12px">${ico("alert")}<span><strong>Sans poulet</strong> : vérifie la composition avant tout nouvel aliment.</span></div></section>
+  <section class="card"><div class="card-h"><h2>Transition alimentaire</h2>${lvl("ok", "Terminée")}</div>
+    <p class="small">De <b>${FOOD.transition.from}</b> à <b>${FOOD.transition.to}</b>, du 14 au 24 septembre. On mélange progressivement l'ancien et le nouvel aliment pour ménager son ventre.</p>
+    <div class="transition">${FOOD.transition.steps.map(([d, p]) => `<div><span class="bar" role="img" aria-label="${d} : ${p} % de nouvelles croquettes"><i style="width:${p}%"></i><s style="width:${100 - p}%"></s></span>${d}<b class="data" style="color:var(--ink)">${p} %</b></div>`).join("")}</div>
+    <div class="legend"><span><i style="background:var(--soin)"></i>Nouvelles</span><span><i style="background:var(--roux-tint)"></i>Anciennes</span></div></section>
+  <section class="card"><div class="card-h"><h2>Poids</h2><button class="link-btn" data-go="sante">Santé${ico("chev-r")}</button></div>${chartBox("weight", 170)}</section>
+  </div></div>`;
+  const aside = `<div class="kpi" style="box-shadow:none;background:var(--surface-tint)"><span class="k-lab">${ico("bowl")}Ration conseillée</span><span class="k-val">50<small>g/jour</small></span><span class="k-note muted">+ 1 sachet de pâtée le soir, pour un chat stérilisé de 4,6 kg</span></div>
+    <div class="explain"><h4>${ico("info", "sm")}Bon à savoir</h4><p class="small">Un chat qui mange moins de la moitié de sa ration pendant plus de 24 heures doit être vu par un vétérinaire.</p></div>
+    <button class="btn secondary block" data-act="ask" data-q="Pourquoi mange-t-il moins depuis 3 jours ?">${ico("doc", "sm")}Demander à Dr. Doudou</button>`;
+  return { main, aside, asideTitle: "Repères" };
+};
+
+/* --- Activité et GPS --- */
+function mapSVG() {
+  return `<svg viewBox="0 0 340 220" role="img" aria-label="Carte stylisée : Doudou est dans le jardin, à 18 mètres de la maison.">
+    <rect width="340" height="220" fill="var(--surface-tint)"/>
+    <path d="M0 150H340M120 0V220M260 0V220" stroke="var(--surface)" stroke-width="16"/>
+    <rect x="8" y="10" width="100" height="60" rx="8" fill="var(--line)"/><rect x="8" y="80" width="100" height="60" rx="8" fill="var(--line)"/>
+    <rect x="272" y="10" width="62" height="130" rx="8" fill="var(--line)"/><rect x="8" y="162" width="100" height="52" rx="8" fill="var(--line)"/><rect x="132" y="162" width="116" height="52" rx="8" fill="var(--line)"/><rect x="272" y="162" width="62" height="52" rx="8" fill="var(--line)"/>
+    <rect x="132" y="10" width="116" height="128" rx="10" fill="var(--ok-tint)"/>
+    <circle cx="150" cy="30" r="9" fill="var(--ok)" opacity=".35"/><circle cx="232" cy="34" r="11" fill="var(--ok)" opacity=".35"/><circle cx="226" cy="118" r="8" fill="var(--ok)" opacity=".35"/>
+    <rect x="140" y="92" width="44" height="38" rx="6" fill="var(--surface)" stroke="var(--soin)" stroke-width="2"/><path d="M140 96l22-16 22 16" fill="none" stroke="var(--soin)" stroke-width="2" stroke-linejoin="round"/>
+    <text x="162" y="118" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--soin)">maison</text>
+    <circle cx="170" cy="96" r="70" fill="none" stroke="var(--soin)" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M168 100C176 80 190 74 200 66S214 48 206 40 186 44 196 58" fill="none" stroke="var(--roux)" stroke-width="2.5" stroke-dasharray="1 6" stroke-linecap="round"/>
+    <circle class="ping" cx="196" cy="58" r="10" fill="var(--roux)"/><circle cx="196" cy="58" r="8" fill="var(--roux)" stroke="var(--surface)" stroke-width="3"/>
+    <text x="214" y="190" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-muted)" opacity="0">.</text>
+  </svg>`;
+}
+SCREENS.activite = () => {
+  const pct = ACTIVITY.active / ACTIVITY.goal, C = 2 * Math.PI * 54;
+  const main = `<div class="grid-2"><div class="col">
+  <section class="card"><div class="ring-wrap"><div class="ring" role="img" aria-label="${ACTIVITY.active} minutes d'activité sur un objectif de ${ACTIVITY.goal}"><svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="54" fill="none" stroke="var(--surface-tint)" stroke-width="14"/><circle cx="66" cy="66" r="54" fill="none" stroke="var(--soin)" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C * pct} ${C}" transform="rotate(-90 66 66)"/></svg><div class="r-in"><b>${ACTIVITY.active}</b><span class="small muted">/ ${ACTIVITY.goal} min</span></div></div>
+    <div style="min-width:0"><h2 style="font-size:22px;line-height:28px">Activité du jour</h2><p class="small muted" style="margin-top:4px">Encore 7 minutes pour son objectif. Une petite séance de jeu ce soir ?</p></div></div>
+    <div class="well" style="margin-top:16px"><div>${ico("yarn", "sm")}<b>${ACTIVITY.play} min</b><span class="small muted">jeu · ${ACTIVITY.sessions} séances</span></div><div>${ico("zzz", "sm")}<b>${ACTIVITY.sleep}</b><span class="small muted">sommeil</span></div><div>${ico("paw", "sm")}<b>${ACTIVITY.dist}</b><span class="small muted">parcourus</span></div></div></section>
+  <section class="card"><div class="card-h"><h2>Bien-être</h2>${lvl("watch", "Moins joueur")}</div><p>Doudou est calme et dort un peu plus que d'habitude. Son activité a baissé de 20 % en 3 jours, en même temps que son appétit. À suivre ensemble.</p>${chartBox("activity", 170)}</section>
+  </div><div class="col">
+  <section class="card" style="padding:16px"><div class="card-h" style="padding:4px 8px 0"><h2>Où est Doudou ?</h2><span class="small muted">Traceur du collier</span></div>
+    <div class="map">${mapSVG()}<div class="map-card"><span class="r-ico roux" style="width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--roux-tint);color:var(--roux-ink)">${ico("pin")}</span><span class="r-main"><b>${ACTIVITY.where}</b><br><span class="small muted">${ACTIVITY.seen} · dans la zone maison</span></span><span class="batt">${ico("tag", "sm")}${ACTIVITY.batt} %</span></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding:0 8px 8px"><button class="btn sm secondary" data-act="ring">${ico("sound", "sm")}Faire sonner le collier</button><button class="btn sm ghost" data-act="zone">${ico("pin", "sm")}Zone maison : 70 m</button></div></section>
+  </div></div>`;
+  const aside = `<div class="explain"><h4>${ico("info", "sm")}Pourquoi suivre l'activité ?</h4><p class="small">Un chat qui joue moins et dort plus peut simplement profiter du soleil. Associé à une baisse d'appétit, c'est un signe à noter pour le vétérinaire.</p></div>
+    <div class="list"><div class="row"><span class="r-ico">${ico("clock")}</span><span class="r-main"><span class="r-title">Dernière sortie</span><br><span class="r-sub">10 h 12 → 11 h 05, jardin</span></span></div><div class="row"><span class="r-ico">${ico("zzz")}</span><span class="r-main"><span class="r-title">Sieste la plus longue</span><br><span class="r-sub">3 h 40, sur le canapé</span></span></div></div>`;
+  return { main, aside, asideTitle: "Repères" };
+};
+
+/* --- Finances --- */
+SCREENS.finances = () => {
+  if (S.empty) return { main: emptyState("finances", "Aucune dépense notée", "Garde une trace des consultations et des médicaments : tu verras le budget annuel de Doudou en un coup d'œil.", "addExpense", "Ajouter une dépense"), aside: "" };
+  const total = EXPENSES.reduce((s, e) => s + e.amt, 0), plan = PLANNED.reduce((s, e) => s + e.amt, 0);
+  const byCat = {}; EXPENSES.forEach(e => byCat[e.cat] = (byCat[e.cat] || 0) + e.amt);
+  const cats = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+  const main = `<div class="grid-2"><div class="col">
+  <section class="card"><div class="total"><span class="label muted">Dépensé en 2026</span><span class="big">${fmtEur(total)}</span><p class="small muted">${fmtEur(total + plan)} prévus d'ici fin décembre · 356 € en 2025</p></div>
+    ${chartBox("money", 190)}<div class="legend"><span><i style="background:var(--soin)"></i>Payé</span><span><i style="border:2px dashed var(--soin)"></i>Prévu</span></div></section>
+  <section class="card cat-list"><div class="card-h"><h2>Par catégorie</h2></div>
+    <div class="stackbar" role="img" aria-label="${cats.map(([c, v]) => c + " " + Math.round(v / total * 100) + " %").join(", ")}">${cats.map(([c, v]) => `<i style="width:${v / total * 100}%;background:${CATS[c]}"></i>`).join("")}</div>
+    <div class="list">${cats.map(([c, v]) => `<div class="row"><span class="sw" style="background:${CATS[c]}"></span><span class="r-main"><span class="r-title">${c}</span></span><span class="r-end"><b class="data">${fmtEur(v)}</b><span class="small muted">${Math.round(v / total * 100)} %</span></span></div>`).join("")}</div></section>
+  </div><div class="col">
+  <section class="card"><div class="card-h"><h2>Prochaines dépenses</h2><span class="data small muted">${fmtEur(plan)}</span></div><div class="list">${PLANNED.map(p => `<div class="row"><span class="r-ico miel">${ico("cal")}</span><span class="r-main"><span class="r-title">${p.label}</span><br><span class="r-sub">${cap(fmtDate(parse(p.d)))} · ${relDay(parse(p.d))}</span></span><span class="r-end"><b class="data">${fmtEur(p.amt)}</b><span class="small muted">estimé</span></span></div>`).join("")}</div></section>
+  <section class="card"><div class="card-h"><h2>Historique</h2><button class="btn sm primary" data-act="addExpense">${ico("plus", "sm")}Ajouter</button></div><div class="list">${EXPENSES.slice().sort((a, b) => b.d.localeCompare(a.d)).map(e => `<div class="row"><span class="sw" style="width:10px;height:36px;border-radius:5px;background:${CATS[e.cat] || "var(--line)"};flex:none"></span><span class="r-main"><span class="r-title">${esc(e.label)}</span><br><span class="r-sub">${e.cat} · ${fmtShort(parse(e.d))}</span></span><b class="data">${fmtEur(e.amt)}</b></div>`).join("")}</div></section>
+  </div></div>`;
+  const aside = `<div class="kpi" style="box-shadow:none;background:var(--surface-tint)"><span class="k-lab">${ico("wallet")}Moyenne mensuelle</span><span class="k-val">${Math.round(total / 10)}<small>€ / mois</small></span><span class="k-note muted">Calculée sur janvier à octobre</span></div>
+    <div class="explain"><h4>${ico("info", "sm")}Astuce</h4><p class="small">Garde une petite réserve de 150 € pour les imprévus : une consultation d'urgence coûte souvent entre 80 et 150 €.</p></div>`;
+  return { main, aside, asideTitle: "Budget" };
+};
+function expenseForm() {
+  return `<form id="expForm" novalidate style="display:flex;flex-direction:column;gap:16px">
+    <div class="field"><label for="eLabel">Libellé</label><input class="input" id="eLabel" placeholder="ex. Consultation"></div>
+    <div class="field"><label for="eAmt">Montant (€)</label><input class="input data" id="eAmt" inputmode="decimal" placeholder="ex. 45"><span class="err" id="eErr" hidden></span></div>
+    <div class="field"><label for="eCat">Catégorie</label><select class="input" id="eCat">${Object.keys(CATS).map(c => `<option>${c}</option>`).join("")}</select></div>
+    <div class="field"><label for="eDate">Date</label><input class="input" id="eDate" type="date" value="${key(TODAY)}" max="${key(TODAY)}"></div>
+    <button class="btn primary block" type="submit">${ico("check")}Ajouter la dépense</button></form>`;
+}
+
+/* --- Profil --- */
+SCREENS.profil = () => {
+  const main = `<div class="grid-2"><div class="col">
+  <section class="idcard" aria-label="Carte d'identité"><div class="id-top"><div class="id-photo">${catSVG("content")}</div><div style="min-width:0"><span class="label muted">Carte d'identité</span><h2>Doudou</h2><p class="muted">${CAT.breed} · ${CAT.sex.toLowerCase()}</p></div></div>
+    <dl class="dl"><dt>Né le</dt><dd>${CAT.birth} (${CAT.age})</dd><dt>Poids</dt><dd class="data">4,60 kg</dd><dt>Robe</dt><dd>${CAT.color}</dd><dt>Puce</dt><dd><span class="data">${CAT.chip}</span> <span class="small muted">(${CAT.chipNote})</span></dd><dt>Vétérinaire</dt><dd>${CAT.vet.name}, ${CAT.vet.clinic}</dd></dl></section>
+  <section class="card" style="border:2px solid var(--roux-ink);box-shadow:none"><div class="card-h"><h2 style="display:flex;gap:8px;align-items:center;color:var(--roux-ink)">${ico("alert")}Allergies</h2></div>
+    ${CAT.allergies.map(a => `<p><b>${a.name}</b> : ${a.detail}.</p><p class="small muted">${a.since}</p>`).join("")}<p class="small" style="margin-top:8px">${CAT.noDrugAllergy}.</p></section>
+  </div><div class="col">
+  <section class="card"><div class="card-h"><h2>Carte de secours</h2>${ico("qr")}</div><div class="qr-wrap"><div class="qr">${qrSVG()}</div><div style="flex:1;min-width:180px"><p>À montrer à un vétérinaire ou au pet-sitter. Le code contient l'essentiel sans connexion : identité, allergie, traitement, vétérinaire.</p><button class="btn sm secondary" data-act="bigQR" style="margin-top:12px">${ico("qr", "sm")}Afficher en grand</button></div></div></section>
+  <section class="card"><div class="card-h"><h2>Contacts d'urgence</h2></div><div class="list">
+    ${[{ name: CAT.vet.name + " · " + CAT.vet.clinic, role: "Vétérinaire référent · " + CAT.vet.addr, phone: CAT.vet.phone, i: "stetho" }, { name: CAT.emergency.name, role: "Urgences nuit et week-end", phone: CAT.emergency.phone, i: "cross" }, ...CAT.contacts.map(c => ({ ...c, i: "user" }))].map(c => `<div class="row"><span class="r-ico">${ico(c.i)}</span><span class="r-main"><span class="r-title">${c.name}</span><br><span class="r-sub">${c.role}</span><br><span class="data" style="user-select:all">${c.phone}</span></span><button class="icon-btn" data-act="copy" data-v="${c.phone}" aria-label="Copier le numéro de ${c.name}">${ico("copy")}</button></div>`).join("")}
+  </div><p class="fine" style="margin-top:8px">${ico("info", "sm")}Numéros fictifs pour le prototype.</p></section>
+  </div></div>`;
+  return { main, aside: `<p class="small muted">Ce que contient le QR code :</p><pre class="json" style="white-space:pre-wrap">${esc("CARTE DE SECOURS — DOUDOU\nChat européen, mâle stérilisé, 6 ans, 4,6 kg\nPuce : 250 26 0000 0048 21 (fictif)\nSensibilité : poulet (démangeaisons)\nTraitement : pipette antiparasitaire mensuelle\nVét : Dr Martin, Clinique des Quatre Pattes\nTél : +32 2 000 12 34 (fictif)")}</pre>`, asideTitle: "Carte de secours" };
+};
+
+/* --- Réglages --- */
+SCREENS.reglages = () => {
+  const s = syncLabel();
+  const radio = (act, v, cur, title, sub) => `<button class="radio" role="radio" data-act="${act}" data-v="${v}" aria-checked="${cur === v}"><span class="rd"></span><span class="r-main"><b>${title}</b>${sub ? `<br><span class="small muted">${sub}</span>` : ""}</span></button>`;
+  const tog = (act, on, title, sub) => `<button class="set-row" role="switch" data-act="${act}" aria-checked="${!!on}"><span class="r-main"><b>${title}</b>${sub ? `<br><span class="small muted">${sub}</span>` : ""}</span><span class="toggle" aria-checked="${!!on}"></span></button>`;
+  const main = `<div class="grid-2"><div class="col">
+  <section class="card"><div class="card-h"><h2>Synchronisation</h2><span class="sync" data-state="${S.sync}" style="border:0"><span class="dot"></span>${s.s}</span></div>
+    <p>${s.l}. Tes données sont sur ce téléphone et sur ton PC.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sm primary" data-act="syncNow" ${S.sync === "offline" ? "disabled" : ""}>${ico("refresh", "sm")}Synchroniser maintenant</button></div>
+    <p class="label muted" style="margin:20px 0 8px">Simuler l'état (démo)</p>
+    <div class="radio-list" role="radiogroup" aria-label="État de synchronisation">${radio("setSync", "ok", S.sync, "À jour", "Tout est envoyé")}${radio("setSync", "pending", S.sync, "En attente", "Une saisie part dès que possible")}${radio("setSync", "offline", S.sync, "Hors ligne", "Les saisies sont gardées sur l'appareil")}</div></section>
+  <section class="card"><div class="card-h"><h2>Appareils connectés</h2></div><div class="list">${DEVICES.map(d => `<div class="row"><span class="r-ico ${d.state === "off" ? "miel" : ""}">${ico(d.i)}</span><span class="r-main"><span class="r-title">${d.name}</span><br><span class="r-sub">${d.detail} · ${d.state === "off" ? "déconnectée depuis hier" : "connecté"}</span></span>${d.state === "off" ? `<button class="btn sm ghost" data-act="reconnect">Reconnecter</button>` : `<span class="batt">${ico("tag", "sm")}${d.batt} %</span>`}</div>`).join("")}</div></section>
+  </div><div class="col">
+  <section class="card"><div class="card-h"><h2>Sauvegardes</h2>${lvl("ok", "Actives")}</div><div class="list">${tog("noop", true, "Sauvegarde automatique chaque nuit", "Dernière : aujourd'hui à 3 h 00")}
+    <div class="set-row"><span class="r-ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface-tint);color:var(--soin)">${ico("shield")}</span><span class="r-main"><b>3 sauvegardes gardées</b><br><span class="small muted">4, 3 et 2 octobre</span></span></div></div>
+    <button class="btn secondary block" data-act="export" style="margin-top:12px">${ico("download", "sm")}Exporter toutes les données</button></section>
+  <section class="card"><div class="card-h"><h2>Apparence</h2></div><div class="radio-list" role="radiogroup" aria-label="Thème">${radio("theme", "system", S.theme, "Comme l'appareil", "Clair le jour, sombre le soir si ton téléphone le fait")}${radio("theme", "light", S.theme, "Clair")}${radio("theme", "dark", S.theme, "Sombre", "Pour vérifier Doudou la nuit sans t'éblouir")}</div>
+    <div class="list" style="margin-top:8px">${tog("calm", S.calm, "Réduire les animations", "Respecte déjà le réglage de ton appareil")}</div></section>
+  <section class="card"><div class="card-h"><h2>Démo du prototype</h2></div><div class="list">${tog("demoEmpty", S.empty, "Voir les états vides", "Comme au premier lancement")}${tog("demoError", S.demoError, "Simuler une erreur de Dr. Doudou")}
+    <button class="set-row" data-act="replaySk"><span class="r-main"><b>Rejouer les chargements</b><br><span class="small muted">Affiche les squelettes à la prochaine visite</span></span>${ico("chev-r")}</button></div>
+    <p class="fine" style="margin-top:8px">${ico("info", "sm")}Doudou Healthcare V2 · prototype · données fictives.</p></section>
+  </div></div>`;
+  return { main, aside: `<div class="explain"><h4>${ico("shield", "sm")}Tes données</h4><p class="small">Le journal, le dossier et les photos de Doudou restent à toi. L'export contient tout, dans un format lisible par un développeur (JSON).</p></div>`, asideTitle: "Données" };
+};
+</script>
+<script>
+"use strict";
+/* ---------- Dr. Doudou ---------- */
+let msgId = 0;
+function findAnswer(q) { return ANSWERS.find(a => a.re.test(q)) || FALLBACK; }
+function blocksOf(a) {
+  const b = [];
+  (a.ctx || []).forEach(t => b.push({ t: "ctx", text: t }));
+  (a.p || []).forEach(t => b.push({ t: "p", text: t }));
+  if (a.li) b.push({ t: "li", items: a.li });
+  (a.p2 || []).forEach(t => b.push({ t: "p", text: t }));
+  return b;
+}
+const blocksLen = b => b.reduce((s, x) => s + (x.items ? x.items.join("").length : x.text.length), 0);
+function renderBlocks(blocks, budget) {
+  let out = "", left = budget;
+  for (const b of blocks) {
+    if (left <= 0) break;
+    if (b.t === "li") {
+      let lis = "";
+      for (const it of b.items) { if (left <= 0) break; lis += `<li>${esc(it.slice(0, left))}${left < it.length ? '<span class="caret"></span>' : ""}</li>`; left -= it.length; }
+      out += `<ul>${lis}</ul>`;
+    } else {
+      const txt = b.text.slice(0, left), cut = left < b.text.length;
+      out += b.t === "ctx" ? `<p class="ctx">${ico("folder")}<span>${esc(txt)}${cut ? '<span class="caret"></span>' : ""}</span></p>` : `<p>${esc(txt)}${cut ? '<span class="caret"></span>' : ""}</p>`;
+      left -= b.text.length;
+    }
+  }
+  return out;
+}
+function callBox() {
+  return [[CAT.vet.clinic, CAT.vet.phone], [CAT.emergency.name, CAT.emergency.phone]].map(([n, p]) =>
+    `<div class="callbox"><span class="small"><b>${n}</b></span><span class="numb">${p}</span><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn sm danger" href="tel:${p.replace(/\s/g, "")}">${ico("phone", "sm")}Appeler</a><button class="btn sm ghost" data-act="copy" data-v="${p}">${ico("copy", "sm")}Copier</button></div></div>`).join("") + `<p class="small">Si l'appel ne se lance pas, compose le numéro affiché. Numéros fictifs pour le prototype.</p>`;
+}
+function msgHTML(m) {
+  if (m.role === "user") return `<div class="msg user" data-msg="${m.id}">${esc(m.text)}</div>`;
+  if (m.typing) return `<div class="msg bot" data-msg="${m.id}"><div class="bubble" aria-label="Dr. Doudou écrit"><div class="bot-h">${drSVG("av")}Dr. Doudou</div><span class="typing"><i></i><i></i><i></i></span></div></div>`;
+  if (m.error) return `<div class="msg bot" data-msg="${m.id}"><div class="err-bubble" role="alert"><div class="bot-h">${ico("cloud-off")}Dr. Doudou n'a pas pu répondre</div><p>${S.sync === "offline" ? "Tu es hors ligne. Ta question est gardée : réessaie quand le réseau revient." : "Le service ne répond pas pour le moment. Ta question est gardée."}</p><p class="small muted">Si c'est urgent, n'attends pas : appelle la clinique au <span class="data" style="user-select:all">${CAT.vet.phone}</span>.</p><div><button class="btn sm primary" data-act="retry" data-id="${m.id}">${ico("refresh", "sm")}Réessayer</button></div></div></div>`;
+  const a = m.ans, blocks = blocksOf(a), total = blocksLen(blocks), done = m.shown >= total, L = LEVELS[a.level];
+  return `<div class="msg bot" data-msg="${m.id}"><div class="bubble">
+    <div class="bot-h">${drSVG("av")}<span style="flex:1">Dr. Doudou</span><span class="status ${L.c}">${ico(L.i)}${L.w}</span></div>
+    ${a.level === "urgent" ? `<div class="urgent-band" role="alert"><h4>${ico("cross")}Appelle un vétérinaire maintenant</h4>${callBox()}</div>` : ""}
+    ${renderBlocks(blocks, m.shown)}
+    ${done ? `<div><p class="src-lab">Sources</p><div class="sources">${a.src.map(s => `<a class="src" href="${SOURCES[s].url}" target="_blank" rel="noopener">${ico("book")}${SOURCES[s].name}${ico("ext")}</a>`).join("")}</div></div>
+    <p class="fine">${ico("info", "sm")}Ne remplace pas un vétérinaire. En cas de doute, appelle la clinique.</p>` : ""}
+  </div>
+  ${done && m.last ? `<div class="suggest" style="margin-top:4px">${SUGGESTIONS.filter(q => findAnswer(q).id !== a.id).slice(0, 2).map(q => `<button data-act="ask" data-q="${esc(q)}">${ico("doc")}${q}</button>`).join("")}</div>` : ""}</div>`;
+}
+function chatHTML(where) {
+  const intro = !S.chat.length;
+  return `<div class="chat" data-chat="${where}">
+    ${intro ? `<div class="chat-intro">${drSVG("doc")}<h2>Bonjour, je suis Dr. Doudou</h2><p class="muted">Je réponds à tes questions à partir du dossier de Doudou et de sources vétérinaires reconnues.</p></div>` : ""}
+    <p class="disclaimer">${ico("info")}<span>Je ne remplace pas un vétérinaire. Chaque réponse indique un niveau d'urgence et ses sources.</span></p>
+    ${intro ? `<div class="suggest"><p class="src-lab">Suggestions</p>${SUGGESTIONS.map(q => `<button data-act="ask" data-q="${esc(q)}">${ico("doc")}${q}</button>`).join("")}</div>` : `<div class="msgs" aria-live="polite">${S.chat.map((m, i) => msgHTML(Object.assign(m, { last: i === S.chat.length - 1 }))).join("")}</div>`}
+    <form class="composer" data-act="composer"><label class="sr" for="composer-${where}">Ta question pour Dr. Doudou</label><textarea id="composer-${where}" rows="1" placeholder="Pose ta question sur Doudou…" ${S.chatBusy ? "disabled" : ""}></textarea><button class="send" type="submit" aria-label="Envoyer" ${S.chatBusy ? "disabled" : ""}>${ico("send")}</button></form>
+  </div>`;
+}
+function refreshChats() {
+  document.querySelectorAll("[data-chat]").forEach(el => { el.outerHTML = chatHTML(el.dataset.chat); });
+  scrollChat();
+}
+function updateMsg(m) {
+  document.querySelectorAll(`[data-msg="${m.id}"]`).forEach(el => { el.outerHTML = msgHTML(m); });
+}
+function scrollChat() {
+  const pb = $("#paneBody"); if (S.chatPinned && pb) pb.scrollTop = pb.scrollHeight;
+  if (S.route === "drdoudou" && S.chat.length) { const last = document.querySelector('[data-chat="main"] .msgs > :last-child'); last?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+}
+function ask(q) {
+  q = q.trim(); if (!q || S.chatBusy) return;
+  S.chat.push({ id: ++msgId, role: "user", text: q });
+  answer(q);
+}
+function answer(q) {
+  const m = { id: ++msgId, role: "bot", typing: true, q };
+  S.chat.push(m); S.chatBusy = true; refreshChats();
+  setTimeout(() => {
+    m.typing = false;
+    if (S.sync === "offline" || S.demoError) { m.error = true; S.chatBusy = false; refreshChats(); return; }
+    m.ans = findAnswer(q); m.shown = 0;
+    const total = blocksLen(blocksOf(m.ans));
+    const reduce = S.calm || matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { m.shown = total; S.chatBusy = false; refreshChats(); return; }
+    refreshChats();
+    const iv = setInterval(() => {
+      m.shown += 7; updateMsg(m);
+      if (m.shown >= total) { clearInterval(iv); m.shown = total; S.chatBusy = false; refreshChats(); }
+    }, 22);
+  }, 1100);
+}
+function autoGrow(t) { t.style.height = "auto"; t.style.height = Math.min(120, t.scrollHeight) + "px"; }
+SCREENS.drdoudou = () => ({
+  main: chatHTML("main"),
+  asideTitle: "Ce que Dr. Doudou sait",
+  aside: `<p class="small muted">Pour te répondre, Dr. Doudou lit le dossier de Doudou :</p>
+  <div class="list">${[["cat", "Profil", "Mâle stérilisé, 6 ans, européen"], ["scale", "Poids", "14 pesées depuis avril"], ["journal", "Journal", "90 jours d'humeur, d'appétit et de selles"], ["syringe", "Vaccins", "Typhus + coryza, leucose"], ["pipette", "Traitement", "Pipette en cours jusqu'au 6 oct."], ["alert", "Allergie", "Poulet"]].map(([i, t, s]) => `<div class="row"><span class="r-ico">${ico(i)}</span><span class="r-main"><span class="r-title">${t}</span><br><span class="r-sub">${s}</span></span>${ico("check", "sm")}</div>`).join("")}</div>
+  <div class="explain"><h4>${ico("info", "sm")}Les 4 niveaux d'urgence</h4><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${Object.keys(LEVELS).map(k => lvl(k)).join("")}</div></div>`
+});
+
+/* ---------- Saisie rapide ---------- */
+function refreshQuick() { const el = $("#quick"); if (el) el.outerHTML = quickHTML(); }
+function celebrate() {
+  const pad = $("#mainPad"); pad?.classList.add("stamp");
+  const cat = $("#heroCat .cat");
+  if (cat) { cat.classList.remove("blink", "purr"); void cat.getBoundingClientRect(); cat.classList.add("blink", "purr"); }
+  const h = $("#hearts");
+  if (h && !(S.calm || matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+    for (let i = 0; i < 4; i++) { const s = document.createElement("span"); s.className = "heart"; s.style.left = (20 + i * 22) + "%"; s.style.top = "30%"; s.style.animationDelay = (i * 120) + "ms"; s.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-heart"/></svg>`; h.appendChild(s); setTimeout(() => s.remove(), 2000); }
+  }
+  navigator.vibrate?.(30);
+}
+
+/* ---------- Événements ---------- */
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]");
+  if (g) { e.preventDefault(); go(g.dataset.go); return; }
+  const t = e.target.closest("[data-act]"); if (!t) return;
+  const a = t.dataset.act, v = t.dataset.v;
+  switch (a) {
+    case "slot": S.slot = v; S.quick = { step: 0, h: null, a: null, s: null }; refreshQuick(); break;
+    case "qstep": if (!t.closest("#quick .main-pad.done")) { S.quick.step = +t.dataset.step; const sv = todayLog()?.[S.slot]; if (sv && !S.quick.h && !S.quick.a && !S.quick.s) S.quick = { step: +t.dataset.step, ...sv }; refreshQuick(); } break;
+    case "qedit": { const sv = todayLog()?.[S.slot]; S.quick = { step: 0, h: null, a: null, s: null }; if (sv) { delete todayLog()[S.slot]; } refreshQuick(); break; }
+    case "qpick": {
+      const k = t.dataset.k, val = k === "s" ? v : +v;
+      S.quick[k] = val;
+      const idx = QCATS.findIndex(c => c.k === k);
+      const next = QCATS.findIndex(c => S.quick[c.k] == null);
+      S.quick.step = next === -1 ? 3 : next;
+      refreshQuick();
+      const toe = document.querySelectorAll("#quick .toe")[idx]; toe?.classList.add("lit");
+      if (next === -1) {
+        const tk = key(TODAY); LOGS[tk] = LOGS[tk] || { m: null, e: null, note: "", photos: [] };
+        LOGS[tk][S.slot] = { h: S.quick.h, a: S.quick.a, s: S.quick.s };
+        S.quick = { step: 3, h: null, a: null, s: null };
+        setTimeout(() => { refreshQuick(); celebrate(); toast("Saisie " + (S.slot === "m" ? "du matin" : "du soir") + " enregistrée", "pawfill"); markPending(); renderAside(); }, 380);
+      }
+      break;
+    }
+    case "reminder": { const m = REMINDERS.find(x => x.id === t.dataset.id); const r = RECORDS.find(x => x.id === m.rec);
+      openDetail(m.title, `<p class="muted">${cap(fmtDate(parse(m.date), true))} · ${relDay(parse(m.date))}</p><p>${m.sub}.</p>${r ? `<div class="explain"><h4>${ico("folder", "sm")}Lié au dossier</h4><p class="small">${r.title} : ${r.explain}</p></div>` : ""}<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-act="doneReminder" data-id="${m.id}">${ico("check")}C'est fait</button><button class="btn secondary" data-act="snooze">${ico("clock", "sm")}Me le rappeler demain</button></div>`); break; }
+    case "doneReminder": { const i = REMINDERS.findIndex(x => x.id === t.dataset.id); const m = REMINDERS.splice(i, 1)[0]; closeSheet(); toast(m.title + " : noté comme fait"); markPending(); render(false); break; }
+    case "snooze": closeSheet(); toast("Rappel déplacé à demain", "bell"); renderAside(); break;
+    case "ask":
+      if (!isDesk()) go("drdoudou", { focus: false });
+      else if (S.route !== "drdoudou") { S.chatPinned = true; renderAside(); }
+      ask(t.dataset.q); break;
+    case "retry": { const i = S.chat.findIndex(m => m.id === +t.dataset.id); const q = S.chat[i].q; S.chat.splice(i, 1); answer(q); break; }
+    case "explainInd": { const k = t.dataset.k; const T = { poids: ["Poids", "Le poids de Doudou est de 4,60 kg. Sa zone idéale, fixée avec le Dr Martin, va de 4,4 à 4,8 kg. Il a perdu 200 g depuis fin juillet, comme le conseillait le bilan d'août.", "weight"], appetit: ["Appétit", "Depuis le 1er octobre, il mange environ la moitié de sa ration. Un chat qui saute des repas plus de 24 heures doit être vu par un vétérinaire, car le jeûne peut abîmer son foie.", "appetit"], humeur: ["Humeur", "Il est calme, un peu moins joueur. Aucun signe de douleur n'a été noté (il ne se cache pas, ne grogne pas quand on le touche).", "humeur"] }[k];
+      openDetail(T[0], `<p>${T[1]}</p>${chartBox(T[2], 180)}<button class="btn secondary" data-act="ask" data-q="${k === "poids" ? "Son poids est-il normal ?" : "Pourquoi mange-t-il moins depuis 3 jours ?"}">${ico("doc", "sm")}En parler à Dr. Doudou</button>`, { sheet: false }); break; }
+    case "wrange": S.weightRange = +v; render(false); break;
+    case "period": S.period = +v; render(false); break;
+    case "filter": S.filter = v; render(false); break;
+    case "rec": { S.selRec = t.dataset.id; const r = RECORDS.find(x => x.id === S.selRec);
+      if (isDesk()) { document.querySelectorAll(".rec[aria-current]").forEach(x => x.removeAttribute("aria-current")); t.setAttribute("aria-current", "true"); }
+      openDetail("Fiche", recordHTML(r)); break; }
+    case "visit": openVisit(); break;
+    case "closeVisit": $("#visitSlot").innerHTML = ""; $("[data-act=visit]")?.focus(); break;
+    case "visitBg": if (e.target === t) $("#visitSlot").innerHTML = ""; break;
+    case "addQ": S.visitQs.push(""); openVisit(); setTimeout(() => $(`#vq${S.visitQs.length - 1}`)?.focus(), 80); break;
+    case "delQ": S.visitQs.splice(+t.dataset.i, 1); openVisit(); break;
+    case "copyVisit": copyText(visitText(), "Résumé copié : colle-le dans un e-mail ou un message"); break;
+    case "printVisit": window.print(); break;
+    case "calPrev": { let [y, m] = S.calMonth; m--; if (m < 0) { m = 11; y--; } S.calMonth = [y, m]; render(false); break; }
+    case "calNext": { let [y, m] = S.calMonth; m++; if (m > 11) { m = 0; y++; } S.calMonth = [y, m]; render(false); break; }
+    case "day": S.selDay = t.dataset.k;
+      if (isDesk()) { document.querySelectorAll(".day[aria-current]").forEach(x => x.removeAttribute("aria-current")); t.setAttribute("aria-current", "true"); }
+      openDetail(cap(fmtDate(parse(S.selDay))), dayHTML(S.selDay)); break;
+    case "form": openDetail("Saisie détaillée", formHTML(t.dataset.day)); break;
+    case "formToday": S.empty = false; openDetail("Saisie détaillée", formHTML(key(TODAY))); break;
+    case "fslot": S.draft.slot = v; t.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === t)); break;
+    case "fpick": { const f = t.dataset.f; S.draft[f] = f === "h" || f === "a" ? +v : v; t.parentElement.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", b === t)); $("#fErr").hidden = true; break; }
+    case "addPhoto": if (e.target.tagName !== "INPUT") { e.preventDefault(); $("#photoInput").click(); } break;
+    case "meal": { const m = FOOD.meals[+t.dataset.i];
+      openDetail(m.t + " · " + m.what, `<p>Combien a-t-il mangé ? (${m.qty})</p><div class="choice-group">${[[1, "Tout", "bfull"], [.5, "La moitié", "bhalf"], [.1, "Presque rien", "bempty"]].map(([v, w, i]) => `<button class="choice" data-act="mealSet" data-i="${t.dataset.i}" data-v="${v}" aria-pressed="${m.done && Math.abs(m.eaten - v) < .2}">${ico(i)}${w}</button>`).join("")}</div>`); break; }
+    case "mealSet": { const m = FOOD.meals[+t.dataset.i]; m.done = true; m.eaten = +v; closeSheet(); toast("Repas de " + m.t + " noté"); markPending(); render(false); break; }
+    case "ring": toast("Le collier sonne pendant 10 secondes", "sound"); break;
+    case "zone": toast("Tu seras prévenu si Doudou sort de la zone maison", "pin"); break;
+    case "addExpense": S.empty = false; openDetail("Nouvelle dépense", expenseForm()); setTimeout(() => $("#eLabel")?.focus(), 320); break;
+    case "copy": copyText(v, "Numéro copié"); break;
+    case "bigQR": openDetail("Carte de secours", `<div class="qr" style="width:min(320px,100%);height:auto;aspect-ratio:1;margin:0 auto">${qrSVG()}</div><p style="text-align:center">Doudou · mâle stérilisé · 6 ans · <b>allergie poulet</b><br>Vétérinaire : ${CAT.vet.name}, <span class="data">${CAT.vet.phone}</span></p>`, { sheet: true }); break;
+    case "setSync": S.sync = v; S.pending = v === "pending" ? 1 : 0; if (v === "ok") S.lastSync = Date.now(); renderSync(); render(false); toast(v === "offline" ? "Mode hors ligne : tes saisies sont gardées" : v === "pending" ? "Une saisie en attente d'envoi" : "Tout est à jour", v === "offline" ? "cloud-off" : "cloud"); break;
+    case "syncNow": S.sync = "pending"; S.pending = 1; renderSync(); render(false); setTimeout(() => { S.sync = "ok"; S.pending = 0; S.lastSync = Date.now(); renderSync(); if (S.route === "reglages") render(false); toast("Synchronisation terminée", "cloud"); }, 1300); break;
+    case "reconnect": toast("Recherche de la fontaine… rapproche ton téléphone", "refresh"); break;
+    case "export": { const data = JSON.stringify({ chat: CAT, poids: WEIGHTS.map(w => ({ date: key(w.d), kg: w.v })), dossier: RECORDS, rappels: REMINDERS, depenses: EXPENSES, journal: LOGS }, null, 2);
+      const framed = (() => { try { return window.self !== window.top; } catch (er) { return true; } })();
+      S.exportData = data;
+      openDetail("Exporter les données", `<p>Toutes les données de Doudou (${Object.keys(LOGS).length} jours de journal, ${RECORDS.length} actes médicaux, ${EXPENSES.length} dépenses) au format JSON.</p><pre class="json">${esc(data.slice(0, 1600))}\n…</pre><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-act="copyExport">${ico("copy", "sm")}Copier tout</button>${framed ? "" : `<button class="btn secondary" data-act="dlExport">${ico("download", "sm")}Télécharger le fichier</button>`}</div>${framed ? `<p class="fine">${ico("info", "sm")}Le téléchargement est disponible quand l'appli est ouverte hors de l'aperçu.</p>` : ""}`); break; }
+    case "copyExport": copyText(S.exportData, "Données copiées"); break;
+    case "dlExport": { const b = new Blob([S.exportData], { type: "application/json" }); const u = URL.createObjectURL(b); const l = document.createElement("a"); l.href = u; l.download = "doudou-donnees.json"; l.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); break; }
+    case "theme": S.theme = v; store.set("theme", v); applyTheme(); render(false); break;
+    case "calm": S.calm = !S.calm; store.set("calm", S.calm); applyTheme(); render(false); break;
+    case "demoEmpty": S.empty = !S.empty; buildSideNav(); render(false); toast(S.empty ? "États vides affichés" : "Données de démo rétablies", "info"); break;
+    case "demoError": S.demoError = !S.demoError; render(false); toast(S.demoError ? "Dr. Doudou simulera une erreur" : "Dr. Doudou fonctionne normalement", "info"); break;
+    case "replaySk": S.loaded = {}; toast("Les chargements seront rejoués", "refresh"); break;
+    case "toastCal": toast("Rappel ajouté : on te prévient une semaine avant", "bell"); break;
+    case "toastAdd": toast("Ajout d'un soin : disponible dans la version finale", "info"); break;
+    case "goDossier": go("dossier"); break;
+    case "goToday": go("aujourdhui"); break;
+    case "noop": toast("La sauvegarde automatique reste active", "shield"); break;
+  }
+});
+document.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.matches(".composer")) { const ta = f.querySelector("textarea"); const q = ta.value; ta.value = ""; if (isDesk() && S.route !== "drdoudou") S.chatPinned = true; ask(q); return; }
+  if (f.id === "dayForm") {
+    const d = S.draft, wRaw = $("#fWeight").value.trim().replace(",", ".");
+    const errW = $("#fWeightErr");
+    if (wRaw && (isNaN(+wRaw) || +wRaw < 1 || +wRaw > 15)) { errW.hidden = false; errW.innerHTML = ico("alert", "sm") + "Le poids doit être un nombre entre 1 et 15 kg, par exemple 4,6."; $("#fWeight").setAttribute("aria-invalid", "true"); $("#fWeight").focus(); return; }
+    errW.hidden = true; $("#fWeight").removeAttribute("aria-invalid");
+    if (d.h == null || d.a == null || d.s == null) { const er = $("#fErr"); er.hidden = false; er.innerHTML = ico("alert", "sm") + "Choisis au moins son humeur, son appétit et ses selles."; return; }
+    LOGS[d.k] = LOGS[d.k] || { m: null, e: null, note: "", photos: [] };
+    LOGS[d.k][d.slot] = { h: d.h, a: d.a, s: d.s, vomi: d.vomi === "oui" };
+    LOGS[d.k].note = $("#fNote").value.trim(); LOGS[d.k].photos = S.draftPhotos.slice();
+    if (wRaw) LOGS[d.k].w = +wRaw;
+    S.selDay = d.k; S.empty = false;
+    closeSheet(); toast("Journée enregistrée", "pawfill"); markPending(); render(false); return;
+  }
+  if (f.id === "expForm") {
+    const amt = $("#eAmt").value.trim().replace(",", "."), lab = $("#eLabel").value.trim() || "Dépense vétérinaire";
+    if (!amt || isNaN(+amt) || +amt <= 0) { const er = $("#eErr"); er.hidden = false; er.innerHTML = ico("alert", "sm") + "Indique un montant en euros, par exemple 45."; $("#eAmt").setAttribute("aria-invalid", "true"); $("#eAmt").focus(); return; }
+    EXPENSES.push({ d: $("#eDate").value || key(TODAY), label: lab, cat: $("#eCat").value, amt: Math.round(+amt * 100) / 100 });
+    closeSheet(); toast("Dépense ajoutée : " + fmtEur(+amt)); markPending(); render(false);
+  }
+});
+document.addEventListener("input", e => {
+  if (e.target.matches(".composer textarea")) autoGrow(e.target);
+  if (e.target.dataset.vq != null) S.visitQs[+e.target.dataset.vq] = e.target.value;
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { if ($("#visitSlot").innerHTML) { $("#visitSlot").innerHTML = ""; return; } closeSheet(); }
+  if (e.key === "Enter" && !e.shiftKey && e.target.matches(".composer textarea")) { e.preventDefault(); e.target.closest("form").requestSubmit(); }
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches(".photo-add")) { e.preventDefault(); $("#photoInput").click(); }
+});
+$("#photoInput").addEventListener("change", e => {
+  const file = e.target.files[0]; if (!file) return;
+  if (!file.type.startsWith("image/")) { toast("Ce fichier n'est pas une image", "alert"); return; }
+  const r = new FileReader();
+  r.onload = () => { S.draftPhotos.push(r.result); const box = $("#fPhotos"); if (box) box.innerHTML = photosHTML(S.draftPhotos) + `<label class="photo-add" for="photoInput" tabindex="0" data-act="addPhoto">${ico("camera")}Ajouter</label>`; toast("Photo ajoutée", "camera"); };
+  r.onerror = () => toast("La photo n'a pas pu être lue. Essaie une autre image.", "alert");
+  r.readAsDataURL(file); e.target.value = "";
+});
+async function copyText(txt, msg) {
+  try { await navigator.clipboard.writeText(txt); toast(msg, "copy"); }
+  catch (er) {
+    const ta = document.createElement("textarea"); ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch (x) {}
+    ta.remove(); toast(ok ? msg : "Copie impossible ici : sélectionne le texte et copie-le à la main", ok ? "copy" : "alert");
+  }
+}
+$("#scrim").addEventListener("click", closeSheet);
+$("#sheetClose").addEventListener("click", closeSheet);
+$("#paneClose").addEventListener("click", closePane);
+$("#dockChat").addEventListener("click", () => { S.chatPinned = true; renderAside(); setTimeout(() => $("#composer-pane")?.focus(), 50); });
+$("#moreTab").addEventListener("click", () => {
+  const items = [["journal", "Journal", "Calendrier, notes, photos"], ["alimentation", "Alimentation", "Repas, marques, poids"], ["activite", "Activité et GPS", "Jeu, sommeil, position"], ["finances", "Finances", "Dépenses vétérinaires"], ["profil", "Profil", "Identité, carte de secours"], ["reglages", "Réglages", "Synchro, données, thème"]];
+  openDetail("Plus", `<div class="more-grid">${items.map(([k, t, s]) => `<button class="more-item" data-go="${k}"><span class="m-ico">${ico(ROUTES[k].i)}</span><b>${t}</b><span>${s}</span></button>`).join("")}</div>
+    <button class="sync" data-go="reglages" data-state="${S.sync}" style="align-self:flex-start"><span class="dot"></span>${syncLabel().l}</button>`, { sheet: true });
+});
+/* glisser la feuille vers le bas pour la fermer */
+(() => { let y0 = null; const sh = $("#sheet");
+  sh.addEventListener("touchstart", e => { if (e.target.closest(".sheet-b") && $("#sheetBody").scrollTop > 0) return; y0 = e.touches[0].clientY; }, { passive: true });
+  sh.addEventListener("touchmove", e => { if (y0 == null) return; const dy = e.touches[0].clientY - y0; if (dy > 0) sh.style.transform = `translateY(${dy}px)`; }, { passive: true });
+  sh.addEventListener("touchend", e => { if (y0 == null) return; const dy = e.changedTouches[0].clientY - y0; sh.style.transform = ""; y0 = null; if (dy > 110) closeSheet(); });
+})();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applyTheme);
+let wasDesk = isDesk();
+window.addEventListener("resize", () => { const d = isDesk(); if (d !== wasDesk) { wasDesk = d; closeSheet(); render(false); } });
+
+/* ---------- Démarrage ---------- */
+applyTheme();
+buildSideNav();
+renderSync();
+const h0 = (location.hash || "").replace("#", "");
+S.route = ROUTES[h0] ? h0 : "aujourdhui";
+render(true);
+window.addEventListener("hashchange", () => { const h = location.hash.replace("#", ""); if (ROUTES[h] && h !== S.route) go(h); });
+</script>
+</body></html>

@@ -1,0 +1,17 @@
+# Données personnelles : JAMAIS dans git
+donnees-reelles/
+*.backup.json
+backups/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Outils
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+.DS_Store
