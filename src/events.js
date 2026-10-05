@@ -24,6 +24,7 @@ import { importReportHTML, wipeHTML } from "./screens/settings.js";
 import { weightMeaning } from "./screens/health.js";
 import { records } from "./domain/views.js";
 import { run as runSync, logout, logoutOthers } from "./sync/controller.js";
+import { loginGo } from "./screens/login.js";
 
 /* ---------- Saisie rapide ---------- */
 export function refreshQuick() { const el = $("#quick"); if (el) el.outerHTML = quickHTML(); }
@@ -176,7 +177,7 @@ document.addEventListener("click", async e => {
       case "syncNow": toast("Synchronisation…", "refresh"); await runSync(); toast(S.sync === "ok" ? "Tout est à jour" : S.sync === "pending" ? "Encore des saisies en attente" : "Serveur injoignable : tes saisies sont gardées", S.sync === "ok" ? "cloud" : "cloud-off"); break;
       case "logout": if (confirmTwice(t, "Confirmer la déconnexion")) { await logout(); toast("Déconnecté : les données restent sur ton compte", "info"); S.devices = null; S.devicesAt = 0; render(true); } break;
       case "logoutOthers": if (confirmTwice(t, "Confirmer")) { await logoutOthers(); S.devicesAt = 0; toast("Les autres appareils devront se reconnecter", "shield"); } break;
-      case "loginBack": S.loginStep = "email"; render(false); break;
+      case "loginStep": loginGo(v); break;
       case "importFile": pickJSON(); break;
       case "wipeAsk": openDetail("Tout effacer", wipeHTML(), { sheet: true }); break;
       case "theme": S.theme = v; store.set("theme", v); applyTheme(); render(false); break;

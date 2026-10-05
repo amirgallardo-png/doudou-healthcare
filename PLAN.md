@@ -259,6 +259,7 @@ chaque table a `user_id = auth.uid()` en lecture et écriture.
 - **Appareils** : chaque appareil se déclare (nom, dernière activité) ; « Déconnecter les autres appareils »
   révoque les autres sessions.
 - **Un seul utilisateur** : après la première connexion d'Amir, les inscriptions sont fermées.
+- **Connexion : e-mail + mot de passe** (décision d'Amir du 2026-10-05, D6 révisé) : le service d'e-mail gratuit de Supabase n'envoie que des liens et ne permet plus de modifier le message (pas de code à 6 chiffres sans service d'e-mail externe).
 - **Mise en place** : l'outil Supabase en ligne de commande est bloqué par Windows sur ce PC → script
   `tools/supabase-setup.mjs` via l'API officielle de gestion, avec un jeton temporaire collé par Amir dans
   `.env.local` (jamais affiché ni versionné). Clés de l'appli dans `.env.local` (`VITE_…`), jamais dans le code.

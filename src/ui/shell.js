@@ -35,7 +35,7 @@ export function buildSideNav() {
   const groups = {};
   Object.entries(ROUTES).forEach(([k, r]) => (groups[r.g] = groups[r.g] || []).push([k, r]));
   $("#sideNav").innerHTML = Object.entries(groups).map(([g, items]) => `<div class="nav-group"><h3>${g}</h3>${items.map(([k, r]) =>
-    `<button class="nav-item" data-go="${k}">${ico(r.i)}${esc(routeTitle(k))}${k === "sante" && healthLevel() === "watch" ? '<span class="dotw" aria-label="un point à surveiller"></span>' : ""}</button>`).join("")}</div>`).join("");
+    `<button class="nav-item" data-go="${k}">${ico(r.i)}${esc(k === "profil" ? "Profil de " + (cat()?.name || "ton chat") : r.t)}${k === "sante" && healthLevel() === "watch" ? '<span class="dotw" aria-label="un point à surveiller"></span>' : ""}</button>`).join("")}</div>`).join("");
 }
 /* Tant que la synchronisation (Phase 3) n'existe pas, l'état réel est « enregistré sur cet appareil ». */
 export function syncLabel() {
@@ -104,7 +104,7 @@ export function healthLevel() {
   const l = logs();
   return overall([trend(l, "a", TODAY).level, trend(l, "h", TODAY).level, weightStatus(cat(), weights()).level]);
 }
-export const routeTitle = r => (S.auth === "signed-out" ? "Connexion" : r === "profil" ? "Profil de " + (cat()?.name || "ton chat") : ROUTES[r].t);
+export const routeTitle = r => (S.auth === "signed-out" || S.auth === "recovery" ? "Connexion" : r === "profil" ? "Profil de " + (cat()?.name || "ton chat") : ROUTES[r].t);
 /* Carte du chat dans la barre latérale (PC) */
 function renderSideCat() {
   const c = cat(), w = lastWeight();
@@ -124,7 +124,7 @@ export function render(anim) {
   if (moreRoutes.includes(S.route)) $("#moreTab").setAttribute("aria-current", "page");
   const v = $("#view");
   if (!S.ready) { v.innerHTML = skeleton(); return; }
-  const out = (S.auth === "signed-out" ? SCREENS.login : SCREENS[S.route])();
+  const out = (S.auth === "signed-out" || S.auth === "recovery" ? SCREENS.login : SCREENS[S.route])();
   v.innerHTML = `<div class="view ${anim ? "view-enter" : ""}">${out.main}</div>`;
   v.querySelectorAll(".view > *").forEach((el, i) => { if (anim) { el.classList.add("rise"); el.style.setProperty("--i", i); } });
   drawCharts(v);
@@ -133,7 +133,7 @@ export function render(anim) {
 }
 export function renderAside(out) {
   if (S.chatPinned) { $("#paneTitle").textContent = "Dr. Doudou"; $("#paneClose").hidden = false; $("#paneBody").innerHTML = chatHTML("pane"); scrollChat(); return; }
-  out = out || (S.auth === "signed-out" ? SCREENS.login() : SCREENS[S.route] ? SCREENS[S.route]() : {});
+  out = out || (S.auth === "signed-out" || S.auth === "recovery" ? SCREENS.login() : SCREENS[S.route] ? SCREENS[S.route]() : {});
   $("#paneClose").hidden = true;
   $("#paneTitle").textContent = out.asideTitle || "En un coup d'œil";
   $("#paneBody").innerHTML = out.aside || "";

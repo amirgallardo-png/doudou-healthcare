@@ -28,7 +28,10 @@ export async function run() {
   if (S.route === "reglages" && !busy()) render(false);
 }
 
+let currentUid = null;
 async function signedIn(user) {
+  if (S.auth === "signed-in" && eng && currentUid === user.id) return;   // déjà démarré (écran + événement Supabase)
+  currentUid = user.id;
   S.auth = "signed-in"; S.userEmail = user.email;
   eng = createSync(transport);
   await eng.ensureOwner(user.id);
@@ -51,6 +54,9 @@ export async function startSync() {
     document.addEventListener("visibilitychange", () => { if (!document.hidden) schedule(300); });
     setInterval(() => { if (!document.hidden) run(); }, 60000);
     onAuth((event, user) => {
+      if (event === "PASSWORD_RECOVERY") { S.auth = "recovery"; render(true); return; }
+      // Retour par le lien de confirmation de l'e-mail : la session arrive dans l'adresse.
+      if (event === "SIGNED_IN" && user && S.auth === "signed-out") { signedIn(user); return; }
       if (event === "SIGNED_OUT") { eng = null; unsubRealtime?.(); unsubRealtime = null; S.auth = "signed-out"; S.sync = "offline"; renderSync(); render(true); }
     });
   }

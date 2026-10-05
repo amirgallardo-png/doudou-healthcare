@@ -10,7 +10,7 @@ const nid = name => `f-${name}-${++uid}`;
 export function input(name, label, opts = {}) {
   const id = nid(name), v = opts.value == null ? "" : String(opts.value);
   const attrs = `id="${id}" name="${name}" class="input${opts.data ? " data" : ""}" ${opts.placeholder ? `placeholder="${esc(opts.placeholder)}"` : ""} ${opts.inputmode ? `inputmode="${opts.inputmode}"` : ""} ${opts.min ? `min="${opts.min}"` : ""} ${opts.max ? `max="${opts.max}"` : ""} ${opts.required ? "required" : ""} ${opts.help ? `aria-describedby="${id}-h"` : ""}`;
-  const control = opts.area ? `<textarea ${attrs}>${esc(v)}</textarea>` : `<input ${attrs} type="${opts.type || "text"}" value="${esc(v)}" autocomplete="off">`;
+  const control = opts.area ? `<textarea ${attrs}>${esc(v)}</textarea>` : `<input ${attrs} type="${opts.type || "text"}" value="${esc(v)}" autocomplete="${opts.autocomplete || "off"}">`;
   return `<div class="field"><label for="${id}">${esc(label)}</label>${control}${opts.help ? `<span class="small muted" id="${id}-h">${esc(opts.help)}</span>` : ""}</div>`;
 }
 

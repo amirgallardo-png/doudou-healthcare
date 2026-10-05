@@ -9,14 +9,18 @@ export const configured = !!(URL_ && KEY);
 let client = null;
 export function sb() {
   if (!configured) throw new Error("Synchronisation non configurée.");
-  if (!client) client = createClient(URL_, KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "doudou.auth" } });
+  if (!client) client = createClient(URL_, KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "doudou.auth" } });
   return client;
 }
 const fail = error => { if (error) throw Object.assign(new Error(error.message || String(error)), { name: error.name || "Error", status: error.status }); };
 
-/* ---------- Connexion par code à 6 chiffres ---------- */
-export async function sendCode(email) { const { error } = await sb().auth.signInWithOtp({ email, options: { shouldCreateUser: true } }); fail(error); }
-export async function verifyCode(email, token) { const { data, error } = await sb().auth.verifyOtp({ email, token, type: "email" }); fail(error); return data.user; }
+/* ---------- Connexion par e-mail + mot de passe (décision d'Amir du 2026-10-05 : le service d'e-mail gratuit
+   de Supabase n'envoie que des liens, sans code modifiable) ---------- */
+const backHere = () => location.origin + location.pathname;   // le lien de confirmation ramène vers l'appli
+export async function signUp(email, password) { const { data, error } = await sb().auth.signUp({ email, password, options: { emailRedirectTo: backHere() } }); fail(error); return data; }
+export async function signIn(email, password) { const { data, error } = await sb().auth.signInWithPassword({ email, password }); fail(error); return data.user; }
+export async function sendReset(email) { const { error } = await sb().auth.resetPasswordForEmail(email, { redirectTo: backHere() }); fail(error); }
+export async function setNewPassword(password) { const { data, error } = await sb().auth.updateUser({ password }); fail(error); return data.user; }
 export async function currentUser() { const { data } = await sb().auth.getSession(); return data.session?.user || null; }
 export async function signOut(scope = "local") { const { error } = await sb().auth.signOut({ scope }); fail(error); }
 export const onAuth = fn => sb().auth.onAuthStateChange((event, session) => fn(event, session?.user || null));
