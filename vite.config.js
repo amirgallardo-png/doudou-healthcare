@@ -42,6 +42,8 @@ export default defineConfig(({ command, mode }) => {
     injectRegister: false,
     includeAssets: ["icons/favicon-32.png", "icons/apple-touch-icon.png"],
     manifest: {
+      // Identifiant unique : Orbe est hébergé sur le même domaine (amirgallardo-png.github.io), Chrome ne doit pas les confondre.
+      id: "/doudou-healthcare/",
       name: "Doudou Healthcare",
       short_name: "Doudou",
       description: "Le suivi de santé de ton chat : journal, dossier médical, repas, poids.",
