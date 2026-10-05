@@ -28,7 +28,7 @@ function csp(dev, sbUrl) {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
   return {
-  // Relatif : l'appli fonctionne aussi bien à la racine qu'à l'adresse GitHub Pages /doudou-healthcare/.
+  // Relatif : l'appli fonctionne à la racine (https://doudou-healthcare.github.io/) comme en local.
   base: "./",
   plugins: [{
     name: "doudou-csp",
@@ -42,8 +42,8 @@ export default defineConfig(({ command, mode }) => {
     injectRegister: false,
     includeAssets: ["icons/favicon-32.png", "icons/apple-touch-icon.png"],
     manifest: {
-      // Identifiant unique : Orbe est hébergé sur le même domaine (amirgallardo-png.github.io), Chrome ne doit pas les confondre.
-      id: "/doudou-healthcare/",
+      // L'appli a son propre domaine (doudou-healthcare.github.io) : stockage isolé des autres applis d'Amir.
+      id: "/",
       name: "Doudou Healthcare",
       short_name: "Doudou",
       description: "Le suivi de santé de ton chat : journal, dossier médical, repas, poids.",
