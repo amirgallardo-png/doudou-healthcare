@@ -1,5 +1,5 @@
 /* Illustrations SVG : Doudou, Dr. Doudou, œil de statut, états vides, photos, QR. */
-import { QR_BITS } from "../demo/fixture.js";
+import qrcode from "qrcode-generator";
 
 export function catSVG(mood = "content", opts = {}) {
   const eyeL = 44, eyeR = 76, ey = 64;
@@ -62,9 +62,13 @@ export function photoSVG(kind) {
   };
   return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Photo illustrée">${scenes[kind] || scenes.sleep}</svg>`;
 }
-export function qrSVG() {
-  const n = Math.round(Math.sqrt(QR_BITS.length));
+/* QR de la carte de secours, généré sur l'appareil (aucun service externe). Texte brut, lisible par n'importe quel lecteur. */
+export function qrSVG(text = " ") {
+  const q = qrcode(0, "M");
+  q.addData(unescape(encodeURIComponent(text)));   // UTF-8 (accents)
+  q.make();
+  const n = q.getModuleCount();
   let d = "";
-  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (QR_BITS[y * n + x] === "1") d += `M${x} ${y}h1v1h-1z`;
-  return `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" role="img" aria-label="QR code de la carte de secours de Doudou"><path d="${d}" fill="#13302D"/></svg>`;
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (q.isDark(y, x)) d += `M${x + 2} ${y + 2}h1v1h-1z`;
+  return `<svg viewBox="0 0 ${n + 4} ${n + 4}" shape-rendering="crispEdges" role="img" aria-label="QR code de la carte de secours"><rect width="${n + 4}" height="${n + 4}" fill="#FFFFFF"/><path d="${d}" fill="#13302D"/></svg>`;
 }

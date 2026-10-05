@@ -10,7 +10,7 @@ export const TYPES = {
   analyse: { w: "Analyse", pl: "Analyses", i: "flask", c: "t-analyse" },
   ordonnance: { w: "Ordonnance", pl: "Ordonnances", i: "file", c: "t-ordonnance" }
 };
-export const CATS = { Consultations: "var(--soin)", Analyses: "var(--miel)", "Médicaments": "var(--roux)", Vaccins: "var(--ok)", Urgences: "var(--urgent)" };
+export const CATS = { Consultations: "var(--soin)", Analyses: "var(--miel)", "Médicaments": "var(--roux)", Vaccins: "var(--ok)", Urgences: "var(--urgent)", Nourriture: "var(--fur)", Accessoires: "var(--soin-strong)", Assurance: "var(--miel-ink)", Autre: "var(--ink-muted)" };
 export const LEVELS = {
   ok: { w: "Rien d'inquiétant", i: "checkc", c: "ok" },
   watch: { w: "À surveiller", i: "eye", c: "watch" },

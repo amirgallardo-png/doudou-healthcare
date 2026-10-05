@@ -4,7 +4,10 @@ import { SCREENS } from "../screens/registry.js";
 import { S } from "../state.js";
 import { drawCharts } from "../ui/charts.js";
 import { catSVG } from "../ui/illustrations.js";
-import { ico } from "../utils/core.js";
+import { ico, esc } from "../utils/core.js";
+import { cat, catName, ageText, lastWeight, logs, weights } from "../domain/views.js";
+import { trend, weightStatus, overall } from "../domain/insights.js";
+import { TODAY, fmtKg } from "../utils/core.js";
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const ROUTES = {
@@ -32,11 +35,13 @@ export function buildSideNav() {
   const groups = {};
   Object.entries(ROUTES).forEach(([k, r]) => (groups[r.g] = groups[r.g] || []).push([k, r]));
   $("#sideNav").innerHTML = Object.entries(groups).map(([g, items]) => `<div class="nav-group"><h3>${g}</h3>${items.map(([k, r]) =>
-    `<button class="nav-item" data-go="${k}">${ico(r.i)}${r.t}${k === "sante" && !S.empty ? '<span class="dotw" aria-label="un point à surveiller"></span>' : ""}</button>`).join("")}</div>`).join("");
+    `<button class="nav-item" data-go="${k}">${ico(r.i)}${esc(routeTitle(k))}${k === "sante" && healthLevel() === "watch" ? '<span class="dotw" aria-label="un point à surveiller"></span>' : ""}</button>`).join("")}</div>`).join("");
 }
+/* Tant que la synchronisation (Phase 3) n'existe pas, l'état réel est « enregistré sur cet appareil ». */
 export function syncLabel() {
   if (S.sync === "offline") return { l: "Hors ligne · tes saisies sont gardées", s: "Hors ligne", i: "cloud-off" };
   if (S.sync === "pending") return { l: S.pending + " saisie" + (S.pending > 1 ? "s" : "") + " en attente d'envoi", s: "En attente", i: "refresh" };
+  if (S.sync === "local") return { l: "Enregistré sur cet appareil", s: "Sur l'appareil", i: "cloud" };
   const m = Math.max(0, Math.round((Date.now() - S.lastSync) / 60000));
   return { l: "À jour " + (m < 1 ? "à l'instant" : "il y a " + m + " min"), s: "À jour", i: "cloud" };
 }
@@ -48,15 +53,12 @@ export function renderSync() {
   $("#offlineSlot").innerHTML = S.sync === "offline" ? `<div class="offline-banner" role="status">${ico("cloud-off")}<span><b>Hors ligne.</b> Tu peux continuer à noter : tout sera envoyé au retour du réseau.</span></div>` : "";
 }
 setInterval(renderSync, 30000);
-export function markPending() {
-  if (S.sync === "offline") { S.pending++; renderSync(); return; }
-  S.sync = "pending"; S.pending = 1; renderSync();
-  setTimeout(() => { if (S.sync !== "pending") return; S.sync = "ok"; S.pending = 0; S.lastSync = Date.now(); renderSync(); }, 1600);
-}
+/* Appelé après chaque enregistrement : la donnée est déjà écrite sur l'appareil (l'envoi arrive en Phase 3). */
+export function markPending() { renderSync(); }
 
 export function toast(msg, icon = "check") {
   const t = document.createElement("div");
-  t.className = "toast"; t.innerHTML = ico(icon) + `<span>${msg}</span>`;
+  t.className = "toast"; t.innerHTML = ico(icon) + `<span>${esc(msg)}</span>`;
   $("#toasts").appendChild(t);
   setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 260); }, 2600);
 }
@@ -95,23 +97,32 @@ export function go(route, opts = {}) {
   if (!opts.keepScroll) window.scrollTo({ top: 0 });
   if (opts.focus !== false) $("#view").focus({ preventScroll: true });
 }
-export const SKELETON_ROUTES = ["sante", "dossier", "finances", "activite"];
+/* Niveau santé global (pastille de l'onglet Santé) : calculé, jamais inventé. */
+export function healthLevel() {
+  if (!cat()) return null;
+  const l = logs();
+  return overall([trend(l, "a", TODAY).level, trend(l, "h", TODAY).level, weightStatus(cat(), weights()).level]);
+}
+export const routeTitle = r => (r === "profil" ? "Profil de " + (cat()?.name || "ton chat") : ROUTES[r].t);
+/* Carte du chat dans la barre latérale (PC) */
+function renderSideCat() {
+  const c = cat(), w = lastWeight();
+  const b = $(".side-cat b"), s = $(".side-cat span > span");
+  if (!b || !s) return;
+  b.textContent = c ? c.name : "Bienvenue";
+  s.textContent = c ? [ageText(c.birth_date), w ? fmtKg(w.v) : "", (c.breed || "").toLowerCase()].filter(Boolean).join(" · ") : "Crée son profil";
+}
 export function render(anim) {
-  const r = ROUTES[S.route];
-  $("#screenTitle").textContent = r.t;
-  document.title = r.t + " · Doudou Healthcare";
+  const title = routeTitle(S.route);
+  $("#screenTitle").textContent = title;
+  document.title = title + " · Doudou Healthcare";
+  buildSideNav(); renderSideCat();
   document.querySelectorAll(".tab,.nav-item").forEach(b => b.dataset.go === S.route ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
   const moreRoutes = ["journal", "alimentation", "activite", "finances", "profil", "reglages"];
   $("#moreTab").toggleAttribute("aria-current", moreRoutes.includes(S.route));
   if (moreRoutes.includes(S.route)) $("#moreTab").setAttribute("aria-current", "page");
   const v = $("#view");
-  if (SKELETON_ROUTES.includes(S.route) && !S.loaded[S.route]) {
-    S.loaded[S.route] = true;
-    v.innerHTML = skeleton();
-    const rt = S.route;
-    setTimeout(() => { if (S.route === rt) render(true); }, 650);
-    renderAside(); return;
-  }
+  if (!S.ready) { v.innerHTML = skeleton(); return; }
   const out = SCREENS[S.route]();
   v.innerHTML = `<div class="view ${anim ? "view-enter" : ""}">${out.main}</div>`;
   v.querySelectorAll(".view > *").forEach((el, i) => { if (anim) { el.classList.add("rise"); el.style.setProperty("--i", i); } });
@@ -131,7 +142,7 @@ export function skeleton() {
   return `<div class="view" aria-busy="true" aria-label="Chargement"><div class="sk" style="height:38px;width:60%"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:220px"></div><div class="sk" style="height:140px"></div></div>`;
 }
 export function afterRender() {
-  document.querySelectorAll("[data-cat-mini]").forEach(el => { if (!el.innerHTML) el.innerHTML = catSVG("content", { label: "Doudou" }); });
+  document.querySelectorAll("[data-cat-mini]").forEach(el => { if (!el.innerHTML) el.innerHTML = catSVG("content", { label: catName() }); });
   const c = $("#composer-main"); if (c) autoGrow(c);
 }
 window.addEventListener("scroll", () => $("#topbar").classList.toggle("scrolled", window.scrollY > 4), { passive: true });

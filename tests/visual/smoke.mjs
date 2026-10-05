@@ -1,12 +1,17 @@
-/* Test de fumée : clique les interactions principales sur le build et signale toute erreur JavaScript.
-   Usage : npm run build && node tests/visual/smoke.mjs */
+/* Parcours complet sur une appli vierge (build), comme un vrai premier lancement. Signale toute erreur JavaScript,
+   tout débordement horizontal et toute action qui échoue.
+   Usage : npm run build && node tests/visual/smoke.mjs [chemin/vers/sauvegarde.json] [--shots]
+   Par défaut : sauvegarde FICTIVE tests/fixtures/legacy-sample.json. --shots : captures dans test-results/screens/. */
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
-import { extname, join, normalize } from "node:path";
+import { readFile, mkdir } from "node:fs/promises";
+import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
-const DIST = fileURLToPath(new URL("../../dist/", import.meta.url));
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
+const DIST = join(ROOT, "dist");
+const BACKUP = resolve(process.argv.slice(2).find(a => !a.startsWith("--")) || join(ROOT, "tests/fixtures/legacy-sample.json"));
+const SHOTS = process.argv.includes("--shots");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2" };
 const srv = createServer(async (req, res) => {
   const p = normalize(join(DIST, new URL(req.url, "http://x").pathname));
@@ -16,62 +21,85 @@ const srv = createServer(async (req, res) => {
 });
 await new Promise(r => srv.listen(0, "127.0.0.1", r));
 const URL0 = `http://127.0.0.1:${srv.address().port}/`;
+const ROUTES = ["aujourdhui", "journal", "alimentation", "activite", "sante", "dossier", "drdoudou", "finances", "profil", "reglages"];
+if (SHOTS) await mkdir(join(ROOT, "test-results", "screens"), { recursive: true });
 
 const browser = await chromium.launch();
 const results = [];
-async function run(label, viewport, steps) {
-  const ctx = await browser.newContext({ viewport, reducedMotion: "reduce" });
+async function run(label, viewport) {
+  const ctx = await browser.newContext({ viewport, reducedMotion: "reduce", acceptDownloads: true });
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", e => errors.push(e.message));
   page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
-  await page.goto(URL0 + "#aujourdhui", { waitUntil: "networkidle" });
-  for (const [name, fn] of steps) {
-    const before = errors.length;
-    let ok = true, why = "";
-    // Sur mobile, une feuille restée ouverte recouvre l'écran : on la referme comme le ferait l'utilisateur.
-    if (!name.startsWith("Visite") && !name.startsWith("Rappel : c")) { await page.keyboard.press("Escape"); await page.waitForTimeout(320); }
-    try { await fn(page); } catch (e) { ok = false; why = e.message.split("\n")[0]; }
+  const step = async (name, fn) => {
+    const before = errors.length; let ok = true, why = "";
+    try { await fn(); } catch (e) { ok = false; why = e.message.split("\n")[0]; }
     if (errors.length > before) { ok = false; why = errors.slice(before).join(" | "); }
-    results.push({ appareil: label, action: name, résultat: ok ? "OK" : "ÉCHEC", détail: why.slice(0, 110) });
-  }
+    results.push({ appareil: label, action: name, résultat: ok ? "OK" : "ÉCHEC", détail: why.slice(0, 120) });
+  };
+  const click = async sel => { await page.locator(sel).first().click(); await page.waitForTimeout(350); };
+  const seen = (sel, t = 4000) => page.locator(sel).first().waitFor({ state: "visible", timeout: t });
+  const esc = async () => { await page.keyboard.press("Escape"); await page.waitForTimeout(320); };
+  const fill = (sel, v) => page.locator(sel).first().fill(v);
+  const sheet = (s = "") => (viewport.width < 1024 ? (s.startsWith("text=") ? "#sheet >> " : "#sheet ") : "") + s;
+  const route = async r => { await page.evaluate(h => { location.hash = h; }, r); await page.waitForTimeout(450); };
+
+  await page.goto(URL0, { waitUntil: "networkidle" });
+  await step("Premier lancement : accueil", async () => { await seen("text=Bienvenue !"); });
+  await step("Import de la sauvegarde", async () => {
+    const chooser = page.waitForEvent("filechooser");
+    await click('[data-act="importFile"]');
+    await (await chooser).setFiles(BACKUP);
+    await seen("text=Import terminé", 15000);
+    await esc();
+  });
+  await step("Dossier : fiches importées", async () => { await route("dossier"); if (await page.locator(".rec").count() < 2) throw new Error("moins de 2 fiches"); });
+  await step("Programme de repas : créer avec un nouvel aliment", async () => {
+    await route("alimentation"); await click('[data-act="planEdit"]'); await click('[data-act="planItem"][data-id=""]');
+    await page.locator(sheet('select[name="product"]')).selectOption("__new");
+    await fill(sheet('[name="newName"]'), "Croquettes Test Saumon"); await fill(sheet('[name="time"]'), "07:30"); await fill(sheet('[name="qty"]'), "25");
+    await click(sheet('form[data-form="planitem"] button[type="submit"]'));
+    await seen(sheet("text=Croquettes Test Saumon")); await esc();
+    await seen("#view .meal");
+  });
+  await step("Repas : noter « la moitié »", async () => { await click("#view .meal"); await click(sheet('[data-act="mealSet"][data-v="0.5"]')); await seen("#view .meal >> text=la moitié"); });
+  await step("Repas : changer pour aujourd'hui", async () => { await click("#view .meal"); await click(sheet('[data-act="mealChange"]')); await fill(sheet('[name="qty"]'), "30"); await click(sheet('form[data-form="mealday"] button[type="submit"]')); await seen("#view .meal >> text=changé aujourd'hui"); });
+  await step("Repas : ajouter un extra", async () => { await click('[data-act="extraAdd"]'); await fill(sheet('[name="qty"]'), "5"); await click(sheet('form[data-form="mealday"] button[type="submit"]')); await seen("#view .meal >> text=extra"); });
+  await step("Saisie rapide (3 touches)", async () => { await route("aujourdhui"); await click('[data-act="qpick"][data-k="h"][data-v="3"]'); await click('[data-act="qpick"][data-k="a"][data-v="2"]'); await click('[data-act="qpick"][data-k="s"][data-v="ok"]'); await seen(".toast"); await page.waitForTimeout(500); await seen("#quick .main-pad.done"); });
+  await step("Saisie détaillée avec poids", async () => { await route("journal"); await esc(); await click('.visit-cta[data-act="form"]');
+    for (const [f, v] of [["h", "3"], ["a", "3"], ["s", "ok"]]) await click(`[data-act="fpick"][data-f="${f}"][data-v="${v}"]`);
+    await fill("#fWeight", "5,95"); await fill("#fNote", "Test <b>échappé</b>"); await click('#dayForm button[type="submit"]'); await seen(".toast");
+    await route("sante"); if (!(await page.locator("#view").innerText()).includes("5,95")) throw new Error("poids absent de Santé"); });
+  await step("Texte saisi bien échappé", async () => { await route("journal"); if (await page.locator("#view b:text('échappé'), #pane b:text('échappé')").count()) throw new Error("texte interprété comme du HTML"); });
+  await step("Soin avec rappel → visible sur Aujourd'hui", async () => { await route("dossier"); await click('[data-act="addRec"]'); await click(sheet('[data-act="choose"][data-v="vaccin"]'));
+    await fill(sheet('[name="title"]'), "Typhus coryza test"); await fill(sheet('[name="next"]'), "2099-01-15"); await fill(sheet('[name="cost"]'), "55");
+    await click(sheet('form[data-form="record"] button[type="submit"]')); await route("aujourdhui"); await seen("text=Rappel Typhus coryza test"); });
+  await step("Dépense créée par le soin + dépense manuelle", async () => { await route("finances"); await seen("#view >> text=Typhus coryza test"); await click('[data-act="addExpense"]');
+    await fill(sheet('[name="label"]'), "Litière"); await fill(sheet('[name="amount"]'), "12,5"); await click(sheet('form[data-form="expense"] button[type="submit"]')); await seen("#view >> text=Litière"); });
+  await step("Profil : zone de poids + contact + allergie", async () => { await route("profil"); await click('#view [data-act="profileForm"]');
+    await fill(sheet('[name="tmin"]'), "5,5"); await fill(sheet('[name="tmax"]'), "6,5"); await click(sheet('form[data-form="profile"] button[type="submit"]'));
+    await click('[data-act="contactForm"][data-id=""]'); await page.locator(sheet('select[name="kind"]')).selectOption("urgence"); await fill(sheet('[name="name"]'), "Garde test"); await fill(sheet('[name="phone"]'), "+32 2 000 00 00"); await click(sheet('form[data-form="contact"] button[type="submit"]'));
+    await click('[data-act="allergyForm"][data-id=""]'); await fill(sheet('[name="name"]'), "poulet"); await click(sheet('form[data-form="allergy"] button[type="submit"]'));
+    await seen("#view >> text=Poulet"); await seen("#view >> text=Garde test"); });
+  await step("Activité notée", async () => { await route("activite"); await click('#view [data-act="activityForm"]'); await fill(sheet('[name="minutes"]'), "40"); await fill(sheet('[name="goal"]'), "45"); await click(sheet('form[data-form="activity"] button[type="submit"]')); await seen("#view .ring >> text=40"); });
+  await step("Dr. Doudou : numéros d'urgence réels, pas de fausse réponse", async () => { await route("drdoudou"); await seen("#view >> text=Garde test"); if (await page.locator("#composer-main:not([disabled])").count()) throw new Error("champ de question actif"); });
+  for (const r of ROUTES) await step(`Pas de débordement : ${r}`, async () => {
+    await route(r); await page.waitForTimeout(250);
+    const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    if (o > 1) {
+      const who = await page.evaluate(() => { const vw = document.documentElement.clientWidth; return [...document.querySelectorAll("#view *")].filter(el => el.getBoundingClientRect().right > vw + 1 && !el.closest(".chips")).slice(0, 3).map(el => el.tagName + "." + (typeof el.className === "string" ? el.className : "")).join(", "); });
+      throw new Error(`déborde de ${o} px : ${who}`);
+    }
+    if (SHOTS) await page.screenshot({ path: join(ROOT, "test-results", "screens", `${label.replace(/\W+/g, "-")}-${r}.png`), fullPage: true });
+  });
+  await step("Export (téléchargement JSON)", async () => { await route("reglages"); const dl = page.waitForEvent("download"); await click('#view [data-act="export"]'); const d = await dl; if (!/doudou-sauvegarde-\d{4}-\d{2}-\d{2}\.json/.test(d.suggestedFilename())) throw new Error(d.suggestedFilename()); });
+  await step("Données gardées après rechargement", async () => { await page.reload({ waitUntil: "networkidle" }); await route("finances"); await seen("#view >> text=Litière"); });
+  await step("Tout effacer (EFFACER)", async () => { await route("reglages"); await click('[data-act="wipeAsk"]'); await fill(sheet('[name="word"]'), "EFFACER"); await click(sheet('form[data-form="wipe"] button[type="submit"]')); await seen("text=Bienvenue !"); });
   await ctx.close();
 }
-const click = sel => async p => { await p.locator(sel).first().click(); await p.waitForTimeout(450); };
-const seen = sel => async p => { await p.locator(sel).first().waitFor({ state: "visible", timeout: 4000 }); };
-
-const common = [
-  ["Saisie rapide : humeur", click('[data-act="qpick"][data-k="h"][data-v="3"]')],
-  ["Saisie rapide : appétit", click('[data-act="qpick"][data-k="a"][data-v="2"]')],
-  ["Saisie rapide : selles (enregistre)", async p => { await click('[data-act="qpick"][data-k="s"][data-v="ok"]')(p); await seen(".toast")(p); }],
-  ["Rappel : ouvrir", click('[data-act="reminder"]')],
-  ["Rappel : c'est fait", async p => { await click('[data-act="doneReminder"]')(p); }],
-  ["Santé : période 7 j", async p => { await p.goto(URL0 + "#sante"); await p.waitForTimeout(900); await click('[data-act="period"][data-v="7"]')(p); }],
-  ["Santé : explication poids", click('[data-act="explainInd"][data-k="poids"]')],
-  ["Dossier : filtre vaccins", async p => { await p.goto(URL0 + "#dossier"); await p.waitForTimeout(900); await click('[data-act="filter"][data-v="vaccin"]')(p); }],
-  ["Dossier : fiche", click('[data-act="rec"]')],
-  ["Dossier : résumé de visite", async p => { await click('[data-act="visit"]')(p); await seen(".visit-doc")(p); }],
-  ["Visite : ajouter une question", click('[data-act="addQ"]')],
-  ["Visite : fermer", click('[data-act="closeVisit"]')],
-  ["Journal : jour", async p => { await p.goto(URL0 + "#journal"); await p.waitForTimeout(500); await click('[data-act="day"]')(p); }],
-  ["Journal : mois précédent", click('[data-act="calPrev"]')],
-  ["Journal : saisie détaillée + enregistrer", async p => { await p.goto(URL0 + "#journal"); await p.waitForTimeout(500); await click('.visit-cta[data-act="form"]')(p);
-    for (const [f, v] of [["h", "3"], ["a", "3"], ["s", "ok"]]) await click(`[data-act="fpick"][data-f="${f}"][data-v="${v}"]`)(p);
-    await p.locator("#fWeight").fill("4,7"); await p.locator('#dayForm button[type="submit"]').click(); await seen(".toast")(p); }],
-  ["Alimentation : noter un repas", async p => { await p.goto(URL0 + "#alimentation"); await p.waitForTimeout(500); await click('[data-act="meal"][data-i="2"]')(p); await click('[data-act="mealSet"]')(p); }],
-  ["Finances : ajouter une dépense", async p => { await p.goto(URL0 + "#finances"); await p.waitForTimeout(900); await click('[data-act="addExpense"]')(p);
-    await p.locator("#eLabel").fill("Test <b>échappé</b>"); await p.locator("#eAmt").fill("12,5"); await p.locator('#expForm button[type="submit"]').click(); await seen(".toast")(p);
-    if (await p.locator("#view b:text('échappé')").count()) throw new Error("texte non échappé"); }],
-  ["Profil : QR en grand", async p => { await p.goto(URL0 + "#profil"); await p.waitForTimeout(500); await click('[data-act="bigQR"]')(p); }],
-  ["Réglages : thème sombre", async p => { await p.goto(URL0 + "#reglages"); await p.waitForTimeout(500); await click('[data-act="theme"][data-v="dark"]')(p);
-    if (await p.evaluate(() => document.documentElement.dataset.theme) !== "dark") throw new Error("thème non appliqué"); }],
-  ["Réglages : export", async p => { await click('[data-act="export"]')(p); await seen("pre.json")(p); }],
-  ["Réglages : états vides", async p => { await p.goto(URL0 + "#reglages"); await p.waitForTimeout(400); await click('[data-act="demoEmpty"]')(p); await p.goto(URL0 + "#journal"); await p.waitForTimeout(400); await seen(".empty-state")(p); }],
-  ["Dr. Doudou : question urgente", async p => { await p.goto(URL0 + "#drdoudou"); await p.waitForTimeout(400);
-    await p.locator("#composer-main").fill("Il va à la litière mais n'arrive pas à faire pipi"); await p.keyboard.press("Enter"); await seen(".urgent-band")(p); }]
-];
-await run("mobile 390", { width: 390, height: 844 }, [...common, ["Menu Plus", async p => { await p.goto(URL0 + "#aujourdhui"); await click("#moreTab")(p); await seen(".more-grid")(p); }]]);
-await run("PC 1280", { width: 1280, height: 800 }, [...common, ["Volet Dr. Doudou", async p => { await p.goto(URL0 + "#aujourdhui"); await click("#dockChat")(p); await seen("#composer-pane")(p); }]]);
+await run("mobile 360", { width: 360, height: 800 });
+await run("PC 1280", { width: 1280, height: 800 });
 await browser.close(); srv.close();
 console.table(results);
 const ko = results.filter(r => r.résultat !== "OK");

@@ -1,11 +1,13 @@
 /* Photos : réduction à l'import (1280 px max, WebP, JPEG en repli) et adresses d'affichage locales. */
 import { get } from "./repo.js";
+import { dataURLToBlob } from "./backup.js";
 
 export const MAX_SIDE = 1280;
 
 /* source : Blob/File ou data URL. Rend { blob, width, height }. Navigateur uniquement (canvas). */
 export async function shrinkImage(source, max = MAX_SIDE, quality = 0.82) {
-  const blob = typeof source === "string" ? await (await fetch(source)).blob() : source;
+  // Conversion en mémoire (pas de fetch : la CSP n'autorise aucune connexion vers des adresses data:)
+  const blob = typeof source === "string" ? dataURLToBlob(source) : source;
   const bmp = await createImageBitmap(blob);
   const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
   const width = Math.round(bmp.width * k), height = Math.round(bmp.height * k);
