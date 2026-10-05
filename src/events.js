@@ -21,7 +21,7 @@ import { activityFormHTML } from "./screens/activity.js";
 import { expenseForm } from "./screens/finances.js";
 import { emergencyText, profileFormHTML, contactFormHTML, allergyFormHTML } from "./screens/profile.js";
 import { importReportHTML, wipeHTML } from "./screens/settings.js";
-import { weightMeaning } from "./screens/health.js";
+import { weightMeaning, weightFormHTML } from "./screens/health.js";
 import { records } from "./domain/views.js";
 import { run as runSync, logout, logoutOthers } from "./sync/controller.js";
 import { loginGo } from "./screens/login.js";
@@ -117,6 +117,7 @@ document.addEventListener("click", async e => {
         const T = { poids: ["Poids", weightMeaning(), "weight"], appetit: ["Appétit", "Moyenne de ses saisies du matin et du soir, jour par jour. Un chat qui saute des repas plus de 24 heures doit être vu par un vétérinaire.", "appetit"], humeur: ["Humeur", "Barre haute = joueur, moyenne = calme, basse = grognon. Note aussi s'il se cache ou grogne quand on le touche.", "humeur"] }[k];
         openDetail(T[0], `<p>${esc(T[1])}</p>${chartBox(T[2], 180)}`, { sheet: false }); break; }
       case "wrange": S.weightRange = +v; render(false); break;
+      case "weightForm": openDetail("Nouvelle pesée", weightFormHTML(), { sheet: true }); break;
       case "period": S.period = +v; render(false); break;
       /* dossier */
       case "filter": S.filter = v; render(false); break;

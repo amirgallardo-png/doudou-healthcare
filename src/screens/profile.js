@@ -1,7 +1,7 @@
 /* Écran Profil : carte d'identité, allergies, carte de secours (QR généré en local), contacts. Tout est modifiable. */
 import { SCREENS } from "../screens/registry.js";
 import { catSVG, qrSVG } from "../ui/illustrations.js";
-import { ico, esc, fmtKg, fmtDate, parse, cap } from "../utils/core.js";
+import { ico, esc, fmtKg, fmtDate, parse, cap, key, TODAY } from "../utils/core.js";
 import { closeSheet, toast, markPending, render, go } from "../ui/shell.js";
 import { FORMS, form, input, choices, select, submit, formError, parseNum } from "../ui/forms.js";
 import { commit, get } from "../data/repo.js";
@@ -56,6 +56,7 @@ export function profileFormHTML() {
     ${choices("sterilized", "Stérilisé", [["oui", "Oui"], ["non", "Non"]], c.sterilized === false ? "non" : "oui")}
     ${input("coat", "Robe", { value: c.coat || "", placeholder: "ex. Noir et blanc" })}
     ${input("chip", "Numéro de puce", { value: c.chip_id || "", data: true })}
+    ${input("weight", "Poids actuel (kg, facultatif)", { value: "", inputmode: "decimal", data: true, placeholder: lastWeight() ? String(lastWeight().v).replace(".", ",") : "ex. 5,9", help: "Ajoute une pesée datée d'aujourd'hui (visible dans Santé et le journal)." })}
     ${input("tmin", "Zone de poids idéale : minimum (kg)", { value: c.target_min ?? "", inputmode: "decimal", data: true, help: "À demander à ton vétérinaire. Laisse vide si tu ne la connais pas." })}
     ${input("tmax", "Zone de poids idéale : maximum (kg)", { value: c.target_max ?? "", inputmode: "decimal", data: true })}
     ${input("insurance", "Assurance (facultatif)", { value: c.insurance || "" })}
@@ -68,8 +69,12 @@ FORMS.profile = async (f, v) => {
   const tmin = parseNum(v.tmin), tmax = parseNum(v.tmax);
   if (Number.isNaN(tmin) || Number.isNaN(tmax) || (tmin != null && (tmin < 0.5 || tmin > 15)) || (tmax != null && (tmax < 0.5 || tmax > 15))) return formError(f, "La zone de poids s'écrit en kilos, par exemple 4,4 et 4,8.", "tmin");
   if ((tmin == null) !== (tmax == null) || (tmin != null && tmin >= tmax)) return formError(f, "Indique le minimum ET le maximum, le minimum étant plus petit.", "tmin");
-  const c = cat(), first = !c;
-  await commit([{ table: "cats", row: { id: c?.id, name: v.name, breed: v.breed, birth_date: v.birth || null, sex: v.sex || "male", sterilized: v.sterilized !== "non", coat: v.coat, chip_id: v.chip, target_min: tmin, target_max: tmax, insurance: v.insurance, insurance_id: v.insurance_id, notes: v.notes } }]);
+  const w = parseNum(v.weight);
+  if (Number.isNaN(w) || (w != null && (w < 0.5 || w > 15))) return formError(f, "Le poids s'écrit en kilos, par exemple 5,9.", "weight");
+  const c = cat(), first = !c, catId = c?.id || crypto.randomUUID();
+  const ops = [{ table: "cats", row: { id: catId, name: v.name, breed: v.breed, birth_date: v.birth || null, sex: v.sex || "male", sterilized: v.sterilized !== "non", coat: v.coat, chip_id: v.chip, target_min: tmin, target_max: tmax, insurance: v.insurance, insurance_id: v.insurance_id, notes: v.notes } }];
+  if (w != null) ops.push({ table: "weights", row: { cat_id: catId, date: key(TODAY), moment: "m", kg: Math.round(w * 100) / 100 } });
+  await commit(ops);
   closeSheet(); toast(first ? `Bienvenue, ${v.name} !` : "Profil enregistré", "cat"); markPending();
   if (first) go("aujourdhui"); else render(false);
 };

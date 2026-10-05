@@ -6,6 +6,7 @@ import { drawCharts } from "../ui/charts.js";
 import { catSVG } from "../ui/illustrations.js";
 import { ico, esc } from "../utils/core.js";
 import { cat, catName, ageText, lastWeight, logs, weights } from "../domain/views.js";
+import { photoURL } from "../data/photos.js";
 import { trend, weightStatus, overall } from "../domain/insights.js";
 import { TODAY, fmtKg } from "../utils/core.js";
 
@@ -143,7 +144,13 @@ export function skeleton() {
   return `<div class="view" aria-busy="true" aria-label="Chargement"><div class="sk" style="height:38px;width:60%"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:220px"></div><div class="sk" style="height:140px"></div></div>`;
 }
 export function afterRender() {
-  document.querySelectorAll("[data-cat-mini]").forEach(el => { if (!el.innerHTML) el.innerHTML = catSVG("content", { label: catName() }); });
+  // Avatar du chat : sa vraie photo si elle existe, sinon l'illustration. Redessiné seulement si la photo change.
+  const me = cat(), url = me?.photo_id ? photoURL(me.photo_id) : null, sig = url || "svg";
+  document.querySelectorAll("[data-cat-mini]").forEach(el => {
+    if (el.dataset.sig === sig && el.innerHTML) return;
+    el.dataset.sig = sig;
+    el.innerHTML = url ? `<img src="${esc(url)}" alt="${esc(catName())}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block">` : catSVG("content", { label: catName() });
+  });
   const c = $("#composer-main"); if (c) autoGrow(c);
 }
 window.addEventListener("scroll", () => $("#topbar").classList.toggle("scrolled", window.scrollY > 4), { passive: true });

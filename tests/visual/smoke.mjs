@@ -82,6 +82,9 @@ async function run(label, viewport) {
     await click('[data-act="contactForm"][data-id=""]'); await page.locator(sheet('select[name="kind"]')).selectOption("urgence"); await fill(sheet('[name="name"]'), "Garde test"); await fill(sheet('[name="phone"]'), "+32 2 000 00 00"); await click(sheet('form[data-form="contact"] button[type="submit"]'));
     await click('[data-act="allergyForm"][data-id=""]'); await fill(sheet('[name="name"]'), "poulet"); await click(sheet('form[data-form="allergy"] button[type="submit"]'));
     await seen("#view >> text=Poulet"); await seen("#view >> text=Garde test"); });
+  await step("Pesée depuis Santé + poids depuis le profil", async () => { await route("sante"); await click('#view [data-act="weightForm"]'); await fill(sheet('[name="kg"]'), "6,1"); await click(sheet('form[data-form="weight"] button[type="submit"]'));
+    await route("profil"); await click('#view [data-act="profileForm"]'); await fill(sheet('[name="weight"]'), "6,2"); await click(sheet('form[data-form="profile"] button[type="submit"]'));
+    await route("sante"); if (!(await page.locator("#view").innerText()).includes("6,2")) throw new Error("poids du profil absent de Santé"); });
   await step("Activité notée", async () => { await route("activite"); await click('#view [data-act="activityForm"]'); await fill(sheet('[name="minutes"]'), "40"); await fill(sheet('[name="goal"]'), "45"); await click(sheet('form[data-form="activity"] button[type="submit"]')); await seen("#view .ring >> text=40"); });
   await step("Dr. Doudou : numéros d'urgence réels, pas de fausse réponse", async () => { await route("drdoudou"); await seen("#view >> text=Garde test"); if (await page.locator("#composer-main:not([disabled])").count()) throw new Error("champ de question actif"); });
   for (const r of ROUTES) await step(`Pas de débordement : ${r}`, async () => {
