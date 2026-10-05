@@ -29,6 +29,7 @@ import { initRepo, onChange, pendingCount } from "./data/repo.js";
 import { weightPoints } from "./ui/charts.js";
 import { refreshToday, ico } from "./utils/core.js";
 import { startSync } from "./sync/controller.js";
+import { startPWA } from "./pwa.js";
 
 /* ---------- Démarrage ---------- */
 applyTheme();
@@ -55,6 +56,8 @@ try {
   $("#view").innerHTML = `<div class="view"><div class="empty-state"><h3>Impossible d'ouvrir les données</h3><p>Le navigateur refuse le stockage local (navigation privée ou espace plein ?). Ouvre l'appli dans une fenêtre normale. Détail : ${String(err.message || err).replace(/[<>&]/g, "")}</p><button class="btn primary" id="retryOpen">${ico("refresh")}Réessayer</button></div></div>`;
   $("#retryOpen").addEventListener("click", () => location.reload());
 }
+
+startPWA();
 
 /* Changement de jour (appli restée ouverte après minuit) */
 document.addEventListener("visibilitychange", () => { if (!document.hidden && refreshToday() && S.ready) render(false); });

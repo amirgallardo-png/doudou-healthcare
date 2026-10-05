@@ -10,3 +10,8 @@
   .visit-doc{box-shadow:none;width:100%;color:#000;background:#fff}
   .visit-bar,.no-print{display:none!important}
 }
+/* Phase 5 : écrans tactiles uniquement — zones de toucher d'au moins 44 px (le design PC reste identique). */
+@media (pointer: coarse){
+  .seg button{min-height:44px}
+  .topbar .sync{min-height:44px}
+}

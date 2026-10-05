@@ -217,6 +217,11 @@ document.addEventListener("input", e => {
   if (e.target.matches("[data-visit-motif]")) store.set("visitMotif", e.target.value);
   if (e.target.getAttribute("aria-invalid")) e.target.removeAttribute("aria-invalid");
 });
+/* Téléphone : le champ touché remonte au milieu de l'écran, au-dessus du clavier. */
+document.addEventListener("focusin", e => {
+  if (!e.target.matches?.("input:not([type=file]),textarea,select") || !matchMedia("(pointer: coarse)").matches) return;
+  setTimeout(() => e.target.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+});
 document.addEventListener("change", e => {
   if (e.target.matches('select[name="product"]')) { const box = e.target.closest("form")?.querySelector("[data-newproduct]"); if (box) box.hidden = e.target.value !== "__new"; }
 });
