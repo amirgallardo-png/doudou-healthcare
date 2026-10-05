@@ -1,7 +1,7 @@
 # Doudou Healthcare — Plan de construction (Phase 0)
 
 > Rédigé le 2026-10-04. Statut : **validé par Amir le 2026-10-04** (D1 à D10 selon les recommandations ; D8 précisé en §7.1).
-> Reste ouvert : D4 (saisies dans la V1 après le 11 juin ?).
+> D4 clos le 2026-10-05 : ancien historique abandonné, saisies réelles à partir de la visite vétérinaire.
 > Ce document ne contient aucune donnée personnelle (le dépôt pourra devenir public pour GitHub Pages).
 
 ---
@@ -246,6 +246,24 @@ Le fichier source n'est jamais modifié ; l'import affiche un rapport « import�
 
 Connexion : **code à 6 chiffres reçu par e-mail** (plutôt qu'un lien magique, voir décisions). Sécurité par ligne :
 chaque table a `user_id = auth.uid()` en lecture et écriture.
+
+### 6.1 Choix précis de la Phase 3 (2026-10-05)
+
+- **Côté serveur, une seule table `public.rows`** (`tbl`, `id`, `user_id`, `data jsonb`, `updated_at`, `deleted_at`,
+  `server_at`) : même schéma local et distant sans maintenir 15 tables SQL ; RLS `user_id = auth.uid()` ;
+  fonction `push_rows()` qui n'écrit une ligne que si elle est plus récente ; `server_at` posé par le serveur.
+- **Identifiants déterministes** pour les tables à clé métier (journal, notes du jour, pesées, activité) :
+  l'id est calculé à partir de (chat, date, moment) → deux appareils produisent le même id, pas de doublon.
+- **Photos** : bucket privé `photos`, dossier `<user_id>/`, envoi avant la ligne qui les décrit ; téléchargement
+  à la demande sur l'autre appareil.
+- **Appareils** : chaque appareil se déclare (nom, dernière activité) ; « Déconnecter les autres appareils »
+  révoque les autres sessions.
+- **Un seul utilisateur** : après la première connexion d'Amir, les inscriptions sont fermées.
+- **Mise en place** : l'outil Supabase en ligne de commande est bloqué par Windows sur ce PC → script
+  `tools/supabase-setup.mjs` via l'API officielle de gestion, avec un jeton temporaire collé par Amir dans
+  `.env.local` (jamais affiché ni versionné). Clés de l'appli dans `.env.local` (`VITE_…`), jamais dans le code.
+- **Ancien historique abandonné** (décision d'Amir du 2026-10-05) : les vraies saisies commencent à la visite
+  vétérinaire ; l'import de la V1 reste disponible mais n'est plus utilisé.
 
 ---
 

@@ -21,6 +21,7 @@
     "vitest": "^3.2.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "dexie": "^4.4.6",
     "qrcode-generator": "^1.5.2"
   }

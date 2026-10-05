@@ -39,7 +39,8 @@ export function buildSideNav() {
 }
 /* Tant que la synchronisation (Phase 3) n'existe pas, l'état réel est « enregistré sur cet appareil ». */
 export function syncLabel() {
-  if (S.sync === "offline") return { l: "Hors ligne · tes saisies sont gardées", s: "Hors ligne", i: "cloud-off" };
+  if (S.auth === "signed-out") return { l: "Non connecté · tes saisies restent sur l'appareil", s: "Non connecté", i: "cloud-off" };
+  if (S.sync === "offline") return S.syncError ? { l: "Serveur injoignable · tes saisies sont gardées", s: "Hors ligne", i: "cloud-off" } : { l: "Hors ligne · tes saisies sont gardées", s: "Hors ligne", i: "cloud-off" };
   if (S.sync === "pending") return { l: S.pending + " saisie" + (S.pending > 1 ? "s" : "") + " en attente d'envoi", s: "En attente", i: "refresh" };
   if (S.sync === "local") return { l: "Enregistré sur cet appareil", s: "Sur l'appareil", i: "cloud" };
   const m = Math.max(0, Math.round((Date.now() - S.lastSync) / 60000));
@@ -50,7 +51,7 @@ export function renderSync() {
   const html = `<span class="dot" aria-hidden="true"></span><span class="txt-long">${s.l}</span><span class="txt-short">${s.s}</span>`;
   ["#syncTop", "#syncSide"].forEach(id => { const el = $(id); el.dataset.state = S.sync; el.innerHTML = html; el.setAttribute("aria-label", "Synchronisation : " + s.l + ". Ouvrir les réglages."); });
   $("#syncSide .txt-short").hidden = true;
-  $("#offlineSlot").innerHTML = S.sync === "offline" ? `<div class="offline-banner" role="status">${ico("cloud-off")}<span><b>Hors ligne.</b> Tu peux continuer à noter : tout sera envoyé au retour du réseau.</span></div>` : "";
+  $("#offlineSlot").innerHTML = S.sync === "offline" && S.auth === "signed-in" ? `<div class="offline-banner" role="status">${ico("cloud-off")}<span><b>Hors ligne.</b> Tu peux continuer à noter : tout sera envoyé au retour du réseau.</span></div>` : "";
 }
 setInterval(renderSync, 30000);
 /* Appelé après chaque enregistrement : la donnée est déjà écrite sur l'appareil (l'envoi arrive en Phase 3). */
@@ -103,7 +104,7 @@ export function healthLevel() {
   const l = logs();
   return overall([trend(l, "a", TODAY).level, trend(l, "h", TODAY).level, weightStatus(cat(), weights()).level]);
 }
-export const routeTitle = r => (r === "profil" ? "Profil de " + (cat()?.name || "ton chat") : ROUTES[r].t);
+export const routeTitle = r => (S.auth === "signed-out" ? "Connexion" : r === "profil" ? "Profil de " + (cat()?.name || "ton chat") : ROUTES[r].t);
 /* Carte du chat dans la barre latérale (PC) */
 function renderSideCat() {
   const c = cat(), w = lastWeight();
@@ -123,7 +124,7 @@ export function render(anim) {
   if (moreRoutes.includes(S.route)) $("#moreTab").setAttribute("aria-current", "page");
   const v = $("#view");
   if (!S.ready) { v.innerHTML = skeleton(); return; }
-  const out = SCREENS[S.route]();
+  const out = (S.auth === "signed-out" ? SCREENS.login : SCREENS[S.route])();
   v.innerHTML = `<div class="view ${anim ? "view-enter" : ""}">${out.main}</div>`;
   v.querySelectorAll(".view > *").forEach((el, i) => { if (anim) { el.classList.add("rise"); el.style.setProperty("--i", i); } });
   drawCharts(v);
@@ -132,7 +133,7 @@ export function render(anim) {
 }
 export function renderAside(out) {
   if (S.chatPinned) { $("#paneTitle").textContent = "Dr. Doudou"; $("#paneClose").hidden = false; $("#paneBody").innerHTML = chatHTML("pane"); scrollChat(); return; }
-  out = out || (SCREENS[S.route] ? SCREENS[S.route]() : {});
+  out = out || (S.auth === "signed-out" ? SCREENS.login() : SCREENS[S.route] ? SCREENS[S.route]() : {});
   $("#paneClose").hidden = true;
   $("#paneTitle").textContent = out.asideTitle || "En un coup d'œil";
   $("#paneBody").innerHTML = out.aside || "";

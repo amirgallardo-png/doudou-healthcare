@@ -20,6 +20,7 @@ import "./screens/finances.js";
 import "./screens/profile.js";
 import "./screens/settings.js";
 import "./screens/drdoudou.js";
+import "./screens/login.js";
 import "./events.js";
 
 import { S } from "./state.js";
@@ -27,6 +28,7 @@ import { $, ROUTES, applyTheme, buildSideNav, renderSync, render, go } from "./u
 import { initRepo, onChange, pendingCount } from "./data/repo.js";
 import { weightPoints } from "./ui/charts.js";
 import { refreshToday, ico } from "./utils/core.js";
+import { startSync } from "./sync/controller.js";
 
 /* ---------- Démarrage ---------- */
 applyTheme();
@@ -47,6 +49,7 @@ try {
   S.ready = true;
   render(true);
   onChange(() => { updatePending(); });
+  await startSync();
 } catch (err) {
   console.error(err);
   $("#view").innerHTML = `<div class="view"><div class="empty-state"><h3>Impossible d'ouvrir les données</h3><p>Le navigateur refuse le stockage local (navigation privée ou espace plein ?). Ouvre l'appli dans une fenêtre normale. Détail : ${String(err.message || err).replace(/[<>&]/g, "")}</p><button class="btn primary" id="retryOpen">${ico("refresh")}Réessayer</button></div></div>`;
