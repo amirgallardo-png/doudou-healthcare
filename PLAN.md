@@ -263,6 +263,9 @@ chaque table a `user_id = auth.uid()` en lecture et écriture.
 - **Mise en place** : l'outil Supabase en ligne de commande est bloqué par Windows sur ce PC → script
   `tools/supabase-setup.mjs` via l'API officielle de gestion, avec un jeton temporaire collé par Amir dans
   `.env.local` (jamais affiché ni versionné). Clés de l'appli dans `.env.local` (`VITE_…`), jamais dans le code.
+- **Hébergement (2026-10-06)** : organisation GitHub dédiée `doudou-healthcare`, dépôt `doudou-healthcare.github.io`,
+  appli servie sur **https://doudou-healthcare.github.io/** — domaine propre, donc stockage du navigateur isolé
+  des autres applis d'Amir (Orbe, Vault, Kairos partageaient `amirgallardo-png.github.io`).
 - **Ancien historique abandonné** (décision d'Amir du 2026-10-05) : les vraies saisies commencent à la visite
   vétérinaire ; l'import de la V1 reste disponible mais n'est plus utilisé.
 
