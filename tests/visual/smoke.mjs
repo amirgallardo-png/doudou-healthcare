@@ -96,9 +96,19 @@ async function run(label, viewport) {
     }
     if (SHOTS) await page.screenshot({ path: join(ROOT, "test-results", "screens", `${label.replace(/\W+/g, "-")}-${r}.png`), fullPage: true });
   });
-  await step("Export (téléchargement JSON)", async () => { await route("reglages"); const dl = page.waitForEvent("download"); await click('#view [data-act="export"]'); const d = await dl; if (!/doudou-sauvegarde-\d{4}-\d{2}-\d{2}\.json/.test(d.suggestedFilename())) throw new Error(d.suggestedFilename()); });
+  let exported = null;
+  await step("Export (téléchargement JSON)", async () => { await route("reglages"); const dl = page.waitForEvent("download"); await click('#view [data-act="export"]'); const d = await dl; if (!/doudou-sauvegarde-\d{4}-\d{2}-\d{2}\.json/.test(d.suggestedFilename())) throw new Error(d.suggestedFilename()); exported = await d.path(); });
   await step("Données gardées après rechargement", async () => { await page.reload({ waitUntil: "networkidle" }); await route("finances"); await seen("#view >> text=Litière"); });
   await step("Tout effacer (EFFACER)", async () => { await route("reglages"); await click('[data-act="wipeAsk"]'); await fill(sheet('[name="word"]'), "EFFACER"); await click(sheet('form[data-form="wipe"] button[type="submit"]')); await seen("text=Bienvenue !"); });
+  await step("Restauration réelle de la sauvegarde exportée", async () => {
+    const chooser = page.waitForEvent("filechooser");
+    await click('[data-act="importFile"]');
+    await (await chooser).setFiles(exported);
+    await seen("text=Import terminé", 15000); await esc();
+    await route("finances"); await seen("#view >> text=Litière");
+    await route("profil"); await seen("#view >> text=Garde test");
+    await route("sante"); if (!(await page.locator("#view").innerText()).includes("6,2")) throw new Error("pesée absente après restauration");
+  });
   await ctx.close();
 }
 await run("mobile 360", { width: 360, height: 800 });
