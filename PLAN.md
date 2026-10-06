@@ -281,6 +281,11 @@ chaque table a `user_id = auth.uid()` en lecture et écriture.
 - Sans fiche pertinente : « je n'ai pas de source fiable là-dessus, voici quand consulter ».
 - Le modèle se change à un seul endroit (`MODEL` dans la config serveur).
 
+### 7.0 Sources validées par Amir (2026-10-06)
+International Cat Care · Cornell Feline Health Center · AAFP / Cat Friendly (catvets.com) · WSAVA · ISFM ·
+Merck Veterinary Manual (version propriétaires) · ESCCAP · ASPCA Animal Poison Control · Pet Poison Helpline ·
+Faculté de médecine vétérinaire de l'ULiège · Ordre des vétérinaires de Belgique. Les 11 sites répondent (vérifié).
+
 ### 7.1 Choix de la clé et maîtrise du coût (décision d'Amir, 2026-10-04)
 
 - **Règle de choix** : au moment de la Phase 4, on prend le fournisseur (Claude, Gemini ou ChatGPT) **le moins

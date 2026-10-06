@@ -1,0 +1,13 @@
+[
+  { "id": "icc", "publisher": "International Cat Care", "base_url": "https://icatcare.org/" },
+  { "id": "cornell", "publisher": "Cornell Feline Health Center (Cornell University)", "base_url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center" },
+  { "id": "aafp", "publisher": "AAFP / Cat Friendly", "base_url": "https://catvets.com/" },
+  { "id": "wsava", "publisher": "WSAVA (World Small Animal Veterinary Association)", "base_url": "https://wsava.org/" },
+  { "id": "isfm", "publisher": "ISFM (International Society of Feline Medicine)", "base_url": "https://icatcare.org/veterinary/isfm/" },
+  { "id": "merck", "publisher": "Merck Veterinary Manual (version propriétaires)", "base_url": "https://www.merckvetmanual.com/cat-owners" },
+  { "id": "esccap", "publisher": "ESCCAP (parasites, Europe)", "base_url": "https://www.esccap.org/" },
+  { "id": "aspca", "publisher": "ASPCA Animal Poison Control", "base_url": "https://www.aspca.org/pet-care/animal-poison-control" },
+  { "id": "pph", "publisher": "Pet Poison Helpline", "base_url": "https://www.petpoisonhelpline.com/" },
+  { "id": "uliege", "publisher": "Faculté de médecine vétérinaire, ULiège", "base_url": "https://www.fmv.uliege.be/" },
+  { "id": "ordre", "publisher": "Ordre des vétérinaires de Belgique", "base_url": "https://www.ordre-veterinaires.be/" }
+]

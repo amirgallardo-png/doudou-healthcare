@@ -1,0 +1,104 @@
+[
+  {
+    "id": "urinaire-blocage", "titre": "Problèmes urinaires et blocage du mâle",
+    "mots": ["urine", "urin", "pipi", "litière", "force", "pousse", "goutte", "bouché", "blocage", "vessie", "cystite", "sang dans les urines", "miaule en urinant"],
+    "resume": "Les troubles urinaires du chat se voient par des passages fréquents à la litière, des efforts, des cris en urinant, du sang dans l'urine ou des pipis hors du bac. Chez le mâle, l'urètre peut se boucher complètement : la vessie ne se vide plus et l'état peut devenir mortel en un à deux jours. Un chat qui force sans rien produire doit être vu par un vétérinaire immédiatement. Les chats d'âge moyen, en surpoids, sédentaires, vivant à l'intérieur, buvant peu ou stressés sont plus exposés.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-lower-urinary-tract-disease", "verifie": "2026-10-06"
+  },
+  {
+    "id": "vomissements", "titre": "Vomissements",
+    "mots": ["vomi", "vomit", "vomissement", "régurgite", "rejette", "nausée"],
+    "resume": "Un vomissement isolé (souvent une boule de poils) peut être banal, mais de nombreuses causes existent : objet avalé (ficelle, élastique), plante ou produit toxique, troubles digestifs, parasites, ou maladie générale (reins, diabète, thyroïde). Il faut consulter si les vomissements reviennent plus d'une fois par semaine, s'il y a du sang, de l'abattement, une perte d'appétit, une diarrhée ou une soif inhabituelle. Noter la fréquence, l'aspect, les changements récents d'alimentation et la date de début aide le vétérinaire.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/vomiting", "verifie": "2026-10-06"
+  },
+  {
+    "id": "diarrhee", "titre": "Diarrhée",
+    "mots": ["diarrhée", "diarrhee", "selles molles", "selles liquides", "crotte", "selles"],
+    "resume": "Une diarrhée peut venir d'un changement de nourriture ou d'un stress et passer seule, mais aussi d'une infection, de parasites ou d'une maladie générale. Il faut consulter si elle dure plus d'un ou deux jours, s'il y a du sang ou des glaires, ou si le chat mange moins, vomit ou est abattu. Ne donner aucun médicament vendu sans ordonnance sans l'avis du vétérinaire : certains sont dangereux pour le chat. Noter fréquence, aspect et durée.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/diarrhea", "verifie": "2026-10-06"
+  },
+  {
+    "id": "appetit-jeune", "titre": "Appétit en baisse et jeûne (lipidose hépatique)",
+    "mots": ["mange", "mange plus", "mange moins", "appétit", "appetit", "boude", "croquettes", "nourriture", "faim", "jeûne", "refuse", "gamelle"],
+    "resume": "Un chat qui cesse de manger risque une maladie grave du foie, la lipidose hépatique : le corps mobilise trop de graisse que le foie n'arrive plus à traiter. Elle est presque toujours précédée d'un refus de manger et touche davantage les chats en surpoids. Signes : chat retiré qui évite sa gamelle, jaunissement des oreilles ou des gencives, bave. C'est une urgence : un chat qui ne mange plus depuis 24 heures doit être vu rapidement ; pris tôt, le pronostic est bon.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hepatic-lipidosis", "verifie": "2026-10-06"
+  },
+  {
+    "id": "toxiques", "titre": "Toxiques de la maison",
+    "mots": ["poison", "toxique", "intoxication", "avalé", "mangé", "paracétamol", "doliprane", "ibuprofène", "aspirine", "médicament", "antiparasitaire chien", "pipette chien", "raticide", "mort-aux-rats", "antigel", "chocolat", "oignon", "ail", "raisin", "javel", "produit ménager"],
+    "resume": "Parmi les dangers courants : les lys, les médicaments humains (paracétamol, ibuprofène, aspirine), les antiparasitaires prévus pour les chiens, la mort-aux-rats, l'antigel, le chocolat, l'oignon, le raisin et les produits ménagers. Signes possibles : abattement, démarche instable, bave, respiration rapide, vomissements, diarrhée, convulsions. En cas de doute, appeler immédiatement un vétérinaire ou un centre antipoison ; ne jamais faire vomir le chat sans avis vétérinaire.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/poisons", "verifie": "2026-10-06"
+  },
+  {
+    "id": "lys", "titre": "Lys : danger mortel pour le chat",
+    "mots": ["lys", "lis", "lilium", "fleur", "bouquet", "pollen", "plante"],
+    "resume": "Toutes les espèces de vrais lys (genre Lilium) sont toxiques pour le chat, et toutes les parties de la plante comptent : feuilles, tige, fleur, pollen, et même l'eau du vase. Une petite quantité suffit à provoquer une insuffisance rénale aiguë, précédée de vomissements et d'abattement. C'est une urgence : le traitement doit commencer très tôt, il faut appeler un vétérinaire immédiatement, même sans symptôme.",
+    "source": "pph", "url": "https://www.petpoisonhelpline.com/poison/lilies/", "verifie": "2026-10-06"
+  },
+  {
+    "id": "vaccins", "titre": "Vaccins essentiels du chat",
+    "mots": ["vaccin", "vaccination", "rappel", "typhus", "coryza", "leucose", "felv", "rage", "piqûre"],
+    "resume": "Les vaccins de base protègent contre le typhus (panleucopénie) et le coryza (herpèsvirus et calicivirus) ; la rage dépend des règles légales. Le vaccin contre la leucose féline est conseillé aux chats qui sortent ou côtoient d'autres chats. Un chat adulte en retard de rappel peut simplement le refaire. Les effets secondaires sont rares et le plus souvent passagers ; en cas de réaction inhabituelle après un vaccin, appeler le vétérinaire.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-vaccines-benefits-and-risks", "verifie": "2026-10-06"
+  },
+  {
+    "id": "vaccins-rythme", "titre": "Rythme des vaccins (recommandations internationales)",
+    "mots": ["vaccin", "rappel", "tous les ans", "chaque année", "trois ans", "fréquence vaccin", "quand refaire"],
+    "resume": "Les recommandations internationales des vétérinaires (WSAVA) distinguent les vaccins de base, utiles à tous les chats, et les vaccins selon le mode de vie, comme la leucose pour les chats qui sortent. Chez l'adulte, certains vaccins de base n'ont pas besoin d'être refaits chaque année : l'intervalle peut aller jusqu'à trois ans. Le programme se décide avec le vétérinaire selon le mode de vie et la région.",
+    "source": "wsava", "url": "https://wsava.org/global-guidelines/vaccination-guidelines/", "verifie": "2026-10-06"
+  },
+  {
+    "id": "poids", "titre": "Poids et surpoids",
+    "mots": ["poids", "kilo", "kg", "gros", "grosse", "surpoids", "obèse", "obésité", "maigrir", "régime", "maigre", "côtes"],
+    "resume": "Le surpoids, très fréquent chez le chat, favorise le diabète, l'arthrose et réduit l'activité. Pour juger la silhouette : les côtes doivent se sentir sous une fine couche de graisse, la taille se voir d'en haut et le ventre ne pas pendre. Une perte de poids doit être lente (environ 1 à 2 % du poids par semaine), suivie par le vétérinaire, avec des repas mesurés ; ne jamais affamer un chat, car le jeûne peut abîmer son foie.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/obesity", "verifie": "2026-10-06"
+  },
+  {
+    "id": "diabete-soif", "titre": "Boit et urine plus (diabète)",
+    "mots": ["boit", "boit beaucoup", "soif", "eau", "urine beaucoup", "diabète", "maigrit", "mange beaucoup"],
+    "resume": "Un chat qui boit et urine davantage tout en maigrissant malgré un bon appétit peut être diabétique. Le surpoids, la sédentarité, l'âge et le sexe mâle augmentent le risque. Ces signes peuvent aussi venir des reins ou de la thyroïde : seul le vétérinaire peut faire la différence par des analyses. Un traitement précoce améliore nettement les chances de rémission.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-diabetes", "verifie": "2026-10-06"
+  },
+  {
+    "id": "reins", "titre": "Maladie rénale chronique",
+    "mots": ["rein", "reins", "rénal", "insuffisance", "boit", "soif", "vieux", "âgé", "senior", "créatinine", "sdma"],
+    "resume": "La maladie rénale chronique touche une grande partie des chats âgés ; l'âge est son principal facteur de risque. Signes : soif et urines abondantes, perte de poids et d'appétit, poil négligé, fatigue. Au début, elle passe souvent inaperçue : des analyses de sang et d'urine régulières chez le chat âgé permettent de la repérer tôt, ce qui prolonge nettement la vie.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease", "verifie": "2026-10-06"
+  },
+  {
+    "id": "dents", "titre": "Dents et gencives",
+    "mots": ["dent", "dents", "tartre", "gencive", "haleine", "bave", "mâche", "mastique", "bouche"],
+    "resume": "Mauvaise haleine, bave, difficulté ou refus de manger, préférence pour la nourriture molle, nourriture qui tombe de la bouche ou tête penchée en mâchant peuvent signaler un problème dentaire. Le tartre abrite des bactéries et peut mener à une inflammation des gencives puis à la perte de dents. Prévention : brossage avec un dentifrice pour chat (jamais celui des humains) et contrôles réguliers ; un détartrage se fait sous anesthésie chez le vétérinaire.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-dental-disease", "verifie": "2026-10-06"
+  },
+  {
+    "id": "respiration", "titre": "Difficultés à respirer et toux",
+    "mots": ["respire", "respiration", "souffle", "essoufflé", "halète", "bouche ouverte", "tousse", "toux", "sifflement", "asthme"],
+    "resume": "Toux, sifflements, respiration rapide ou bouche ouverte peuvent signaler un asthme ou un autre problème respiratoire ; pendant une crise, le chat se tasse et tend le cou. Une respiration difficile ou bouche ouverte est une urgence : il faut appeler un vétérinaire immédiatement. Une toux répétée mérite un rendez-vous, car elle est parfois confondue avec des boules de poils.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-asthma-what-you-need-know", "verifie": "2026-10-06"
+  },
+  {
+    "id": "allergie-alimentaire", "titre": "Allergie alimentaire",
+    "mots": ["allergie", "allergique", "démange", "gratte", "grattage", "prurit", "poulet", "boeuf", "poisson", "croûtes", "perd ses poils"],
+    "resume": "L'allergie alimentaire provoque surtout des démangeaisons de la tête et du cou, des croûtes ou une perte de poils, et parfois des troubles digestifs. Les protéines habituelles (bœuf, poulet, poisson, œuf…) peuvent être en cause. Le diagnostic passe par un régime d'éviction strict de 8 à 10 semaines, avec une protéine nouvelle, puis la réintroduction des aliments un par un, sous suivi vétérinaire ; ensuite, l'aliment responsable est évité durablement.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/food-allergies", "verifie": "2026-10-06"
+  },
+  {
+    "id": "boules-de-poils", "titre": "Boules de poils",
+    "mots": ["boule de poils", "boules de poils", "poils", "crache", "hoquet", "toilettage", "brossage"],
+    "resume": "Rejeter une boule de poils toutes les une à deux semaines est en général normal. Il faut consulter si le chat a des haut-le-cœur répétés sans rien rejeter, vomit vraiment, ne mange plus depuis plus d'un ou deux jours, est constipé ou abattu. Le brossage régulier limite les poils avalés ; ne pas donner de laxatif sans avis vétérinaire. Des haut-le-cœur fréquents peuvent aussi venir d'un problème respiratoire.",
+    "source": "cornell", "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/danger-hairballs", "verifie": "2026-10-06"
+  },
+  {
+    "id": "vermifuge", "titre": "Vers et vermifuge",
+    "mots": ["vers", "ver", "vermifuge", "vermifuger", "parasite", "parasites", "chasse", "souris", "ténia"],
+    "resume": "Le rythme du vermifuge dépend du mode de vie : un chat qui sort et chasse est plus exposé aux vers qu'un chat d'intérieur et doit être traité plus souvent. Les recommandations européennes (ESCCAP) proposent un schéma individuel établi avec le vétérinaire selon le risque, plutôt qu'une règle unique.",
+    "source": "esccap", "url": "https://www.esccap.org/deworming-cats/", "verifie": "2026-10-06"
+  },
+  {
+    "id": "puces-tiques", "titre": "Puces et tiques",
+    "mots": ["puce", "puces", "tique", "tiques", "pipette", "antiparasitaire", "gratte", "démangeaisons"],
+    "resume": "Pour un chat qui sort, la protection contre les puces et les tiques est utile toute l'année ; certains parasites peuvent aussi se transmettre à l'humain. Le produit et le rythme se choisissent avec le vétérinaire selon le mode de vie. Attention : les antiparasitaires prévus pour les chiens peuvent être mortels pour le chat.",
+    "source": "esccap", "url": "https://www.esccap.org/guidelines/gl3/", "verifie": "2026-10-06"
+  }
+]
