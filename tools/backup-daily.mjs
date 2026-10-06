@@ -65,4 +65,4 @@ async function main() {
   const counts = Object.entries(tables).filter(([, l]) => l.length).map(([t, l]) => `${t} ${l.length}`).join(", ");
   log(`Sauvegarde OK : ${name} (${counts}) ; photos ${photos}${missing ? `, ${missing} introuvable(s)` : ""} ; ${Math.min(files.length, KEEP)} sauvegarde(s) gardée(s).`);
 }
-main().catch(e => { log("ÉCHEC : " + e.message); process.exit(1); });
+main().catch(e => { log("ÉCHEC : " + e.message); process.exitCode = 1; });

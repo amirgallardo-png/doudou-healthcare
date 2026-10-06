@@ -1,4 +1,4 @@
-# ═══════════════════════════════════════════════════════════════
+﻿# ═══════════════════════════════════════════════════════════════
 #  Doudou Healthcare — installe la sauvegarde automatique quotidienne
 #  (chaque soir à 21:30, rattrapée au réveil si le PC était éteint).
 #  Usage : clic droit > « Exécuter avec PowerShell », ou :  powershell -File tools\installer-sauvegarde.ps1

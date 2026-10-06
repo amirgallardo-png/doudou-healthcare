@@ -20,6 +20,8 @@ drop policy if exists "rows: lecture de ses lignes" on public.rows;
 create policy "rows: lecture de ses lignes" on public.rows for select to authenticated using (user_id = auth.uid());
 revoke all on public.rows from anon, authenticated;
 grant select on public.rows to authenticated;
+-- Sauvegarde quotidienne du PC (clé de service) : lecture seule.
+grant select on public.rows to service_role;
 
 -- 3. Envoi d'un lot : une ligne n'est écrite que si elle est PLUS RÉCENTE que celle du serveur.
 create or replace function public.push_rows(items jsonb) returns integer
