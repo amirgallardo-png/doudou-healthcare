@@ -86,7 +86,13 @@ async function run(label, viewport) {
     await route("profil"); await click('#view [data-act="profileForm"]'); await fill(sheet('[name="weight"]'), "6,2"); await click(sheet('form[data-form="profile"] button[type="submit"]'));
     await route("sante"); if (!(await page.locator("#view").innerText()).includes("6,2")) throw new Error("poids du profil absent de Santé"); });
   await step("Activité notée", async () => { await route("activite"); await click('#view [data-act="activityForm"]'); await fill(sheet('[name="minutes"]'), "40"); await fill(sheet('[name="goal"]'), "45"); await click(sheet('form[data-form="activity"] button[type="submit"]')); await seen("#view .ring >> text=40"); });
-  await step("Dr. Doudou : numéros d'urgence réels, pas de fausse réponse", async () => { await route("drdoudou"); await seen("#view >> text=Garde test"); if (await page.locator("#composer-main:not([disabled])").count()) throw new Error("champ de question actif"); });
+  await step("Dr. Doudou : numéros d'urgence réels à l'accueil", async () => { await route("drdoudou"); await seen("#view >> text=Garde test"); });
+  await step("Dr. Doudou : signe d'urgence repéré par le code + prompt à copier", async () => {
+    await fill("#composer-main", "Il va à la litière mais n'arrive pas à faire pipi"); await click("#view .composer .send");
+    await seen("#view .msg.user"); await seen("#view .urgent-band >> text=Appelle un vétérinaire maintenant");
+    await seen("#view >> text=Règle de sécurité"); await seen("#view [data-act=copyPrompt]");
+  });
+  await step("Dr. Doudou : effacer la conversation", async () => { await click("#view [data-act=clearChat]"); await click("#view [data-act=clearChat]"); await seen("#view >> text=Bonjour, je suis Dr. Doudou"); });
   for (const r of ROUTES) await step(`Pas de débordement : ${r}`, async () => {
     await route(r); await page.waitForTimeout(250);
     const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

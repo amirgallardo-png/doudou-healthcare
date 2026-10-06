@@ -10,7 +10,7 @@ import { weights } from "../domain/views.js";
 
 export { dayOverall };
 /* Dr. Doudou (IA) est branché en Phase 4 : d'ici là, aucun bouton ne mène à une réponse simulée. */
-export const AI_READY = false;
+export const AI_READY = true;
 export const askBtn = (q, label = "Demander à Dr. Doudou", cls = "btn sm secondary") => (AI_READY ? `<button class="${cls}" data-act="ask" data-q="${esc(q)}">${ico("doc", "sm")}${label}</button>` : "");
 
 export const lvl = (l, txt) => `<span class="status ${LEVELS[l].c}">${ico(LEVELS[l].i)}${esc(txt || LEVELS[l].w)}</span>`;

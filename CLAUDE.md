@@ -32,7 +32,7 @@ Amir est Product Manager, ne lit pas le code : réponses en français, expliquer
 
 ## Commandes
 - `npm run dev` · `npm test` (51+ tests) · `npx eslint src tests tools`
-- Parcours complet : build sans Supabase puis `node tests/visual/smoke.mjs` (58 actions, 360 px + PC).
+- Parcours complet : build sans Supabase puis `node tests/visual/smoke.mjs` (64 actions, 360 px + PC).
 - Audit des zones tactiles : `node tests/visual/tap-audit.mjs`. Icônes : `node tools/make-icons.mjs`.
 - Sauvegarde : `node tools/backup-daily.mjs` (clé de service requise) ; tâche « Doudou - Sauvegarde » (21:30).
 

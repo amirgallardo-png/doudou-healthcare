@@ -13,7 +13,7 @@ import { importFile } from "./data/importer.js";
 import { shrinkImage } from "./data/photos.js";
 import { cat, catName, reminders } from "./domain/views.js";
 import { QCATS, quickHTML, todayLog } from "./screens/today.js";
-import { ask, autoGrow } from "./screens/drdoudou.js";
+import { ask, autoGrow, clearChat, copyPrompt } from "./screens/drdoudou.js";
 import { dayHTML, formHTML, saveDayForm, refreshDraftPhotos } from "./screens/journal.js";
 import { recordHTML, recordFormHTML, deleteRecord, openVisit, visitText } from "./screens/records.js";
 import { mealSheet, setMealEaten, skipMeal, mealDayFormHTML, planEditorHTML, planItemFormHTML, deletePlanItem, productFormHTML, retireProduct } from "./screens/food.js";
@@ -111,7 +111,12 @@ document.addEventListener("click", async e => {
       case "doneReminder": { const m = get("reminders", t.dataset.id); await commit([{ table: "reminders", row: { id: m.id, done_at: new Date().toISOString() } }]); done(m.title + " : noté comme fait"); break; }
       case "snooze": await commit([{ table: "reminders", row: { id: t.dataset.id, snoozed_to: key(addDays(TODAY, 1)) } }]); closeSheet(); toast("Rappel déplacé à demain", "bell"); render(false); break;
       /* Dr. Doudou */
-      case "ask": ask(t.dataset.q); break;
+      case "ask": if (S.route !== "drdoudou" && !S.chatPinned) go("drdoudou"); ask(t.dataset.q); break;
+      case "retryAsk": ask(t.dataset.q, { retry: true }); break;
+      case "promptAsk": ask(t.dataset.q, { retry: true, prompt: true }); break;
+      case "copyPrompt": copyText(copyPrompt(t.dataset.id), "Prompt copié : colle-le dans ChatGPT, Gemini ou Claude"); break;
+      case "clearChat": if (confirmTwice(t, "Confirmer l'effacement")) { await clearChat(); toast("Conversation effacée", "info"); } break;
+      case "aiMode": store.set("aiMode", v); render(false); break;
       /* santé */
       case "explainInd": { const k = t.dataset.k;
         const T = { poids: ["Poids", weightMeaning(), "weight"], appetit: ["Appétit", "Moyenne de ses saisies du matin et du soir, jour par jour. Un chat qui saute des repas plus de 24 heures doit être vu par un vétérinaire.", "appetit"], humeur: ["Humeur", "Barre haute = joueur, moyenne = calme, basse = grognon. Note aussi s'il se cache ou grogne quand on le touche.", "humeur"] }[k];

@@ -37,7 +37,7 @@ carte de secours. Appli web installable (PWA) qui marche **hors ligne**, synchro
 3. Tests :
    ```powershell
    npm test                                   # tests automatiques (données, synchronisation, règles)
-   npx vite build; node tests/visual/smoke.mjs  # parcours complet (58 actions, téléphone + PC)
+   npx vite build; node tests/visual/smoke.mjs  # parcours complet (64 actions, téléphone + PC)
    ```
    Le parcours complet se lance en mode « sans serveur » :
    `$env:VITE_SUPABASE_URL=''; $env:VITE_SUPABASE_ANON_KEY=''; npx vite build; node tests/visual/smoke.mjs`

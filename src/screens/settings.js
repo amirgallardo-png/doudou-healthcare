@@ -8,6 +8,7 @@ import { store } from "../utils/store.js";
 import { cat } from "../domain/views.js";
 import { deviceId } from "../sync/supabase.js";
 import { loadDevices } from "../sync/controller.js";
+import { aiMode, loadAiUsage } from "./drdoudou.js";
 
 const KIND_WORD = { ok: "Importé", "transformé": "Transformé", "ignoré": "Ignoré", attention: "À vérifier" };
 const KIND_LVL = { ok: "ok", "transformé": "watch", "ignoré": "watch", attention: "soon" };
@@ -33,7 +34,7 @@ function syncCard(s) {
 }
 
 SCREENS.reglages = () => {
-  loadDevices();
+  loadDevices(); loadAiUsage();
   const s = syncLabel(), last = store.get("lastExport", null);
   const radio = (act, v, cur, title, sub) => `<button class="radio" role="radio" data-act="${act}" data-v="${v}" aria-checked="${cur === v}"><span class="rd"></span><span class="r-main"><b>${title}</b>${sub ? `<br><span class="small muted">${sub}</span>` : ""}</span></button>`;
   const tog = (act, on, title, sub) => `<button class="set-row" role="switch" data-act="${act}" aria-checked="${!!on}"><span class="r-main"><b>${title}</b>${sub ? `<br><span class="small muted">${sub}</span>` : ""}</span><span class="toggle" aria-checked="${!!on}"></span></button>`;
@@ -41,11 +42,14 @@ SCREENS.reglages = () => {
   ${syncCard(s)}
   </div><div class="col">
   <section class="card"><div class="card-h"><h2>Sauvegardes</h2>${last ? lvl("ok", "Export fait") : lvl("watch", "Aucun export")}</div>
-    <p class="small">${last ? `Dernier export : ${esc(fmtDate(new Date(last), true))}.` : "Aucun export pour l'instant."} La sauvegarde automatique quotidienne sur ton PC arrive à l'étape 6 ; d'ici là, exporte de temps en temps.</p>
+    <p class="small">${last ? `Dernier export : ${esc(fmtDate(new Date(last), true))}.` : "Aucun export pour l'instant."} Ton PC fait aussi une sauvegarde automatique chaque soir à 21 h 30 (dossier Documents › Sauvegardes Doudou, 30 jours gardés).</p>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
       <button class="btn secondary block" data-act="export" ${cat() ? "" : "disabled"}>${ico("download", "sm")}Exporter toutes les données</button>
       <button class="btn secondary block" data-act="importFile">${ico("refresh", "sm")}Importer une sauvegarde</button>
       <button class="btn ghost block" data-act="wipeAsk" ${cat() ? "" : "disabled"}>${ico("x", "sm")}Tout effacer sur cet appareil</button></div></section>
+  <section class="card"><div class="card-h"><h2>Dr. Doudou</h2></div>
+    ${S.auth === "signed-in" ? `<div class="radio-list" role="radiogroup" aria-label="Mode de Dr. Doudou">${radio("aiMode", "auto", aiMode(), "Réponse directe", "L'IA répond avec ses sources ; plafond 20 questions par jour et 2 $ par mois")}${radio("aiMode", "prompt", aiMode(), "Prompt à copier (gratuit)", "Dr. Doudou prépare la question pour tes propres IA")}</div>
+    <p class="small muted" style="margin-top:8px">${S.aiUsage ? `Ce mois-ci : ${S.aiUsage.requests} question${S.aiUsage.requests > 1 ? "s" : ""}, ≈ ${S.aiUsage.cost.toFixed(2).replace(".", ",")} $ sur 2 $. Au plafond, il passe tout seul en prompt à copier.` : "Dépense du mois : chargement…"}</p>` : `<p class="small muted">Connecte-toi pour activer les réponses directes. En attendant, Dr. Doudou prépare un prompt à copier.</p>`}</section>
   <section class="card"><div class="card-h"><h2>Apparence</h2></div><div class="radio-list" role="radiogroup" aria-label="Thème">${radio("theme", "system", S.theme, "Comme l'appareil", "Clair le jour, sombre le soir si ton téléphone le fait")}${radio("theme", "light", S.theme, "Clair")}${radio("theme", "dark", S.theme, "Sombre", "Pour vérifier ton chat la nuit sans t'éblouir")}</div>
     <div class="list" style="margin-top:8px">${tog("calm", S.calm, "Réduire les animations", "Respecte déjà le réglage de ton appareil")}</div></section>
   <p class="fine">${ico("info", "sm")}Doudou Healthcare · version 0.3 · adresse : ${esc(location.host)}</p>
