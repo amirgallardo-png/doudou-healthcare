@@ -48,7 +48,7 @@ SCREENS.reglages = () => {
       <button class="btn ghost block" data-act="wipeAsk" ${cat() ? "" : "disabled"}>${ico("x", "sm")}Tout effacer sur cet appareil</button></div></section>
   <section class="card"><div class="card-h"><h2>Apparence</h2></div><div class="radio-list" role="radiogroup" aria-label="Thème">${radio("theme", "system", S.theme, "Comme l'appareil", "Clair le jour, sombre le soir si ton téléphone le fait")}${radio("theme", "light", S.theme, "Clair")}${radio("theme", "dark", S.theme, "Sombre", "Pour vérifier ton chat la nuit sans t'éblouir")}</div>
     <div class="list" style="margin-top:8px">${tog("calm", S.calm, "Réduire les animations", "Respecte déjà le réglage de ton appareil")}</div></section>
-  <p class="fine">${ico("info", "sm")}Doudou Healthcare · version 0.2 · données enregistrées sur cet appareil.</p>
+  <p class="fine">${ico("info", "sm")}Doudou Healthcare · version 0.3 · adresse : ${esc(location.host)}</p>
   </div></div>`;
   return { main, aside: `<div class="explain"><h4>${ico("shield", "sm")}Tes données</h4><p class="small">Le journal, le dossier et les photos restent à toi. L'export contient tout, photos comprises, dans un format lisible (JSON) : garde-le en lieu sûr.</p></div>`, asideTitle: "Données" };
 };
